@@ -1,0 +1,625 @@
+exception occurred with creating pin
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with creating transaction
+exception occurred with retrieving token
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with retrieving token
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with retrieving token
+<<<<<<< HEAD
+=======
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with retrieving banks
+exception occurred with checking pin
+exception occurred with checking pin
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with retrieving token
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with checking email
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with retrieving details
+exception occurred with retrieving details
+exception occurred with retrieving details
+exception occurred with retrieving details
+exception occurred with retrieving details
+<<<<<<< HEAD
+>>>>>>> 34b96700d91161135e412c6d81b6710967e6ec89
+exception occurred with retrieving countries
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving fee
+exception occurred with retrieving fee
+exception occurred with retrieving fee
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with retrieving fee
+exception occurred with retrieving fee
+exception occurred with creating transaction
+exception occurred with retrieving fees
+exception occurred with retrieving fees
+exception occurred with adding account
+exception occurred with adding account
+exception occurred with adding account
+exception occurred with adding account
+exception occurred with adding account
+exception occurred with adding account
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating bank
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with checking accounts
+exception occurred with retrieving email
+exception occurred with retrieving email
+exception occurred with checking notifications
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with creating kyc2
+exception occurred with checking transactions
+exception occurred with checking transactions
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with checking accounts
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with checking notifications
+exception occurred with creating bank
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking notifications
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with checking balance
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with retrieving fee
+exception occurred with checking balance
+exception occurred with checking balance
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+=======
+exception occurred with creating QR request
+exception occurred with creating Bio pin
+<<<<<<< HEAD
+>>>>>>> 8c799939b672e6785880bda8c95c1a55414982a7
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with retrieving fees
+=======
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> 23c93f69fa30c36cfa4f4dd19b5de4defa65bdb0
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with sending sms and email or with creating account
+exception occurred with sending sms and email or with creating account
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with retrieving token
+=======
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> de3f3e6de632aaf6cacee5f279bb2f68f10c66a5
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with creating QR request
+exception occurred with getting QR request
+<<<<<<< HEAD
+exception occurred with getting QR request
+exception occurred with checking balance
+exception occurred with checking balance
+exception occurred with checking balance
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with checking transactions
+exception occurred with checking transactions
+exception occurred with checking transactions
+exception occurred with checking transactions
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+exception occurred with creating bank
+=======
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> 4274d039fc2bc820682f72e05863c4fa3d479e37
+=======
+exception occurred with creating QR request
+exception occurred with getting QR request
+>>>>>>> 77bc3726bd2a84592a83a3a7fffe48eb6e7579f0
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with retrieving fees
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with checking accounts
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with checking transactions
+exception occurred with getting QR request
+=======
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+<<<<<<< HEAD
+>>>>>>> f778a962159d813d8c8776f781ccbd482fe1539e
+=======
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> 4139ec2d0c67ef58ba2bbfea5fbbffb4779d35d5
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with creating transaction
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with creating transaction
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with creating transaction
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with checking pin
+exception occurred with checking pin
+exception occurred with checking pin
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with getting QR request
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with creating transaction operation
+=======
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> f384c35effe344914b7bdbe55cbd19ab555ad873
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+=======
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction operation
+exception occurred with creating transaction
+exception occurred with creating transaction
+<<<<<<< HEAD
+>>>>>>> 4df7e91b8e4a4838629f753aa41c70009b91829b
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with checking email
+exception occurred with checking accounts
+exception occurred with checking transactions
+exception occurred with checking accounts
+exception occurred with checking balance
+=======
+>>>>>>> fc9ed49af203896218cc207ca8b7af1159a57ba3
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+<<<<<<< HEAD
+=======
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with creating QR request
+exception occurred with getting QR request
+exception occurred with getting QR request
+>>>>>>> fc9ed49af203896218cc207ca8b7af1159a57ba3
+exception occurred with creating transaction
+exception occurred with retrieving eligibility
+exception occurred with retrieving eligibility
+exception occurred with retrieving eligibility
+exception occurred with retrieving eligibility
+exception occurred with adding card
+exception occurred with creating card
+exception occurred with adding card
+exception occurred with creating card
+exception occurred with adding card
+exception occurred with creating card
+exception occurred with creating card
+exception occurred with adding card
+exception occurred with adding card
+exception occurred with adding card
+exception occurred with creating card
+exception occurred with adding card
+exception occurred with creating card
+exception occurred with creating card
+exception occurred with adding card
+exception occurred with getting card
+exception occurred with getting card
+exception occurred with getting card
+exception occurred with getting card
+exception occurred with retrieving eligibility
+exception occurred with retrieving eligibility
+exception occurred with retrieving eligibility
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with creating charge
+exception occurred with creating charge
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with charge process
+exception occurred with getting card
+exception occurred with getting card
+exception occurred with getting card
+exception occurred with adding card
+exception occurred with encoding id
+exception occurred with encoding id
+exception occurred with encoding id
+exception occurred with encoding id
+exception occurred with encoding id
+exception occurred with encoding id
+exception occurred with adding card
+exception occurred with adding card
+exception occurred with adding card
+exception occurred with retrieving eligibility
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions
+exception occurred with outgoing transactions

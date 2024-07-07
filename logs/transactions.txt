@@ -1,0 +1,331 @@
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:5464189, to:01-00000101-001-001, amount:10,sending currency:USD, receiving currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000101-001-001, amount:10, currency:USD
+from:5464189, to:01-00000101-001-001, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000101-001-001, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-001, to:056754946548, amount:1, currency:USD
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-001, to:056754946548, amount:1, currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000101-001-001, amount:10, currency:USD
+from:5464189, to:01-00000101-001-001, amount:10,sending currency:USD, receiving currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000101-001-001, amount:100, currency:USD
+from:5464189, to:01-00000101-001-001, amount:100,sending currency:USD, receiving currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000101-001-001, amount:100, currency:USD
+from:5464189, to:01-00000101-001-001, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+from:01-00000101-001-001, to:01-00000102-001-001, amount:10,sending currency:EGP, receiving currency:EGP
+<<<<<<< HEAD
+from:01-00000101-001-01, to:iBan35677886543, amount:20.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-01, to:35677886543, amount:20, currency:USD
+
+from:01-00000101-001-01, to:iBan35677886543, amount:10.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-01, to:35677886543, amount:10, currency:USD
+from:01-00000104-001-01, to:01-00000104-001-01, amount:20.0,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000104-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000104-001-01, amount:12.0,sending currency:USD, receiving currency:USD
+from:01-00000104-001-01, to:01-00000104-001-01, amount:25.0,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:01-00000104-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:iBan14638392)2, amount:10.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000105-001-01, to:14638392)2, amount:10, currency:USD
+from:01-00000101-001-01, to:01-00000104-001-01, amount:30.0,sending currency:USD, receiving currency:USD
+from:01-00000106-001-01, to:01-00000104-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:01-00000104-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:01-00000104-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:01-00000104-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000104-001-01, amount:25.0,sending currency:USD, receiving currency:USD
+from:01-00000107-001-01, to:iBan687597857857578957857859, amount:30.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000107-001-01, to:687597857857578957857859, amount:30, currency:USD
+from:01-00000107-001-01, to:01-00000104-001-01, amount:20.0,sending currency:USD, receiving currency:USD
+from:01-00000107-001-01, to:iBan687597857857578957857859, amount:20.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000107-001-01, to:687597857857578957857859, amount:20, currency:USD
+from:01-00000107-001-01, to:iBan687597857857578957857859, amount:11.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000107-001-01, to:687597857857578957857859, amount:11, currency:USD
+from:01-00000105-001-01, to:iBan14638392)2, amount:1000.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000105-001-01, to:14638392)2, amount:1000, currency:USD
+from:01-00000105-001-01, to:iBan14638392)2, amount:10.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000105-001-01, to:14638392)2, amount:10, currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000105-001-01, amount:1000, currency:USD
+from:5464189, to:01-00000105-001-01, amount:1000,sending currency:USD, receiving currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000105-001-01, amount:20, currency:USD
+from:5464189, to:01-00000105-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000105-001-01, to:01-00000105-001-01, amount:10,sending currency:USD, receiving currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000101-001-001, amount:10, currency:USD
+INCOMING TRANSACTION from:5464189, to:01-000001051-001-001, amount:10, currency:USD
+INCOMING TRANSACTION from:5464189, to:01-00000109-001-001, amount:10, currency:USD
+from:01-00000101-001-01, to:iBan35677886543, amount:10.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-01, to:35677886543, amount:10, currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:5.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan1234, amount:5.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:1234, amount:5, currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan1234, amount:100.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:1234, amount:100, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBanasddasdsa, amount:250.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:asddasdsa, amount:250, currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:12.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:12.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:12.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:13.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+
+from:01-00000109-001-01, to:01-00000105-001-01, amount:11.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:200,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:200,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:200,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:300,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:500,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBanasddasd, amount:100.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan1232423, amount:100.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:asddasd, amount:100, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:1232423, amount:100, currency:USD
+from:01-00000109-001-01, to:iBanasddasdsa, amount:10.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:asddasdsa, amount:10, currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+from:01-00000109-001-01, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:056754946548, amount:1, currency:USD
+from:01-00000109-001-01, to:iBan1234, amount:100.0,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:1234, amount:100, currency:USD
+from:01-00000109-001-01, to:iBan056754946548, amount:100,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:056754946548, amount:100, currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:94,sending currency:USD, receiving currency:USD
+from:01-00000109-013-01, to:01-00000105-001-01, amount:10.0,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:600,sending currency:USD, receiving currency:USD
+from:01-00000109-012-01, to:01-00000105-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000109-011-01, to:01-00000105-001-01, amount:3,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:83,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:500,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:50,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:500,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:1000,sending currency:USD, receiving currency:USD
+from:01-00000109-015-01, to:01-00000105-001-01, amount:3,sending currency:USD, receiving currency:USD
+from:01-00000109-006-01, to:01-00000105-001-01, amount:5000,sending currency:USD, receiving currency:USD
+from:01-00000109-004-01, to:01-00000105-001-01, amount:400,sending currency:USD, receiving currency:USD
+from:01-00000109-004-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000105-001-01, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:500,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:100, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:500, currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:44,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:600,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:2000,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:44, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:600, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:2000, currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:1233,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:500,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:200,sending currency:USD, receiving currency:USD
+from:01-00000109-014-01, to:iBan123456789, amount:4,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:1233, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:500, currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:200, currency:USD
+OUT GOING TRANSACTION from:01-00000109-014-01, to:123456789, amount:4, currency:USD
+from:01-00000109-001-01, to:iBan123456789, amount:1000,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-001-01, to:123456789, amount:1000, currency:USD
+from:01-00000109-017-01, to:01-00000109-016-01, amount:4,sending currency:USD, receiving currency:USD
+from:01-00000109-007-01, to:01-00000109-017-01, amount:3,sending currency:USD, receiving currency:USD
+from:01-00000109-009-01, to:01-00000109-018-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000109-009-01, to:01-00000109-009-01, amount:70,sending currency:USD, receiving currency:USD
+from:01-00000109-008-01, to:iBan123456789, amount:56,sending currency:USD, receiving currency:USD
+from:01-00000109-001-01, to:01-00000109-008-01, amount:100,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-008-01, to:123456789, amount:56, currency:USD
+from:01-00000109-004-01, to:01-00000109-013-01, amount:900,sending currency:USD, receiving currency:USD
+from:01-00000103-002-01, to:iBan123456799, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000103-002-01, to:123456799, amount:1, currency:USD
+from:01-00000103-001-01, to:01-00000115-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000115-001-01, amount:2,sending currency:USD, receiving currency:USD
+from:01-00000109-004-01, to:iBan123456789, amount:1000,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000109-004-01, to:123456789, amount:1000, currency:USD
+from:01-00000109-001-01, to:01-00000109-013-01, amount:54,sending currency:USD, receiving currency:USD
+=======
+from:01-00000101-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000101-001-01, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000101-001-01, to:056754946548, amount:1, currency:USD
+from:01-00000102-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+>>>>>>> de3f3e6de632aaf6cacee5f279bb2f68f10c66a5
+from:01-00000102-001-01, to:01-00000103-001-01, amount:45,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:56,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:30,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000103-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:34,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:12,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:25,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:5,sending currency:USD, receiving currency:USD
+=======
+OUT GOING TRANSACTION from:01-00000102-001-01, to:1, amount:1, currency:USD
+OUT GOING TRANSACTION from:01-00000102-001-01, to:1, amount:1, currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000102-001-01, to:1, amount:1, currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+>>>>>>> 4274d039fc2bc820682f72e05863c4fa3d479e37
+from:01-00000103-001-01, to:01-00000102-001-01, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+=======
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+>>>>>>> 8d954a9ede80ce9b2d9e80f92195977fcc675bf9
+from:01-00000102-001-01, to:01-00000103-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:7,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:01-00000101-001-01, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:3, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:3, amount:200,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:3, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:34,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:50,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:35,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:2, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:18,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:5,sending currency:USD, receiving currency:USD
+=======
+from:01-00000102-001-01, to:3, amount:1,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+>>>>>>> f778a962159d813d8c8776f781ccbd482fe1539e
+from:01-00000103-001-01, to:1, amount:56,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:34,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:56,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:2, amount:50,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:12,sending currency:USD, receiving currency:USD
+=======
+>>>>>>> a1929cda43cec5e25d3a901ea7d3e3c0d12697cb
+from:01-00000102-001-01, to:01-00000101-001-01, amount:10,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:45,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:16,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000103-001-01, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:1, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:1, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:1, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:1, amount:56,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:1, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:1, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:2, amount:22,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:2, amount:33,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:100,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:50,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:50,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:77,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:23,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:17,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:8,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:12,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:5,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:25,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:6,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:4,sending currency:USD, receiving currency:USD
+from:01-00000102-002-01, to:5, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:1, amount:1,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:11, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:13, amount:35,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:14, amount:55,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:14, amount:2,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:16, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:17, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-002-01, to:18, amount:10,sending currency:USD, receiving currency:USD
+from:01-00000103-002-01, to:18, amount:20,sending currency:USD, receiving currency:USD
+from:01-00000103-002-01, to:18, amount:30,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:19, amount:50,sending currency:USD, receiving currency:USD
+=======
+from:01-00000102-001-01, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000102-001-01, to:056754946548, amount:1, currency:USD
+from:01-00000102-001-01, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+<<<<<<< HEAD
+>>>>>>> 4df7e91b8e4a4838629f753aa41c70009b91829b
+from:01-00000102-001-01, to:iBan056754946548, amount:1,sending currency:USD, receiving currency:USD
+OUT GOING TRANSACTION from:01-00000102-001-01, to:056754946548, amount:1, currency:USD
+from:01-00000101-001-01, to:15, amount:25,sending currency:USD, receiving currency:USD
+from:01-00000101-001-01, to:15, amount:5,sending currency:USD, receiving currency:USD
+=======
+OUT GOING TRANSACTION from:01-00000102-001-01, to:056754946548, amount:1, currency:USD
+>>>>>>> fc9ed49af203896218cc207ca8b7af1159a57ba3
+from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}
+from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}
+from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}

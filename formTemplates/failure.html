@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Information Form</title>
+    <link rel="icon" href="https://secure.onelinkwallet.com/files/favicon.ico">
+    <link rel="stylesheet" href="https://secure.onelinkwallet.com/files/cardfile.css">
+    <script>
+        // Function to open HTML content in a new tab
+        function openHtmlContentInNewTab(htmlContent) {
+            var newWindow = window.open('', '_blank');
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+        }
+
+        // Function to validate form and fetch HTML content upon form submission
+        function submitFormAndOpenInNewTab(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = {
+                cardNumber: document.getElementById("cardNumber").value,
+                expiryMonth: document.getElementById("expiryMonth").value,
+                expiryYear: document.getElementById("expiryYear").value,
+                secretNumber: document.getElementById("cvv").value,
+                fName: document.getElementById("firstName").value,
+                lName: document.getElementById("lastName").value,
+                id: %cusID // Added id field
+            };
+            fetch('/addCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(html => { 
+                            document.open();
+                            document.write(html);
+                            document.close();
+                        }
+                    )
+            .catch(error => console.error('Error submitting form:', error));
+        }
+
+        // Function to set the value of the ID field when the form is loaded
+        window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var id = urlParams.get('cusID');
+            document.getElementById("id").value = id;
+        };
+    </script>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f8f9fa;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+      
+        .card-notification {
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          text-align: center;
+          max-width: 400px;
+        }
+      
+        .card-notification h2 {
+          color: #007bff;
+        }
+      
+        .card-notification p {
+          color: #6c757d;
+          margin-top: 20px;
+        }
+      
+        .btn {
+          display: inline-block;
+          background-color: #007bff;
+          color: #ffffff;
+          padding: 10px 20px;
+          border-radius: 5px;
+          text-decoration: none;
+          margin-top: 20px;
+          transition: background-color 0.3s;
+        }
+      
+        .btn:hover {
+          background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>One Link Payment</h2>
+        <div class="card-notification">
+            <h2>Error Registering Card!</h2>
+            <p>There was an error in your card registeration</p>
+            <p>%errorMessage</p>
+            <a href="?status=%status_code" class="btn">Continue</a>
+          </div>
+    </div>
+</body>
+</html>
