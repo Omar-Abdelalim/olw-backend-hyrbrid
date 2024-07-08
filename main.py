@@ -4,17 +4,21 @@ from core.config import settings
 from db.session import  engine,get_db
 from db.base import Base
 import asyncio
-from apis.version3.processing import router as processing_router
-from apis.version3.transactions import router as transaction_router
-from apis.version3.autoOperations import router as background_router
-from apis.version3.autoOperations import periodic_task
+from apis.version2.processing import router as processing_router
+from apis.version2.transactions import router as transaction_router
+from apis.version2.autoOperations import router as background_router
+from apis.version2.autoOperations import periodic_task
 
+from apis.version2.middleware import decryptMiddleware
+
+active_session = {}
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
 
 def startapplication():
     app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION,docs_url=None, redoc_url=None)
+    app.add_middleware(decryptMiddleware)
     app.include_router(processing_router)
     app.include_router(transaction_router)
     app.include_router(background_router)
