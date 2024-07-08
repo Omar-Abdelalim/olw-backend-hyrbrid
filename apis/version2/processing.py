@@ -44,6 +44,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
 from apis.version2.middleware import DecryptRequest, decrypt_data
+from pydantic import BaseModel
 from db.globals.globals import tokens
 
 from core.hashing import Hasher
@@ -77,16 +78,14 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 
 @router.post("/handshake")
 async def handshake(request: Request, response: Response, data: DecryptRequest, db: Session = Depends(get_db)):
-    
-    return data.message
+    b = await request.body()
+    print('key is:',b)
     ip = request.client.host
     key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
     keys = tokens.keys()
     while key in keys:
         key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-    newdata = data #json.loads(data.message)
-    print("data:",newdata)
-    tokens[key] = {'key': data.message,'ip':ip, 'exp': datetime.now() + timedelta(minutes=session_expiry_time),'customerID':None}
+    tokens[key] = {'key': b,'ip':ip, 'exp': datetime.now() + timedelta(minutes=session_expiry_time),'customerID':None}
     return {"status_code":200,"message":"Hand Shake Successful","session key":key}
 
 

@@ -116,11 +116,12 @@ class decryptMiddleware(BaseHTTPMiddleware):
         async def receive() -> dict:
             return {"type": "http.request", "body": modified_body}
 
-        new_request = Request(scope=request.scope, receive=receive)
-        nn = await new_request.body()
-        print('new_request:',nn)
-        response = await call_next(new_request)
-        return response
+        request = Request(scope=request.scope, receive=receive)
+        
+        on = await request.body()
+        print('request:',on)
+        
+        response = await call_next(request)
         if requested_url == "/test":
             return response
         # out_resp = encrypt(response,request.client.host)
