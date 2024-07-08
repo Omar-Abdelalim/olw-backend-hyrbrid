@@ -107,6 +107,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             return response
         
+        
         body = await request.body()
         json_body = json.loads(body)
         decrypt_request = DecryptRequest(**json_body)
@@ -119,7 +120,21 @@ class decryptMiddleware(BaseHTTPMiddleware):
         request = Request(scope=request.scope, receive=receive)
         
         on = await request.body()
+        on = json.loads(on)
         print('request:',on)
+        if not requested_url == '/handshake':
+            if not on['token'] in tokens:
+                return {"status_code": 500, "message": "do handshake again"}
+
+
+            if datetime.now() > tokens[on['token']]['exp']:
+                del tokens[on['token']]
+                return {"status_code": 500, "message": "do handshake again"}
+            
+            if not tokens[on['token']]['ip'] == request.client.host:
+                del tokens[on['token']]
+                return {"status_code": 500, "message": "do handshake again"}
+
         
         response = await call_next(request)
         if requested_url == "/test":
@@ -133,5 +148,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
         # out_resp = response_body_str#encrypt(response_body_str,request.client.host)
         out_resp = encrypt(response_body_str,respBody['session key'])
+        if not requested_url == '/handshake':
+            tokens[on['token']]['exp'] = datetime.now() + timedelta(minutes=session_expiry_time)
 
         return JSONResponse(content=out_resp)
