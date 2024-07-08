@@ -79,13 +79,14 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 @router.post("/handshake")
 async def handshake(request: Request, response: Response, data: DecryptRequest, db: Session = Depends(get_db)):
     b = await request.body()
-    print('key is:',b)
+    payload = json.loads(b)
+
     ip = request.client.host
     key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
     keys = tokens.keys()
     while key in keys:
         key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-    tokens[key] = {'key': b,'ip':ip, 'exp': datetime.now() + timedelta(minutes=session_expiry_time),'customerID':None}
+    tokens[key] = {'key': payload['message'],'ip':ip, 'exp': datetime.now() + timedelta(minutes=session_expiry_time),'customerID':None}
     return {"status_code":200,"message":"Hand Shake Successful","session key":key}
 
 
