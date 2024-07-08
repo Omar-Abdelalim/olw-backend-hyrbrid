@@ -126,6 +126,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
         
         print('request:',type(on),' , ',on)
         if not requested_url == '/handshake':
+            on = json.loads(on)
             if not on['token'] in tokens:
                 return {"status_code": 500, "message": "do handshake again"}
 
