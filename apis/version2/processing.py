@@ -1534,7 +1534,7 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
 
 @router.post("/login")
 async def signIn(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-  try:
+#   try:
     em = payload["email"]
 
     pa = payload["password"]
@@ -1563,21 +1563,21 @@ async def signIn(request: Request, payload: dict = Body(...), db: Session = Depe
                 "other": password}
     db.query(Token).filter(Token.customerID == user.id).update({"status": "expired"})
     t = Token(customerID=str(user.id), dateTime=datetime.now(), ip=request.client.host, token=generateToken(user.id),
-              expiration=datetime.now() + timedelta(minutes=tokenValidMins), status="active",deviceID="none")
+                expiration=datetime.now() + timedelta(minutes=tokenValidMins), status="active",deviceID="none")
     db.add(t)
     db.commit()
     db.refresh(t)
     account = db.query(Account).filter(Account.customerID == str(user.id), Account.primaryAccount == "1").first()
     bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
     bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
-    
+
     
 
-  except:
-         message = "exception occurred with retrieving token"
-         log(0,message)
-         return {"status_code":401,"message":message}
-  return {"status_code":200,"user":user,"token":t,"account":account,"bank":bank,"bankBusiness":bankb}
+#   except:
+#          message = "exception occurred with retrieving token"
+#          log(0,message)
+#          return {"status_code":401,"message":message}
+    return {"status_code":200,"user":user,"token":t,"account":account,"bank":bank,"bankBusiness":bankb}
 
 @router.post("/getAddress")
 async def getAdd(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
