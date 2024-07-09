@@ -108,16 +108,14 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 @router.post("/transaction")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
@@ -170,17 +168,15 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 @router.post("/transactionQr")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
-            
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
+                
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
             
@@ -232,22 +228,21 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
         if qrt is None:
             return{"status_code":403,"message":"terminal qr code is not pending here"}
         db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").update({"qrStatus":"processing"})
         db.commit()
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
             
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
             
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
 
@@ -307,16 +302,14 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
             iBan = payload["iBan"]
@@ -406,16 +399,14 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 @router.post("/bank")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             accountNo=payload["accountNo"]
             bankName=payload["bankName"]
@@ -454,17 +445,15 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/getBanks")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
-            
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
+                
             
             accountNo=payload["accountNo"]
 
@@ -487,16 +476,14 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/getBanksIban")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             
             iBan=payload["iBan"]
@@ -523,16 +510,14 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/bankB")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             accountNo=payload["accountNo"]
             bankName=payload["bankName"]
@@ -571,16 +556,14 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/getBanksB")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             
             accountNo=payload["accountNo"]
@@ -605,16 +588,14 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/getBanksBIban")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
-            check = checkToken(payload["id"],payload["token"])
-            if not check:
-                return {"status_code":400,"message":"token invalid"}
-            
-            Itoken = updateToken(payload["id"],db)
-            if not Itoken["status_code"]==201:
-                return Itoken
-            token = Itoken["message"]
-            if not token:
-                return {"status_code":400,"message":"token invalid"}
+            payload = await request.body()
+            payload = json.loads(payload)
+            payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
             
             
             bank = db.query(BankBusiness).filter(BankBusiness.iBan == payload["iBan"]).first()
@@ -639,12 +620,28 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 
 @router.post("/inTransaction")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
+    payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
+
+
+    print('payload:',payload)
     t = TransactionRequestIncoming(dateTime = datetime.now(),inIBan=payload["inIBan"],accountNo=payload["accountNo"],currency=payload["currency"],country=payload["country"],sendingCurrency=payload["sendingCurrency"],sendingCountry=payload["sendingCountry"],direction="in",transactionStatus="pending",amount=payload["amount"],feesCode=payload["feesCode"])
     db.add(t)
     db.commit()
 
 @router.post("/balanceBank")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
+    payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
+
+        
+    print('payload:',payload)
     t1 = db.query(Transaction).filter(Transaction.id%2 == 1).all()
     t2 = db.query(Transaction).filter(Transaction.id%2 == 0).all()
 
@@ -957,7 +954,14 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 @router.post("/getFees")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
+    
+        print('payload:',payload)
         returning = calcFee(db,payload["feeCode"],payload["amount"])
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         returning["level"] = cus.customerStatus
@@ -979,16 +983,14 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/getEligibility")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"],payload["token"])
-        if not check:
-            return {"status_code":400,"message":"token invalid"}
-        
-        Itoken = updateToken(payload["id"],db)
-        if not Itoken["status_code"]==201:
-            return Itoken
-        token = Itoken["message"]
-        if not token:
-            return {"status_code":400,"message":"token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         
 
         returning = {}
@@ -1020,17 +1022,14 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/charge")
 async def charge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"],payload["token"])
-        if not check:
-            return {"status_code":400,"message":"token invalid"}
-        
-        Itoken = updateToken(payload["id"],db)
-        if not Itoken["status_code"]==201:
-            return Itoken
-        token = Itoken["message"]
-        if not token:
-            return {"status_code":400,"message":"token invalid"}
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
 
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
@@ -1100,17 +1099,14 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
 @router.get("/getCharge")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"],payload["token"])
-        if not check:
-            return {"status_code":400,"message":"token invalid"}
-        
-        Itoken = updateToken(payload["id"],db)
-        if not Itoken["status_code"]==201:
-            return Itoken
-        token = Itoken["message"]
-        if not token:
-            return {"status_code":400,"message":"token invalid"}
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
 
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
@@ -1139,6 +1135,14 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         ac = addCard(db,payload["id"],payload["cardNumber"],payload["expiryMonth"],payload["expiryYear"],payload["fName"]+" "+payload["lName"],payload["secretNumber"])
         if not ac["status_code"] == 201:
             with open("formTemplates/failure.html", "r") as file:
@@ -1163,17 +1167,14 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/removeCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"],payload["token"])
-        if not check:
-            return {"status_code":400,"message":"token invalid"}
-        
-        Itoken = updateToken(payload["id"],db)
-        if not Itoken["status_code"]==201:
-            return Itoken
-        token = Itoken["message"]
-        if not token:
-            return {"status_code":400,"message":"token invalid"}
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         card = db.query(Card).filter(Card.token == payload["cardToken"],Card.cardStatus == "active").first()
         if card is None:
             return {"status_code":401,"message":"this is not an active card"}
@@ -1199,6 +1200,15 @@ async def addcard(cusID,request: Request,response: Response,db: Session = Depend
 @router.post("/encodeID")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     # try:
+    payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
+
+    
+    print('payload:',payload)
+
     re = AlphanumericConverter.encode(payload["id"])
     return {"status_code":200,"message":re}
     # except:
@@ -1210,17 +1220,14 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
 @router.get("/getCards")
 async def getcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"],payload["token"])
-        if not check:
-            return {"status_code":400,"message":"token invalid"}
-        
-        Itoken = updateToken(payload["id"],db)
-        if not Itoken["status_code"]==201:
-            return Itoken
-        token = Itoken["message"]
-        if not token:
-            return {"status_code":400,"message":"token invalid"}
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cards = db.query(Card).filter(Card.customerID == str(payload["id"]),Card.cardStatus == "active").all()
         extracted_details = []
         for card in cards:
@@ -1250,7 +1257,12 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
     try:
         payload = await request.body()
         payload = json.loads(payload)
-        print(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
         OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
         

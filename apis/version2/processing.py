@@ -94,6 +94,14 @@ async def handshake(request: Request, response: Response, data: DecryptRequest, 
 
 @router.post("/reg1")
 async def reg1(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
+    payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
+
+
+    print('payload:',payload)
     password = payload["password"]
     c = Customer(firstName=payload["firstName"],
                  lastName=payload["lastName"],
@@ -204,6 +212,14 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 @router.post("/reg2")
 async def reg2(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         kycO = db.query(KYC).filter(KYC.customerID == payload["id"], KYC.kycStatus == "active")
         if kycO.first() is not None:
             db.query(KYC).filter(KYC.customerID == payload["id"]).update({"kycStatus": "outdated"})
@@ -269,7 +285,14 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
 @router.post("/reg3")
 async def reg3(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         beforep = preprocess()
         if not beforep["status_code"] == 201:
             return beforep
@@ -306,6 +329,14 @@ async def reg3(request: Request, payload: dict = Body(...), db: Session = Depend
 @router.post("/confirmEmail")
 async def sendemail1(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
 
         if cus is None:
@@ -329,6 +360,14 @@ async def sendemail1(request: Request, payload: dict = Body(...), db: Session = 
 @router.post("/confirmMobile")
 async def sendSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
 
         if cus is None:
@@ -355,19 +394,22 @@ async def sendSms(request: Request, payload: dict = Body(...), db: Session = Dep
 @router.post("/pinLogin")
 async def pinLogin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
 
         pin = cus.pin
         if pin == payload["pin"]:
-            db.query(Token).filter(Token.customerID == cus.id).update({"status": "expired"})
-            t = Token(customerID=cus.id, dateTime=datetime.now(), ip=request.client.host, token=generateToken(cus.id),
-                      expiration=datetime.now() + timedelta(minutes=tokenValidMins), status="active",deviceID="none")
-            db.add(t)
-            db.commit()
-            db.refresh(t)
-            return {"status_code": 201, "message": "Correct Pin", "token": t}
+            tokens[token]['id'] = cus.id
+            return {"status_code": 201, "message": "Correct Pin", "token": token}
 
         return {"status_code": 401, "message": "pins mismatch"}
     except:
@@ -379,12 +421,14 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
 @router.put("/pin")
 async def changePin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -407,12 +451,14 @@ async def changePin(request: Request, payload: dict = Body(...), db: Session = D
 @router.put("/email")
 async def changeEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -446,12 +492,14 @@ async def changeEmail(request: Request, payload: dict = Body(...), db: Session =
 @router.put("/phone")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -470,12 +518,14 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 @router.put("/password")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -510,12 +560,14 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 @router.post("/createPin")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         if not payload["pin1"] == payload["pin2"]:
             return {"status_code": 401, "message": "pins need to match"}
 
@@ -538,12 +590,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createBio")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -563,12 +617,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/bioPin")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -584,12 +640,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createQR")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -612,7 +670,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createQRTer")
 async def createQrTer(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         
         if not qr is None:
@@ -636,15 +701,15 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
 @router.post("/cancelQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # check = checkToken(payload["id"], payload["token"])
-        # if not check:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # token = updateToken(payload["id"], db)
-        # if not token:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        # if cus is None:
-        #     return {"status_code": 401, "message": "no customer exists with this id"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
+        
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this terminal"}
@@ -664,15 +729,14 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/timeOutQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # check = checkToken(payload["id"], payload["token"])
-        # if not check:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # token = updateToken(payload["id"], db)
-        # if not token:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        # if cus is None:
-        #     return {"status_code": 401, "message": "no customer exists with this id"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this terminal"}
@@ -693,15 +757,14 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/rejectQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # check = checkToken(payload["id"], payload["token"])
-        # if not check:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # token = updateToken(payload["id"], db)
-        # if not token:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        # if cus is None:
-        #     return {"status_code": 401, "message": "no customer exists with this id"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this terminal"}
@@ -721,15 +784,14 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.get("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # check = checkToken(payload["id"], payload["token"])
-        # if not check:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # token = updateToken(payload["id"], db)
-        # if not token:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        # if cus is None:
-        #     return {"status_code": 401, "message": "no customer exists with this id"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this terminal"}
@@ -745,15 +807,14 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.get("/getQrTerIdStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # check = checkToken(payload["id"], payload["token"])
-        # if not check:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # token = updateToken(payload["id"], db)
-        # if not token:
-        #     return {"status_code": 400, "message": "token invalid"}
-        # cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        # if cus is None:
-        #     return {"status_code": 401, "message": "no customer exists with this id"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.id == payload["qrID"]).first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this id"}
@@ -769,12 +830,14 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/recCancelQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -795,12 +858,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/timeOutCancelQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -821,12 +886,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/senderReadQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -855,12 +922,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/senderRejectQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -888,12 +957,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -914,6 +985,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrTerStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"]).first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this user"}
@@ -929,12 +1008,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrIdStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -958,12 +1039,14 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/checkPin")
 async def checkPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
@@ -983,12 +1066,14 @@ async def checkPin(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/balance")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         accts = db.query(Account).filter(Account.customerID == payload["id"])
         if accts.first() is None:
             return {"status_code": 400, "message": "customer has no accounts"}
@@ -1007,12 +1092,14 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/acctBalance")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         accts = db.query(Account).filter(Account.accountNumber == payload["accountNumber"]).first()
         if accts is None:
             return {"status_code": 400, "message": "account doesn't exist"}
@@ -1027,12 +1114,14 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/getTransactions")
 async def gettrans(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         acct = db.query(Account).filter(Account.accountNumber == payload["accountNumber"]).first()
         if acct is None:
             return {"status_code": 400, "message": "account doesn't exist"}
@@ -1081,12 +1170,14 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/addAcc")
 async def addAcct(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         if payload["balance"] < 1:
             return {"status_code": 401, "message": "balance can't be negative"}
 
@@ -1126,12 +1217,14 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
 @router.post("/kycLevel")
 async def getKyc(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         return {"status_code": 200, "message": cus.customerStatus, "token": token}
     except:
@@ -1142,12 +1235,14 @@ async def getKyc(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/removeNotification")
 async def remNot(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         db.query(Notification).filter(Notification.id == payload["notifID"]).update({"notificationStatus":"inactive"})
         
         return {"status_code": 200, "message": "notification inactivated", "token": token}
@@ -1161,12 +1256,14 @@ async def remNot(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/account")
 async def getAccount(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         accounts = db.query(Account).filter(Account.customerID == payload["id"]).all()
         user = db.query(Customer).filter(Customer.id == payload["id"]).first()
 
@@ -1180,12 +1277,14 @@ async def getAccount(request: Request, payload: dict = Body(...), db: Session = 
 @router.post("/getNotification")
 async def getNotifications(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         notifications = db.query(Notification).filter(Notification.customerID == payload["id"], Notification.notificationStatus == "active").all()
         notifications.reverse()
         return {"status_code": 200, "message": notifications, "token": token}
@@ -1198,6 +1297,14 @@ async def getNotifications(request: Request, payload: dict = Body(...), db: Sess
 @router.post("/sendVerEmail")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
         cus.emailCode = send_template_email(cus.email, 1, cus)
 
@@ -1218,12 +1325,14 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
 @router.post("/resendVer")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         cus.emailCode = send_template_email(cus.email, 3, cus)
@@ -1247,12 +1356,14 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
 @router.post("/resendUpdateVer")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         
         ec1 = db.query(EmailCode).filter(EmailCode.customerID == payload["id"] , EmailCode.result=="pending").first()
         
@@ -1408,6 +1519,14 @@ async def updateEmail(user_id, request: Request, db: Session = Depends(get_db)):
 @router.post("/updateMobile")
 async def sendSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
 
         if cus is None:
@@ -1457,12 +1576,14 @@ async def test(request: Request, payload: dict = Body(...), db: Session = Depend
 @router.get("/getUserDetails")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         user = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if user is None:
             return {"status_code": 400, "message": "no user with such an ID"}
@@ -1480,6 +1601,14 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.get("/getKYC2")
 async def getkyc2(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         opts = db.query(Options).filter(Options.table == "KYC2").all()
         displayOptions = {}
         for i in opts:
@@ -1516,6 +1645,14 @@ async def ops(request: Request, payload: dict = Body(...), db: Session = Depends
 @router.post("/loginSms")
 async def signInSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if not cus:
             return {"status_code": 404, "message": "no user exists with this id"}
@@ -1539,8 +1676,10 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     payload = json.loads(payload)
     payload = payload['message']
     payload = json.loads(payload)
-    
-    print(payload)
+    token = payload['token']
+
+
+    print('payload:',payload)
     em = payload["email"]
 
     pa = payload["password"]
@@ -1567,12 +1706,10 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     if not Hasher.verify_password(hashed_password, password.passwordHash):
         return {"status_code": 404, "message": "Password doesn't match email", "orig": hashed_password,
                 "other": password}
-    db.query(Token).filter(Token.customerID == user.id).update({"status": "expired"})
-    t = Token(customerID=str(user.id), dateTime=datetime.now(), ip=request.client.host, token=generateToken(user.id),
-                expiration=datetime.now() + timedelta(minutes=tokenValidMins), status="active",deviceID="none")
-    db.add(t)
-    db.commit()
-    db.refresh(t)
+    tokens[token]['id'] = user.id
+    
+
+
     account = db.query(Account).filter(Account.customerID == str(user.id), Account.primaryAccount == "1").first()
     bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
     bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
@@ -1583,17 +1720,19 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 #          message = "exception occurred with retrieving token"
 #          log(0,message)
 #          return {"status_code":401,"message":message}
-    return {"status_code":200,"user":user,"token":t,"account":account,"bank":bank,"bankBusiness":bankb}
+    return {"status_code":200,"user":user,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
 
 @router.post("/getAddress")
 async def getAdd(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        check = checkToken(payload["id"], payload["token"])
-        if not check:
-            return {"status_code": 400, "message": "token invalid"}
-        token = updateToken(payload["id"], db)
-        if not token:
-            return {"status_code": 400, "message": "token invalid"}
+        payload = await request.body()
+        payload = json.loads(payload)
+        payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
+
+    
+        print('payload:',payload)
         return getAddress(payload["id"],db)
     except:
         message = "exception occurred with retrieving Address"
