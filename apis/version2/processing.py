@@ -1533,8 +1533,9 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
 
 
 @router.post("/login")
-async def signIn(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
+async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
 #   try:
+    payload = await request.body()
     em = payload["email"]
 
     pa = payload["password"]
