@@ -1536,6 +1536,10 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
 #   try:
     payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    
     print(payload)
     em = payload["email"]
 
