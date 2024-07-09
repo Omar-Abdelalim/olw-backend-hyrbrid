@@ -156,6 +156,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if not requested_url == '/handshake':
             tokens[on['token']]['exp'] = datetime.now() + timedelta(minutes=session_expiry_time)
             curr_code = on['token']
-
-        out_resp = encrypt(response_body_str,tokens[curr_code]['key'])
+            out_resp = encrypt(response_body_str,tokens[curr_code]['key'])
+        else:
+            out_resp = encrypt(response_body_str,respBody['session key'])
         return JSONResponse(content=out_resp)
