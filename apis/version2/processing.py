@@ -328,31 +328,31 @@ async def reg3(request: Request, payload: dict = Body(...), db: Session = Depend
 
 @router.post("/confirmEmail")
 async def sendemail1(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        payload = json.loads(payload)
-        payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    payload = json.loads(payload)
+    payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
 
-    
-        print('payload:',payload)
-        cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
 
-        if cus is None:
-            return "no customer exists with this email"
+    print('payload:',payload)
+    cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
 
-        e = Email(emailAddress=payload["email"], emailStatus="active", customerID=cus.id, dateTime=datetime.now())
+    if cus is None:
+        return "no customer exists with this email"
 
-        db.query(Customer).filter(Customer.email == payload["email"]).update({"customerStatus": "first level"})
+    e = Email(emailAddress=payload["email"], emailStatus="active", customerID=cus.id, dateTime=datetime.now())
 
-        db.add(e)
-        db.commit()
-        db.refresh(e)
-    except:
-        message = "exception occurred with creating email"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    db.query(Customer).filter(Customer.email == payload["email"]).update({"customerStatus": "first level"})
+
+    db.add(e)
+    db.commit()
+    db.refresh(e)
+    # except:
+    #     message = "exception occurred with creating email"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
     return {"status_code": 201, "message": "email Succefully added"}
 
