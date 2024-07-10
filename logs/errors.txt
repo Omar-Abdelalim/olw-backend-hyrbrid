@@ -623,3 +623,6 @@ exception occurred with outgoing transactions
 exception occurred with outgoing transactions
 exception occurred with outgoing transactions
 exception occurred with outgoing transactions
+exception occurred with retrieving token
+exception occurred with retrieving token
+exception occurred with checking balance

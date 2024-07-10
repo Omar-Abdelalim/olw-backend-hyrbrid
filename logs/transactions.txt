@@ -329,3 +329,6 @@ OUT GOING TRANSACTION from:01-00000102-001-01, to:056754946548, amount:1, curren
 from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}
 from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}
 from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{charge.currency}, receiving currency:{charge.currency}
+from:01-00000103-001-01, to:01-00000102-001-01, amount:12,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:4,sending currency:USD, receiving currency:USD
+from:01-00000103-001-01, to:01-00000102-001-01, amount:2,sending currency:USD, receiving currency:USD

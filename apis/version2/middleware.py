@@ -113,6 +113,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
         
         
         body = await request.body()
+        print("body from request",body)
         json_body = json.loads(body)
         decrypt_request = DecryptRequest(**json_body)
         decrypted_message = self.decrypt_message_again(decrypt_request)

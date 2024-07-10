@@ -160,7 +160,6 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
-        db.refresh(token)
         db.refresh(cus)
         tra1 = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
         return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra1}
