@@ -331,10 +331,7 @@ async def sendemail1(request: Request, payload: dict = Body(...), db: Session = 
     # try:
     payload = await request.body()
     payload = json.loads(payload)
-    payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
-
+    
 
     print('payload:',payload)
     cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
@@ -362,10 +359,6 @@ async def sendSms(request: Request, payload: dict = Body(...), db: Session = Dep
     try:
         payload = await request.body()
         payload = json.loads(payload)
-        payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
-
     
         print('payload:',payload)
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
