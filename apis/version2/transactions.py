@@ -215,16 +215,16 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 
                 if not trans2["status_code"]==201:
                     return trans2
-            tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
+            
         except:
             message = "exception occurred with creating transaction"
             log(0,message)
             return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
-         
+        tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
         db.refresh(cus)
-        return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra}
+        return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transaction":tra}
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
