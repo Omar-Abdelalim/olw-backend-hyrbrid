@@ -215,6 +215,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 
                 if not trans2["status_code"]==201:
                     return trans2
+            tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
         except:
             message = "exception occurred with creating transaction"
             log(0,message)
@@ -223,7 +224,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
         db.commit()
          
         db.refresh(cus)
-        return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":trans["t1"]}
+        return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra}
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
