@@ -471,7 +471,7 @@ async def changeEmail(request: Request, payload: dict = Body(...), db: Session =
 
         db.add(ec)
         db.commit()
-        db.refresh(token)
+         
 
         return {"status_code": 201, "message": "update email sent", "token": token}
 
@@ -559,7 +559,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
         payload = json.loads(payload)
         token = payload['token']
 
-    
+
         print('payload:',payload)
         if not payload["pin1"] == payload["pin2"]:
             return {"status_code": 401, "message": "pins need to match"}
@@ -571,7 +571,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
         res = db.query(Customer).filter(Customer.id == payload["id"]).update({"pin": pincurr})
         db.commit()
-        db.refresh(token)
+     
 
     except:
         message = "exception occurred with creating pin"
@@ -598,7 +598,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
         db.add(b)
         db.commit()
-        db.refresh(token)
+         
 
     except:
         message = "exception occurred with creating Bio pin"
@@ -651,7 +651,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
         db.add(q)
         db.commit()
-        db.refresh(token)
+         
 
     except:
         message = "exception occurred with creating QR request"
@@ -839,7 +839,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
             return {"status_code": 401, "message": "user has no active QR request"}
         qr = db.query(QR).filter(QR.customerID == payload["id"], QR.qrStatus == "pending").update({"qrStatus":"cancelled"})
         db.commit()
-        db.refresh(token)
+         
 
     except:
         message = "exception occurred with creating QR request"
@@ -867,7 +867,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
             return {"status_code": 401, "message": "user has no active QR request"}
         qr = db.query(QR).filter(QR.customerID == payload["id"], QR.qrStatus == "pending").update({"qrStatus":"timed out"})
         db.commit()
-        db.refresh(token)
+         
 
     except:
         message = "exception occurred with creating QR request"
@@ -900,7 +900,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
         db.query(QR).filter(QR.customerID == payload["recID"], QR.qrStatus == "pending").update({"qrStatus":"received"})
         db.commit()
         db.refresh(qr)
-        db.refresh(token)
+         
         db.refresh(rec)
         db.refresh(cus)
         
@@ -935,7 +935,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
         db.query(QR).filter(QR.customerID == payload["recID"], QR.qrStatus == "pending").update({"qrStatus":"rejected"})
         db.commit()
         db.refresh(qr)
-        db.refresh(token)
+         
         db.refresh(rec)
         db.refresh(cus)
         
