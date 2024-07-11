@@ -113,20 +113,30 @@ class decryptMiddleware(BaseHTTPMiddleware):
         
         
         body = await request.body()
-        print("body from request",body)
         json_body = json.loads(body)
-        decrypt_request = DecryptRequest(**json_body)
-        decrypted_message = self.decrypt_message_again(decrypt_request)
-        modified_body =  json.dumps(decrypted_message).encode('utf-8') # Modify if necessary
+        print("body from request",json_body)
+        substrings = json_body['message'].split(":::")
+        alldicts = []
+        for i in substrings:
+            json_body = {'message':i}
+            decrypt_request = DecryptRequest(**json_body)
+            decrypted_message = self.decrypt_message_again(decrypt_request)
+            modified_body =  json.dumps(decrypted_message).encode('utf-8') # Modify if necessary
+            alldicts.append(modified_body)
+        
+        modified_body = {}
+        for j in alldicts:
+            on = await request.body()
+            on = json.loads(on)
+            on = on['message']
+            modified_body.update(j)
         # Define a new receive function that returns the modified body
         async def receive() -> dict:
             return {"type": "http.request", "body": modified_body}
 
         request = Request(scope=request.scope, receive=receive)
         
-        on = await request.body()
-        on = json.loads(on)
-        on = on['message']
+        
         
         
         print('request:',type(on),' , ',on)
