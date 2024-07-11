@@ -221,7 +221,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
-        db.refresh(token)
+         
         db.refresh(cus)
         return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":trans["t1"]}
 
@@ -346,7 +346,7 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
             return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],("iBan"+iBan),payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
-        db.refresh(token)
+         
         return {"status_code": 201, "token":token,"message":"transaction registered"}        
 
 def tansaction3(intransID,db: Session = Depends(get_db)):
@@ -1087,7 +1087,7 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
             
 
         req = requests.post(url, json=json.dumps(charge_dict)) 
-        db.refresh(token)
+         
         return {"status_code":201,"url":json.loads(req.content),"charge":charge_instance,"token":token}
         
     except:
@@ -1121,7 +1121,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
             db.query(Charge).filter(Charge.id == payload["chargeID"]).update({"chargeStatus":"Cancelled / Timed Out"})
             db.commit()
             db.refresh(ch)
-            db.refresh(token)
+             
             return {"status_code":401,"charge":ch,"token":token,"message":"timed out"}
         return {"status_code":201,"charge":ch,"token":token,"time":20}
 
@@ -1180,7 +1180,7 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
         
         card = db.query(Card).filter(Card.token == payload["cardToken"]).update({"cardStatus":"inactive"})
         db.commit()
-        db.refresh(token)
+         
         return {"status_code":201,"message":"card removed","token":token}
     except:
         message = "exception occurred with adding card"
