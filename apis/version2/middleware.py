@@ -131,8 +131,10 @@ class decryptMiddleware(BaseHTTPMiddleware):
             on = json.loads(on)
             if not requested_url == "/handshake":
                 on = on['message']
+                on = json.loads(on)
             print("ON:",on)
             modified_body.update(on)
+        print('modefied',modified_body)
         # Define a new receive function that returns the modified body
         async def receive() -> dict:
             return {"type": "http.request", "body": modified_body}
@@ -142,9 +144,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
         
         
         
-        print('request:',type(on),' , ',on)
-        if not requested_url == '/handshake':
-            on = json.loads(on)
+        if not requested_url == '/handshake':        
             print('not handshake, body now: ',on)
             if not on['token'] in tokens:
                 return {"status_code": 500, "message": "do handshake again"}
