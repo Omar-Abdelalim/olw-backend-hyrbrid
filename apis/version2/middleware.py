@@ -128,6 +128,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
         print('alldicts:',alldicts)
         for j in alldicts:
             on = j
+            on = on.decode('utf-8')
             # on = json.loads(on)
             if not requested_url == "/handshake":
                 on = on['message']
