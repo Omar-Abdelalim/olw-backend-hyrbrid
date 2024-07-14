@@ -135,7 +135,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             print("ON:",on)
             modified_body.update(on)
         print('modefied',modified_body)
-        modified_body=json.dumps(modified_body)
+        modified_body=json.dumps(modified_body).encode('utf-8')
         # Define a new receive function that returns the modified body
         async def receive() -> dict:
             return {"type": "http.request", "body": modified_body}
