@@ -81,6 +81,7 @@ async def handshake(request: Request, response: Response, data: DecryptRequest, 
     b = await request.body()
     payload = json.loads(b)
 
+    print("payload",payload)
     ip = request.client.host
     key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
     keys = tokens.keys()
