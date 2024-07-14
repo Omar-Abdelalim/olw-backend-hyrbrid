@@ -130,6 +130,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             on = await request.body()
             on = json.loads(on)
             on = on['message']
+            print("ON:",on)
             modified_body.update(j)
         # Define a new receive function that returns the modified body
         async def receive() -> dict:
