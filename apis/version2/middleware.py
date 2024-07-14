@@ -125,6 +125,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             alldicts.append(modified_body)
         
         modified_body = {}
+        print('alldicts:',alldicts)
         for j in alldicts:
             on = await request.body()
             on = json.loads(on)
