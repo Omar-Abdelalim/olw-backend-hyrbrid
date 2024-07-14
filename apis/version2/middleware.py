@@ -124,7 +124,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             modified_body =  json.dumps(decrypted_message).encode('utf-8') # Modify if necessary
             alldicts.append(modified_body)
         
-        modified_body = {}
+        modified_body = ""
         print('alldicts:',alldicts)
         for j in alldicts:
             on = j
@@ -132,11 +132,12 @@ class decryptMiddleware(BaseHTTPMiddleware):
             if not requested_url == "/handshake":
                 on = on['message']
                 print('on inside:',on)
-                on = json.loads(on)
+                # on = json.loads(on)
             print("ON:",on)
-            modified_body.update(on)
+            modified_body=modified_body+on
         print('modefied',modified_body)
-        modified_body=json.dumps(modified_body).encode('utf-8')
+        # modified_body=json.dumps(modified_body).encode('utf-8')
+        modified_body=modified_body.encode('utf-8')
         # Define a new receive function that returns the modified body
         async def receive() -> dict:
             return {"type": "http.request", "body": modified_body}
