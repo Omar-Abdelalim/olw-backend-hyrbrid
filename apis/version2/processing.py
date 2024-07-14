@@ -97,8 +97,8 @@ async def handshake(request: Request, response: Response, data: DecryptRequest, 
 async def reg1(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
     payload = json.loads(payload)
-    payload = payload['message']
-    payload = json.loads(payload)
+    # payload = payload['message']
+    # payload = json.loads(payload)
     token = payload['token']
 
 
@@ -213,7 +213,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 @router.post("/reg2")
 async def reg2(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -286,7 +286,7 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
 @router.post("/reg3")
 async def reg3(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -388,7 +388,7 @@ async def sendSms(request: Request, payload: dict = Body(...), db: Session = Dep
 @router.post("/pinLogin")
 async def pinLogin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -415,7 +415,7 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
 @router.put("/pin")
 async def changePin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -445,7 +445,7 @@ async def changePin(request: Request, payload: dict = Body(...), db: Session = D
 @router.put("/email")
 async def changeEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -486,7 +486,7 @@ async def changeEmail(request: Request, payload: dict = Body(...), db: Session =
 @router.put("/phone")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -512,7 +512,7 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 @router.put("/password")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -554,7 +554,7 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 @router.post("/createPin")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -584,7 +584,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createBio")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -611,7 +611,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/bioPin")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -634,7 +634,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createQR")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -664,7 +664,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/createQRTer")
 async def createQrTer(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -695,7 +695,7 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
 @router.post("/cancelQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -723,7 +723,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/timeOutQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -751,7 +751,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/rejectQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -778,7 +778,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.get("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -801,7 +801,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.get("/getQrTerIdStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -824,7 +824,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/recCancelQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -852,7 +852,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/timeOutCancelQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -880,7 +880,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/senderReadQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -916,7 +916,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/senderRejectQr")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -951,7 +951,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -979,7 +979,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrTerStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1002,7 +1002,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.get("/getQrIdStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1033,7 +1033,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 @router.post("/checkPin")
 async def checkPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1060,7 +1060,7 @@ async def checkPin(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/balance")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1086,7 +1086,7 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/acctBalance")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1108,7 +1108,7 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/getTransactions")
 async def gettrans(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1164,7 +1164,7 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
 @router.post("/addAcc")
 async def addAcct(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1211,7 +1211,7 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
 @router.post("/kycLevel")
 async def getKyc(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1229,7 +1229,7 @@ async def getKyc(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/removeNotification")
 async def remNot(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1250,7 +1250,7 @@ async def remNot(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.post("/account")
 async def getAccount(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1271,7 +1271,7 @@ async def getAccount(request: Request, payload: dict = Body(...), db: Session = 
 @router.post("/getNotification")
 async def getNotifications(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1291,7 +1291,7 @@ async def getNotifications(request: Request, payload: dict = Body(...), db: Sess
 @router.post("/sendVerEmail")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1319,7 +1319,7 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
 @router.post("/resendVer")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1350,7 +1350,7 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
 @router.post("/resendUpdateVer")
 async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1513,7 +1513,7 @@ async def updateEmail(user_id, request: Request, db: Session = Depends(get_db)):
 @router.post("/updateMobile")
 async def sendSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1570,7 +1570,7 @@ async def test(request: Request, payload: dict = Body(...), db: Session = Depend
 @router.get("/getUserDetails")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1595,7 +1595,7 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 @router.get("/getKYC2")
 async def getkyc2(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1639,7 +1639,7 @@ async def ops(request: Request, payload: dict = Body(...), db: Session = Depends
 @router.post("/loginSms")
 async def signInSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1668,8 +1668,8 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 #   try:
     payload = await request.body()
     payload = json.loads(payload)
-    payload = payload['message']
-    payload = json.loads(payload)
+    # payload = payload['message']
+    # payload = json.loads(payload)
     token = payload['token']
 
 
@@ -1719,7 +1719,7 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 @router.post("/getAddress")
 async def getAdd(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)

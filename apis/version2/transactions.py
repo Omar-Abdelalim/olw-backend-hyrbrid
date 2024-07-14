@@ -109,8 +109,8 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -168,8 +168,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -228,7 +228,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -303,8 +303,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -400,8 +400,8 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -446,8 +446,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -477,8 +477,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -511,8 +511,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -557,8 +557,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -589,8 +589,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
             payload = await request.body()
-            payload = json.loads(payload)
-            payload = payload['message']
+            # payload = json.loads(payload)
+            # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
 
@@ -954,7 +954,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 @router.post("/getFees")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -983,7 +983,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/getEligibility")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1022,7 +1022,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/charge")
 async def charge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1099,7 +1099,7 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
 @router.get("/getCharge")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1135,7 +1135,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1167,7 +1167,7 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/removeCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1220,7 +1220,7 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
 @router.get("/getCards")
 async def getcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
@@ -1255,7 +1255,7 @@ async def getcard(request: Request,response: Response,payload: dict = Body(...),
 @router.post("/chargeTransaction")
 async def testT(request: Request,response: Response,db: Session = Depends(get_db)):
     try:
-        # payload = await request.body()
+        payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
