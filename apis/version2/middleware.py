@@ -131,6 +131,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             on = json.loads(on)
             if not requested_url == "/handshake":
                 on = on['message']
+                print('on inside:',on)
                 on = json.loads(on)
             print("ON:",on)
             modified_body.update(on)
