@@ -1138,7 +1138,7 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
     payload = await request.body()
     # payload = json.loads(payload)
     # payload = payload['message']
-    # payload = json.loads(payload)
+    payload = json.loads(payload)
     # token = payload['token']
 
 
