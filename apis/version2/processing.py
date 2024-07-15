@@ -1322,7 +1322,7 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
-        payload = json.loads(payload)
+        # payload = json.loads(payload)
         token = payload['token']
 
     
