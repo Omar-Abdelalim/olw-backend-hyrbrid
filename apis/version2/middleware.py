@@ -153,16 +153,16 @@ class decryptMiddleware(BaseHTTPMiddleware):
             on = json.loads(b)    
             print('not handshake, body now: ',on)
             if not on['token'] in tokens:
-                return {"status_code": 500, "message": "do handshake again"}
+                return {"status_code": 401, "message": "do handshake again"}
 
 
             if datetime.now() > tokens[on['token']]['exp']:
                 del tokens[on['token']]
-                return {"status_code": 500, "message": "do handshake again"}
+                return {"status_code": 401, "message": "do handshake again"}
             
             if not tokens[on['token']]['ip'] == request.client.host:
                 del tokens[on['token']]
-                return {"status_code": 500, "message": "do handshake again"}
+                return {"status_code": 401, "message": "do handshake again"}
 
         
         response = await call_next(request)
