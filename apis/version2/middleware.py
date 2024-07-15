@@ -103,7 +103,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         requested_url = request.url.path
-        if requested_url == "/initAccts" or requested_url == '/intOpts' or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard":
+        if requested_url == "/initAccts" or requested_url == '/intOpts' or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction":
             response = await call_next(request)
             return response
         if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url):

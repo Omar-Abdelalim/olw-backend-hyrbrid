@@ -1138,8 +1138,8 @@ async def addcard(request: Request,response: Response,payload: dict = Body(...),
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+        # payload = json.loads(payload)
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -1258,8 +1258,8 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+        # payload = json.loads(payload)
+        # token = payload['token']
 
     
         print('payload:',payload)
