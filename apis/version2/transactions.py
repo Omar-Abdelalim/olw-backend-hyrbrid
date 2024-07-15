@@ -1098,39 +1098,39 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
 
 @router.get("/getCharge")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
 
+
+    print('payload:',payload)
+
+    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+    if cus is None:
+        return {"status_code":401,"message":"No customer exists with this ID"}
     
-        print('payload:',payload)
-
-        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        if cus is None:
-            return {"status_code":401,"message":"No customer exists with this ID"}
-        
-        ch = db.query(Charge).filter(Charge.id == payload["chargeID"]).first()
-        if ch is None:
-            return {"status_code":401,"message":"No charge exists with this ID"}
-        elif not int(ch.customerID) == cus.id:
-            return {"status_code":401,"message":"this charge does not belong to this customer"}
-        time  = datetime.strptime(ch.dateTime, '%Y-%m-%d %H:%M:%S.%f')+timedelta(minutes=20)
-        if datetime.now() > time:
-            db.query(Charge).filter(Charge.id == payload["chargeID"]).update({"chargeStatus":"Cancelled / Timed Out"})
-            db.commit()
-            db.refresh(ch)
-             
-            return {"status_code":401,"charge":ch,"token":token,"message":"timed out"}
-        return {"status_code":201,"charge":ch,"token":token,"time":20}
+    ch = db.query(Charge).filter(Charge.id == payload["chargeID"]).first()
+    if ch is None:
+        return {"status_code":401,"message":"No charge exists with this ID"}
+    elif not int(ch.customerID) == cus.id:
+        return {"status_code":401,"message":"this charge does not belong to this customer"}
+    time  = datetime.strptime(ch.dateTime, '%Y-%m-%d %H:%M:%S.%f')+timedelta(minutes=20)
+    if datetime.now() > time:
+        db.query(Charge).filter(Charge.id == payload["chargeID"]).update({"chargeStatus":"Cancelled / Timed Out"})
+        db.commit()
+        db.refresh(ch)
+            
+        return {"status_code":401,"charge":ch,"token":token,"message":"timed out"}
+    return {"status_code":201,"charge":ch,"token":token,"time":20}
 
         
-    except:
-        message = "exception occurred with retrieving eligibility"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # except:
+    #     message = "exception occurred with retrieving eligibility"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
 
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
