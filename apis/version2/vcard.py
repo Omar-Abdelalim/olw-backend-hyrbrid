@@ -105,8 +105,8 @@ class AlphanumericConverter:
 @router.post("/addvCard")
 async def addCard(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -149,8 +149,8 @@ async def addCard(request: Request, response: Response, payload: dict = Body(...
 @router.post("/changeCardStatus")
 async def actCard(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -179,8 +179,8 @@ async def actCard(request: Request, response: Response, payload: dict = Body(...
 @router.get("/getCard")
 async def frzCard(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -195,8 +195,8 @@ async def frzCard(request: Request, response: Response, payload: dict = Body(...
 @router.post("/updateCardService")
 async def updateuseage(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -218,8 +218,8 @@ async def updateuseage(request: Request, response: Response, payload: dict = Bod
 @router.get("/getCardService")
 async def updateuseage(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -237,8 +237,8 @@ async def updateuseage(request: Request, response: Response, payload: dict = Bod
 @router.post("/getCustomerCards")
 async def getcustomercards(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -269,8 +269,8 @@ async def getcustomercards(request: Request, response: Response, payload: dict =
 @router.post("/getaccountCards")
 async def getAllCardsRelatedToAccount(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -282,8 +282,8 @@ async def getAllCardsRelatedToAccount(request: Request, response: Response, payl
 @router.post("/getaccountCard")
 async def getAllCardsRelatedToAccount(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -296,8 +296,8 @@ async def getAllCardsRelatedToAccount(request: Request, response: Response, payl
 @router.post("/getaccountNumber")
 async def getAllCardsRelatedToAccount(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
