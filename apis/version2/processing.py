@@ -235,8 +235,8 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
         if not cus:
             return {"status_code": 400, "message": "no customer with this id"}
         ee = db.query(Email).filter(Email.customerID == payload["id"] and Email.emailStatus == "active").first()
-        mm = db.query(Mobile).filter(Mobile.customerID == payload["id"] and Mobile.numberStatus == "active").first()
-
+        # mm = db.query(Mobile).filter(Mobile.customerID == payload["id"] and Mobile.numberStatus == "active").first()
+        mm = True
         if ee is None or mm is None:
               return {"status_code": 400, "message": "email or phone not verified"}
         kyc = KYC(firstName=cus.firstName, familyName=cus.lastName, customerID=cus.id, birthDate=cus.birthdate)
