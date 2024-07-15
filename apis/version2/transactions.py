@@ -1289,6 +1289,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
         if OLWBank is None or OLWBank is None:
             return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
         trans = transactionOperation(f"charge {str(charge.id)}",acc.accountNumber,charge.amount+charge.feesCurrency+charge.feesService,charge.currency,charge.currency,db)
+        print(trans)
         if not trans["status_code"]==201:
             db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failed"})
             db.commit()
