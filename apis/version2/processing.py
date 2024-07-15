@@ -1679,10 +1679,7 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     em = payload["email"]
 
     pa = payload["password"]
-    code = payload["code"]
-    print(em)
-    print(pa)
-    print(code)
+    # code = payload["code"]
     hashed_password = pa.encode('utf-8')
 
 
@@ -1690,9 +1687,9 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 
     if not user:
         return {"status_code": 403, "message": "no user exists with this email"}
-    if not user.smsCode == code:
-        print(user.smsCode)
-        return {"status_code": 404, "message": "wrong code"}
+    # if not user.smsCode == code:
+    #     print(user.smsCode)
+    #     return {"status_code": 404, "message": "wrong code"}
     elif datetime.now() > datetime.strptime(user.smsValid, '%Y-%m-%d %H:%M:%S.%f'):
         return {"status_code": 404, "message": "code timed- out"}
 
