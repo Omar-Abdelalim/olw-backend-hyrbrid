@@ -238,6 +238,8 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
         # mm = db.query(Mobile).filter(Mobile.customerID == payload["id"] and Mobile.numberStatus == "active").first()
         mm = True
         if ee is None or mm is None:
+              print("email:",ee)
+              print("phone:",mm)
               return {"status_code": 400, "message": "email or phone not verified"}
         kyc = KYC(firstName=cus.firstName, familyName=cus.lastName, customerID=cus.id, birthDate=cus.birthdate)
         kyc.fullAddress = payload["address"]
