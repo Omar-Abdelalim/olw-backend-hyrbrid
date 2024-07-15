@@ -621,8 +621,8 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 @router.post("/inTransaction")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -635,8 +635,8 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 @router.post("/balanceBank")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
@@ -1201,8 +1201,8 @@ async def addcard(cusID,request: Request,response: Response,db: Session = Depend
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     # try:
     payload = await request.body()
-    payload = json.loads(payload)
-    payload = payload['message']
+    # payload = json.loads(payload)
+    # payload = payload['message']
     payload = json.loads(payload)
     token = payload['token']
 
