@@ -1134,35 +1134,35 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        # payload = json.loads(payload)
-        # token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    # payload = json.loads(payload)
+    # token = payload['token']
 
-    
-        print('payload:',payload)
-        ac = addCard(db,payload["id"],payload["cardNumber"],payload["expiryMonth"],payload["expiryYear"],payload["fName"]+" "+payload["lName"],payload["secretNumber"])
-        if not ac["status_code"] == 201:
-            with open("formTemplates/failure.html", "r") as file:
-                html_content = file.read()
-                html_content = html_content.replace('%status_code', str(ac["status_code"]))
-                html_content = html_content.replace('%errorMessage', str(ac["message"]))
-                
-                
-            return Response(content=html_content, media_type="text/html")
-            
-        with open("formTemplates/success.html", "r") as file:
+
+    print('payload:',payload)
+    ac = addCard(db,payload["id"],payload["cardNumber"],payload["expiryMonth"],payload["expiryYear"],payload["fName"]+" "+payload["lName"],payload["secretNumber"])
+    if not ac["status_code"] == 201:
+        with open("formTemplates/failure.html", "r") as file:
             html_content = file.read()
-            html_content = html_content.replace('%status_code', "201")
+            html_content = html_content.replace('%status_code', str(ac["status_code"]))
+            html_content = html_content.replace('%errorMessage', str(ac["message"]))
+            
+            
         return Response(content=html_content, media_type="text/html")
+        
+    with open("formTemplates/success.html", "r") as file:
+        html_content = file.read()
+        html_content = html_content.replace('%status_code', "201")
+    return Response(content=html_content, media_type="text/html")
 
         
-    except:
-        message = "exception occurred with adding card"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # except:
+    #     message = "exception occurred with adding card"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
 
 @router.post("/removeCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
