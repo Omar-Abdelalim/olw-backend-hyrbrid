@@ -263,11 +263,7 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
         if not is_valid_postal_code(payload["postalCode"], payload["countryOfResidence"]):
             return False, "Invalid postal code format for the selected country."
 
-        # Validate residence and citizenship countries
-
-        if payload["countryOfResidence"] not in countryCodes.keys() or payload[
-            "countryOfCitzenship"] not in countryCodes.keys():
-            return False, "Invalid country selected."
+        
 
         # if not countryCodes[payload["countryOfResidence"]] == payload["countryCode"]:
         #     return False, "country code doesn't match your country of residence"

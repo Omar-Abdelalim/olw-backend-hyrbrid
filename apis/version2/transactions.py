@@ -1256,7 +1256,7 @@ async def getcard(request: Request,response: Response,payload: dict = Body(...),
 async def testT(request: Request,response: Response,db: Session = Depends(get_db)):
     try:
         payload = await request.body()
-        # payload = json.loads(payload)
+        payload = json.loads(payload)
         # payload = payload['message']
         # payload = json.loads(payload)
         # token = payload['token']
