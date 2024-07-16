@@ -1611,7 +1611,7 @@ async def getkyc2(request: Request, payload: dict = Body(...), db: Session = Dep
         log(0, message)
         return {"status_code": 401, "message": message}
 
-@router.post("/intOpts")
+@router.post("/initOpts")
 async def ops(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         opts = db.query(Options).filter(Options.table == "KYC2").all()
