@@ -1626,6 +1626,7 @@ async def ops(request: Request, db: Session = Depends(get_db)):
             db.add(o3)
             db.add(o4)
             db.commit()
+            db.refresh(opst)
             
             return {"status_code": 200,"message":"opts intialized","opts":opts}
         return {"status_code": 400,"message":"opts already exist","opts":opts}
