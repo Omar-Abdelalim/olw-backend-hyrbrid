@@ -403,7 +403,7 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
             tokens[token]['id'] = cus.id
             return {"status_code": 201, "message": "Correct Pin", "token": token}
 
-        return {"status_code": 401, "message": "pins mismatch"}
+        return {"status_code": 402, "message": "pins mismatch"}
     except:
         message = "exception occurred with checking pin"
         log(0, message)
