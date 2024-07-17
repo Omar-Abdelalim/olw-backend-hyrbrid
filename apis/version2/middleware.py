@@ -134,12 +134,13 @@ class decryptMiddleware(BaseHTTPMiddleware):
                 on = json.loads(on)
                 on = on['message']
                 print('on inside:',on)
+                if not modified_body['token'] in tokens:
+                    return {"status_code": 401, "message": "do handshake, token not stored"}
                 # on = json.loads(on)
             print("ON:",on)
             modified_body=modified_body+on
         print('modefied',modified_body)
-        if not modified_body['token'] in tokens:
-             return {"status_code": 401, "message": "do handshake, token not stored"}
+        
         # modified_body=json.dumps(modified_body).encode('utf-8')
         modified_body=modified_body.encode('utf-8')
         # Define a new receive function that returns the modified body
