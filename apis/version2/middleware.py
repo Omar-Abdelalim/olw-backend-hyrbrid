@@ -134,11 +134,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
                 on = json.loads(on)
                 on = on['message']
                 print('on inside:',on)
-                if 'token' in on:
-                    if not on['token'] in tokens:
-                        return {"status_code": 401, "message": "do handshake, token not stored"}
-                else:
-                    return {"status_code": 401, "message": "do handshake, token not stored"}
+                
                 # on = json.loads(on)
             print("ON:",on)
             modified_body=modified_body+on
@@ -158,6 +154,8 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if not requested_url == '/handshake':    
             on = json.loads(b)    
             print('not handshake, body now: ',on)
+            if not 'token' in on:
+                return {"status_code": 401, "message": "missing token"}
             if not on['token'] in tokens:
                 return {"status_code": 401, "message": "do handshake again"}
 
