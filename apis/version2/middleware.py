@@ -157,7 +157,9 @@ class decryptMiddleware(BaseHTTPMiddleware):
             print("token" not in on)
             print(on["email"])
             if "token" not in on:
+                print("TRUEE")
                 return {"status_code": 401, "message": "missing token"}
+            
             if not on['token'] in tokens:
                 return {"status_code": 401, "message": "do handshake again"}
 
