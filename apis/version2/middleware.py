@@ -106,6 +106,9 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction":
             response = await call_next(request)
             return response
+        if requested_url == "/createQRTer" or requested_url == "/cancelQrTerStatus" or requested_url == "/timeOutQrTerStatus" or requested_url == "/rejectQrTerStatus" or requested_url ==  "/getQrTerStatus" or requested_url == "/getQrTerIdStatus":
+            response = await call_next(request)
+            return response
         if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url):
             response = await call_next(request)
             return response
