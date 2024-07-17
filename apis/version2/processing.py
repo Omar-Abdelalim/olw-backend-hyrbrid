@@ -974,27 +974,27 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
     return {"status_code": 201, "message": qr,"customer":cus,"receiver":rec, "token": token}
 
-@router.get("/getQrTerStatus")
-async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+# @router.get("/getQrTerStatus")
+# async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
+#     try:
+#         payload = await request.body()
+#         # payload = json.loads(payload)
+#         # payload = payload['message']
+#         payload = json.loads(payload)
+#         token = payload['token']
 
     
-        print('payload:',payload)
-        qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"]).first()
-        if qr is None:
-            return {"status_code": 401, "message": "no QR request active by this user"}
+#         print('payload:',payload)
+#         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"]).first()
+#         if qr is None:
+#             return {"status_code": 401, "message": "no QR request active by this user"}
         
-    except:
-        message = "exception occurred with getting QR request"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+#     except:
+#         message = "exception occurred with getting QR request"
+#         log(0, message)
+#         return {"status_code": 401, "message": message}
 
-    return {"status_code": 201, "message": qr}
+#     return {"status_code": 201, "message": qr}
 
 
 @router.get("/getQrIdStatus")
