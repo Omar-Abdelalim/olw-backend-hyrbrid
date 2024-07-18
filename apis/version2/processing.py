@@ -108,7 +108,9 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                  lastName=payload["lastName"],
                  email=payload["email"],
                  customerStatus="pending",
-                 IDIqama=payload["ID/Iqama"]
+                 IDIqama=payload["ID/Iqama"],
+                 phoneNumber=payload["phoneNumber"],
+                 countryCode=payload["countryCode"]
                  )
 
     if len(c.firstName) < minNameLength or len(c.lastName) < minNameLength or len(c.firstName) > maxNameLength or len(
@@ -403,7 +405,7 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
             tokens[token]['id'] = cus.id
             return {"status_code": 201, "message": "Correct Pin", "token": token}
 
-        return {"status_code": 402, "message": "pins mismatch"}
+        return {"status_code": 402, "message": "wrong pin"}
     except:
         message = "exception occurred with checking pin"
         log(0, message)
@@ -577,7 +579,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
         log(0, message)
         return {"status_code": 401, "message": message}
 
-    return {"status_code": 201, "message": pincurr, "token": token}
+    return {"status_code": 201, "message": "pin successfully created ", "token": token}
 
 @router.post("/createBio")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
@@ -1661,8 +1663,7 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
         log(0, message)
         return {"status_code": 401, "message": message}
 
-
-@router.post("/login")
+@router.post("/loginCheck")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
 #   try:
     payload = await request.body()
@@ -1676,31 +1677,47 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     em = payload["email"]
 
     pa = payload["password"]
-    # code = payload["code"]
-    hashed_password = pa.encode('utf-8')
-
-
     user = db.query(Customer).filter(Customer.email == em).first()
 
     if not user:
-        return {"status_code": 403, "message": "no user exists with this email"}
-    # if not user.smsCode == code:
-    #     print(user.smsCode)
-    #     return {"status_code": 404, "message": "wrong code"}
-    elif datetime.now() > datetime.strptime(user.smsValid, '%Y-%m-%d %H:%M:%S.%f'):
+        return {"status_code": 403, "message": "wrong credentials"}
+    password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
+    hashed_password = pa.encode('utf-8')
+    if not Hasher.verify_password(hashed_password, password.passwordHash):
+        return {"status_code": 404, "message": "wrong credentials", "orig": hashed_password,
+                "other": password}
+    otp = "1111"
+    user.smsCode = otp
+    user.smsValid = datetime.now() + timedelta(days=365)
+    return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
+
+
+@router.post("/login")
+async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
+#   try:
+    payload = await request.body()
+    payload = json.loads(payload)
+    # payload = payload['message']
+    # payload = json.loads(payload)
+    token = payload['token']
+
+
+    print('payload:',payload)
+    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+
+    if not cus.smsCode == payload['code']:
+        print(cus.smsCode)
+        return {"status_code": 404, "message": "wrong code"}
+    elif datetime.now() > datetime.strptime(cus.smsValid, '%Y-%m-%d %H:%M:%S.%f'):
         return {"status_code": 404, "message": "code timed- out"}
 
 
-    password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
-
-    if not Hasher.verify_password(hashed_password, password.passwordHash):
-        return {"status_code": 404, "message": "Password doesn't match email", "orig": hashed_password,
-                "other": password}
-    tokens[token]['id'] = user.id
+    
+    tokens[token]['id'] = cus.id
     
 
 
-    account = db.query(Account).filter(Account.customerID == str(user.id), Account.primaryAccount == "1").first()
+    account = db.query(Account).filter(Account.customerID == str(cus.id), Account.primaryAccount == "1").first()
     bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
     bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
 
@@ -1710,7 +1727,7 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 #          message = "exception occurred with retrieving token"
 #          log(0,message)
 #          return {"status_code":401,"message":message}
-    return {"status_code":200,"user":user,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
+    return {"status_code":200,"user":cus,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
 
 @router.post("/getAddress")
 async def getAdd(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
