@@ -16,6 +16,10 @@ class Account(Base):
     currency=Column(String,nullable=False)
     friendlyName=Column(String,nullable=False)
 
+    beneficiary = Column(String,nullable=False)
+    iBan = Column(String,nullable=False)
+    bic = Column(String,nullable=False)
+    bank = Column(String,nullable=False)
     
     
 

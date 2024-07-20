@@ -198,7 +198,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
-                        db, account["country"], account["currency"], "primary")
+                        db, account["country"], account["currency"], "primary",payload["iban"],payload['bic'],"SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
         if not acco["status_code"] == 201:
             return acco
         db.commit()
@@ -1190,7 +1190,7 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
         # same procsess for different currencies
 
         acco = addAccnt(payload["id"], newAccountNumber, payload["accountType"], payload["balance"], "active", False,
-                        db, payload["country"], payload["currency"], payload["friendlyName"])
+                        db, payload["country"], payload["currency"], payload["friendlyName"],payload["iban"],payload['bic'],payload['swift'],payload['bankName'],payload["bankAddress"])
         if not acco["status_code"] == 201:
             return acco
         a = acco["message"]
@@ -1813,11 +1813,11 @@ def newPassword(password):
     return hashed_password
 
 
-def addAccnt(id, acctNo, acctType, bal, status, primary: bool, db, country, currency, friendlyName):
+def addAccnt(id, acctNo, acctType, bal, status, primary: bool, db, country, currency, friendlyName,iBan,bic,swift,bankName,bankAddress):
     try:
         a = Account(customerID=id, accountNumber=acctNo, accountType=acctType, balance=bal, dateTime=datetime.now(),
                     accountStatus=status, primaryAccount=primary, currency=currency, country=country,
-                    friendlyName=friendlyName)
+                    friendlyName=friendlyName,iban =iBan,bic = bic,swift = swift,bankName = bankName,bankAddress=bankAddress )
         db.add(a)
         return {"status_code": 201, "message": a}
     except:
