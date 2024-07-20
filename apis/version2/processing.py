@@ -198,7 +198,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
-                        db, account["country"], account["currency"], "primary",payload["iban"],payload['bic'],"SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
+                        db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
         if not acco["status_code"] == 201:
             return acco
         db.commit()
