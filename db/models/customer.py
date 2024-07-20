@@ -10,6 +10,7 @@ class Customer(Base):
     email=Column(String,nullable=False,unique=True)
     birthdate = Column(String,nullable=False)
     customerStatus=Column(String,nullable=False)
+    customerNumber=Column(String,nullable=False)    
     phoneNumber=Column(String,nullable=True)
     countryCode = Column(String,nullable=True)
     pin=Column(String,nullable=True)
