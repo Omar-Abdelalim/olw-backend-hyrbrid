@@ -1615,27 +1615,27 @@ async def getkyc2(request: Request, payload: dict = Body(...), db: Session = Dep
 
 @router.post("/initOpts")
 async def ops(request: Request, db: Session = Depends(get_db)):
-    try:
-        opts = db.query(Options).filter(Options.table == "KYC2").all()
-        if len(opts) == 0:
-            o1 = Options(name="employment",table="KYC2",start=1,end=7)
-            o2 = Options(name="sourceOfIncome",table="KYC2",start=1,end=4)
-            o3 = Options(name="profession",table="KYC2",start=1,end=13)
-            o4 = Options(name="incomeRange",table="KYC2",start=1,end=4)
+    # try:
+    opts = db.query(Options).filter(Options.table == "KYC2").all()
+    if len(opts) == 0:
+        o1 = Options(name="employment",table="KYC2",start=1,end=7)
+        o2 = Options(name="sourceOfIncome",table="KYC2",start=1,end=4)
+        o3 = Options(name="profession",table="KYC2",start=1,end=13)
+        o4 = Options(name="incomeRange",table="KYC2",start=1,end=4)
 
-            db.add(o1)
-            db.add(o2)
-            db.add(o3)
-            db.add(o4)
-            db.commit()
-            db.refresh(opts)
-            
-            return {"status_code": 200,"message":"opts intialized","opts":opts}
-        return {"status_code": 400,"message":"opts already exist","opts":opts}
-    except:
-        message = "exception occurred with retrieving opts"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+        db.add(o1)
+        db.add(o2)
+        db.add(o3)
+        db.add(o4)
+        db.commit()
+        db.refresh(opts)
+        
+        return {"status_code": 200,"message":"opts intialized","opts":opts}
+    return {"status_code": 400,"message":"opts already exist","opts":opts}
+    # except:
+    #     message = "exception occurred with retrieving opts"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
 @router.post("/loginSms")
 async def signInSms(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
