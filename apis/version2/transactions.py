@@ -81,22 +81,22 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
         if not adm is None:
             db.commit()
             return {"status_code": 201,"message":"wallet initiated"}
-        admin = Customer(firstName="OLW",lastName="",email="",birthdate="",customerStatus="admin")
+        admin = Customer(firstName="OLW",lastName="",email="",birthdate="",customerStatus="admin",customerNumber = '00000001')
         db.add(admin)
         
         OLWBank = db.query(Account).filter(Account.accountNumber == "1").first()
         if OLWBank is None:
-            olw = Account(customerID="1",accountNumber="10-00000003-001-000",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="bank")
+            olw = Account(customerID="1",accountNumber="10-00000003-001-000",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="bank",iban = "IEOLW10-00000003-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
 
         OLWAudit = db.query(Account).filter(Account.accountNumber == "2").first()
         if OLWBank is None:
-            olw = Account(customerID="1",accountNumber="10-00000001-001-000",accountType="OLW",balance=0,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="audit")
+            olw = Account(customerID="1",accountNumber="10-00000001-001-000",accountType="OLW",balance=0,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="audit",iban = "IEOLW10-00000001-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
             
         OLWFees = db.query(Account).filter(Account.accountNumber == "3").first()
         if OLWFees is None:
-            olw = Account(customerID="1",accountNumber="10-00000005-001-000",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="fees")
+            olw = Account(customerID="1",accountNumber="10-00000005-001-000",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="fees",iban = "IEOLW10-00000005-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
         with open("last_account_number.txt", "w") as file:
             file.write(str(100)) 

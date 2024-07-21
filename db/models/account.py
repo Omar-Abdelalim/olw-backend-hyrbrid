@@ -16,11 +16,11 @@ class Account(Base):
     currency=Column(String,nullable=False)
     friendlyName=Column(String,nullable=False)
 
-    beneficiary = Column(String,nullable=False)
-    iBan = Column(String,nullable=False)
+    swift = Column(String,nullable=False)
+    iban = Column(String,nullable=False)
     bic = Column(String,nullable=False)
-    bank = Column(String,nullable=False)
-    
+    bankName = Column(String,nullable=False)
+    bankAddress = Column(String,nullable=False)
     
 
     def __str__(self):
