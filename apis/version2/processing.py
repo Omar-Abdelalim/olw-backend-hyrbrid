@@ -110,7 +110,8 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                  customerStatus="pending",
                  IDIqama=payload["ID/Iqama"],
                  phoneNumber=payload["mobileNumber"],
-                 countryCode=payload["countryCode"]
+                 countryCode=payload["countryCode"],
+                 customerNumber = '0'
                  )
 
     if len(c.firstName) < minNameLength or len(c.lastName) < minNameLength or len(c.firstName) > maxNameLength or len(
