@@ -136,38 +136,38 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         return {"status_code": 401, "message": "you have to be 18 years or older to create an account"}
     c.birthdate = birthdate
 
-    try:
-        db.add(c)
+    # try:
+    db.add(c)
+    db.commit()
+    db.refresh(c)
+    if c.customerStatus == "pending":
+        if not True :#FOCAL SANCTION LISTING
+            log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 301 customer await compliance team response (Focal Sanction)")
+            return {"status_code":301,"message":"your request is being reviewed, this might take up to one working day"}
+        db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"Fapproved"})
         db.commit()
         db.refresh(c)
-        if c.customerStatus == "pending":
-            if not True :#FOCAL SANCTION LISTING
-                log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 301 customer await compliance team response (Focal Sanction)")
-                return {"status_code":301,"message":"your request is being reviewed, this might take up to one working day"}
-            db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"Fapproved"})
-            db.commit()
-            db.refresh(c)
 
-        if c.customerStatus == "Fapproved":
-            if not True :#risk assessment
-                log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 301 customer await compliance team response (risk assessment)")
-                return {"status_code":301,"message":"your request is being reviewed, this might take up to one working day"}
-            db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"Rapproved"})
-            db.commit()
-            db.refresh(c)
+    if c.customerStatus == "Fapproved":
+        if not True :#risk assessment
+            log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 301 customer await compliance team response (risk assessment)")
+            return {"status_code":301,"message":"your request is being reviewed, this might take up to one working day"}
+        db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"Rapproved"})
+        db.commit()
+        db.refresh(c)
 
-        if c.customerStatus == "Rapproved":
-            if not True :#nafath
-                log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 302 customer failed Nafath screening")
-                return {"status_code":301,"message":"We cannot verify your identity\nWe are sorry, we cannot confirm your identity as with your National ID and your Mobile number."}
-            db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"approved"})
-            db.commit()
-            db.refresh(c)
+    if c.customerStatus == "Rapproved":
+        if not True :#nafath
+            log("error","IP: "+request.client.host+" time: "+str(datetime.now())+" api: /verifyingCustomer body: "+str(pay)+" response: 302 customer failed Nafath screening")
+            return {"status_code":301,"message":"We cannot verify your identity\nWe are sorry, we cannot confirm your identity as with your National ID and your Mobile number."}
+        db.query(Customer).filter(Customer.id == c.id).update({"customerStatus":"approved"})
+        db.commit()
+        db.refresh(c)
 
-    except:
-        message = "exception occured with creating customer"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    # except:
+    #     message = "exception occured with creating customer"
+    #     log(0, message)
+        # return {"status_code": 401, "message": message}
     try:
         cus = db.query(Customer).filter(Customer.email == c.email).first()
 
