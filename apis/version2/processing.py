@@ -512,44 +512,38 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 
 @router.put("/password")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
+
+
+    print('payload:',payload)
+    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+    if cus is None:
+        return {"status_code": 401, "message": "no customer exists with this id"}
+
 
     
-        print('payload:',payload)
-        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        if cus is None:
-            return {"status_code": 401, "message": "no customer exists with this id"}
+    if not cus.pin == payload["pin"]:
+        return {"status_code": 401, "message": "incorrect pin number"}
+    passcur = newPassword(payload["password"])
+    if not passcur:
+        return {"status_code": 401, "message": "please pick a password between 8 and 16 "}
+    p = Password(passwordHash=passcur, passwordStatus="active", customerID=cus.id, dateTime=datetime.now())
+    db.add(p)
+    db.query(Password).filter(Password.customerID == payload["id"]).update({"passwordStatus": "outdated"})
+    db.commit()
+
+    return {"status_code": 201, "message": "password updated", "token": token}
 
 
-        pa = payload["oldPassword"]
-        hashed_password = pa.encode('utf-8')
-        password = db.query(Password).filter(Password.customerID == str(cus.id) , Password.passwordStatus == "active").first()
-    
-        if not Hasher.verify_password(hashed_password, password.passwordHash):
-            return {"status_code": 404, "message": "Password doesn't match email", "orig": hashed_password,
-                "other": password}
-        # if not pin == payload["pin"]:
-        #     return {"status_code": 401, "message": "incorrect pin number"}
-        passcur = newPassword(payload["password"])
-        if not passcur:
-            return {"status_code": 401, "message": "please pick a password between 8 and 16 "}
-        p = Password(passwordHash=passcur, passwordStatus="active", customerID=cus.id, dateTime=datetime.now())
-        db.add(p)
-        db.query(Password).filter(Password.customerID == payload["id"]).update({"passwordStatus": "outdated"})
-        db.commit()
-
-        return {"status_code": 201, "message": "password updated", "token": token}
-
-
-    except:
-        message = "exception occurred with checking email"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    # except:
+    #     message = "exception occurred with checking email"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
 
 @router.post("/createPin")
