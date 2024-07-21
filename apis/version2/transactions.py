@@ -698,93 +698,93 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
     return {"status_code": 201,"message":f"Data has been written to {csv_file}"}
 
 def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None"):
-    try:
-        OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-000").first()
+    # try:
+    OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-000").first()
+    
+    now = datetime.now()
+    recAmount = sendAmount * 1
+
+    if OLWAudit is None:
+        return {"status_code":401,"message":"Audit account not intialized"}
+    
+    accountSending = db.query(Account).filter(Account.accountNumber == sender).first()
+    accountRec = db.query(Account).filter(Account.accountNumber == receiver).first()
+
+    if accountSending is None and accountRec is None:
+        return {"status_code":401,"message":"neither accounts is on OLW"}
+    if accountSending is None:
+        # if not checkExAccount(sender):
+        #     return {"status_code":401,"message":"iBan does not exist"} 
+        #
+
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+        accountSending=OLWBank
+        currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
         
-        now = datetime.now()
-        recAmount = sendAmount * 1
+        t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender)
+    else:
+        t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount)   
+    if sendAmount < 1:
+        return {"status_code":401,"message":"sending amount can't be less than 0"}
+    if sendAmount > accountSending.balance:
+        return {"status_code":401,"message":"balance can't cover this transaction"}
 
-        if OLWAudit is None:
-            return {"status_code":401,"message":"Audit account not intialized"}
+    
+    
+    
+    if accountRec is None:
         
-        accountSending = db.query(Account).filter(Account.accountNumber == sender).first()
-        accountRec = db.query(Account).filter(Account.accountNumber == receiver).first()
-
-        if accountSending is None and accountRec is None:
-            return {"status_code":401,"message":"neither accounts is on OLW"}
-        if accountSending is None:
-            # if not checkExAccount(sender):
-            #     return {"status_code":401,"message":"iBan does not exist"} 
-            #
-
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            accountSending=OLWBank
+        res  = checkExAccount(receiver)
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+        accountRec=OLWBank
+        if not res["status_code"]==200:
+            
+            
             currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
             
-            t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender)
-        else:
-            t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount)   
-        if sendAmount < 1:
-            return {"status_code":401,"message":"sending amount can't be less than 0"}
-        if sendAmount > accountSending.balance:
-            return {"status_code":401,"message":"balance can't cover this transaction"}
+            tr = TransactionRequest(dateTime=datetime.now(),accountNo=accountSending.accountNumber,outIBan=receiver,transactionStatus="pending",amount=sendAmount,currency=recCurr,country=currency.country,direction="out")
+            db.add(tr)
+            
 
         
         
+        desc=receiver
+        if not displayName == "None":
+            desc = displayName
+        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
+    else:
+        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount)
+
+
         
-        if accountRec is None:
-            
-            res  = checkExAccount(receiver)
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            accountRec=OLWBank
-            if not res["status_code"]==200:
-                
-                
-                currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
-                
-                tr = TransactionRequest(dateTime=datetime.now(),accountNo=accountSending.accountNumber,outIBan=receiver,transactionStatus="pending",amount=sendAmount,currency=recCurr,country=currency.country,direction="out")
-                db.add(tr)
-                
-
-            
-            
-            desc=receiver
-            if not displayName == "None":
-                desc = displayName
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
-        else:
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount)
-
-
-            
-        db.add(t1)
-        db.add(t2)
-        db.commit()
+    db.add(t1)
+    db.add(t2)
+    db.commit()
+    
+    db.refresh(t1)
+    db.refresh(t2)
         
-        db.refresh(t1)
-        db.refresh(t2)
-            
 
-        db.query(Account).filter(Account.accountNumber == accountSending.accountNumber).update({"balance":accountSending.balance-sendAmount})
-        db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance+sendAmount})
+    db.query(Account).filter(Account.accountNumber == accountSending.accountNumber).update({"balance":accountSending.balance-sendAmount})
+    db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance+sendAmount})
 
-        db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"audit"})
-        db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"audit"})
+    db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"audit"})
+    db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"audit"})
 
 
-        db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance-recAmount})
-        db.query(Account).filter(Account.accountNumber == accountRec.accountNumber).update({"balance":accountRec.balance+recAmount})
+    db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance-recAmount})
+    db.query(Account).filter(Account.accountNumber == accountRec.accountNumber).update({"balance":accountRec.balance+recAmount})
 
-        db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"complete"})
-        db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"complete"})
+    db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"complete"})
+    db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"complete"})
 
-        db.commit()
-        db.refresh(t1)
-        db.refresh(t2)
-    except:
-        message = "exception occurred with creating transaction operation"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    db.commit()
+    db.refresh(t1)
+    db.refresh(t2)
+    # except:
+    #     message = "exception occurred with creating transaction operation"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
             
     return {"status_code":201,"message":"transaction operation complete","t1":t1.id,"t2":t2.id}
 
