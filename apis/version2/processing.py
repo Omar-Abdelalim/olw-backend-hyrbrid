@@ -404,7 +404,7 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
         pin = cus.pin
         if pin == payload["pin"]:
             tokens[token]['id'] = cus.id
-            return {"status_code": 201, "message": "Correct Pin", "token": token}
+            return {"status_code": 201, "message": "Correct Pin", "token": token,"pin":pin}
 
         return {"status_code": 402, "message": "wrong pin"}
     except:
