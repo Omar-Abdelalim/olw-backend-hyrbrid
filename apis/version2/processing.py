@@ -1185,7 +1185,7 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
         # same procsess for different currencies
 
         acco = addAccnt(payload["id"], newAccountNumber, payload["accountType"], payload["balance"], "active", False,
-                        db, payload["country"], payload["currency"], payload["friendlyName"],"IEOLW"+account['accountNumber'],"IEOLW","SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
+                        db, payload["country"], payload["currency"], payload["friendlyName"],"IEOLW"+newAccountNumber,"IEOLW","SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
         if not acco["status_code"] == 201:
             return acco
         a = acco["message"]
