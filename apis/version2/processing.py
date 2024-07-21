@@ -109,7 +109,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                  email=payload["email"],
                  customerStatus="pending",
                  IDIqama=payload["ID/Iqama"],
-                 phoneNumber=payload["phoneNumber"],
+                 phoneNumber=payload["mobileNumber"],
                  countryCode=payload["countryCode"]
                  )
 
