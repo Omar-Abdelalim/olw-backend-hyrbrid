@@ -302,50 +302,50 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        try:
-            payload = await request.body()
-            # payload = json.loads(payload)
-            # payload = payload['message']
-            payload = json.loads(payload)
-            token = payload['token']
+        # try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
+    
+        print('payload:',payload)
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+        OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+        iBan = payload["iBan"]
         
-            print('payload:',payload)
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
-            iBan = payload["iBan"]
-            
-            
+        
 
-            sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
+        sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
+        
+        
+        if not sendCus.pin == payload["pin"]:
+            return {"status_code": 401,"message":"pins don't match"}
+        sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
+        if sendAcc is None:
+            return {"status_code": 401,"message":"sending account doesn't exist"}
+        elif sendAcc.customerID == payload["id"]:
+            return {"status_code": 401,"message":"sending account doesn't belong to this user"}
+        
+        if payload["amount"]+payload["fees"] > sendAcc.balance:
+            return {"status_code": 401,"message":"balance not enough"}
+        if OLWBank is None or OLWBank is None:
+            return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
+        
+        trans = transactionOperation(payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
+        if not trans["status_code"]==201:
+            return trans
+        
+        if payload["fees"]>0:
+            trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
             
-            
-            if not sendCus.pin == payload["pin"]:
-                return {"status_code": 401,"message":"pins don't match"}
-            sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
-            if sendAcc is None:
-                return {"status_code": 401,"message":"sending account doesn't exist"}
-            elif sendAcc.customerID == payload["id"]:
-                return {"status_code": 401,"message":"sending account doesn't belong to this user"}
-            
-            if payload["amount"]+payload["fees"] > sendAcc.balance:
-                return {"status_code": 401,"message":"balance not enough"}
-            if OLWBank is None or OLWBank is None:
-                return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
-            
-            trans = transactionOperation(payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
-            if not trans["status_code"]==201:
-                return trans
-            
-            if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
-                
-                if not trans2["status_code"]==201:
-                    return trans2
-        except:
-            message = "exception occurred with creating transaction"
-            log(0,message)
-            return {"status_code":401,"message":message}
+            if not trans2["status_code"]==201:
+                return trans2
+        # except:
+        #     message = "exception occurred with creating transaction"
+        #     log(0,message)
+        #     return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],("iBan"+iBan),payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
          
