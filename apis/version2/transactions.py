@@ -71,6 +71,7 @@ origins = [
 
 @router.post("/initAccts")
 async def intiAccts(request: Request=None,response: Response=None,db: Session = Depends(get_db)):
+        print("init")
         adm = db.query(Customer).filter(Customer.customerStatus == "admin").first()
         addFee("00010001","0001","send money to wallet user",0.5,1,0,0,db)
         addFee("00010002","0001","National money transfer",0.5,1,5,1,db)
