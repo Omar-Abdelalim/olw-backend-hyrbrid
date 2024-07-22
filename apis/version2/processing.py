@@ -1580,7 +1580,7 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
         kyc = db.query(KYC).filter(KYC.customerID == user.id, KYC.kycStatus == "active").first()
         kyc2 = db.query(KYC2).filter(KYC2.customerID == user.id, KYC2.kycStatus == "active").first()
         
-        return {"status_code": 200, "data": "user", "token": token,"mobile":mob,"kyc":kyc,"kyc2":kyc2}
+        return {"status_code": 200, "data": user, "token": token,"mobile":mob,"kyc":kyc,"kyc2":kyc2}
     except:
         message = "exception occurred with retrieving details"
         log(0, message)
@@ -1607,6 +1607,9 @@ async def getkyc2(request: Request, payload: dict = Body(...), db: Session = Dep
         message = "exception occurred with retrieving opts"
         log(0, message)
         return {"status_code": 401, "message": message}
+    
+
+
 
 @router.post("/initOpts")
 async def ops(request: Request, db: Session = Depends(get_db)):
