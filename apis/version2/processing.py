@@ -994,7 +994,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 #     return {"status_code": 201, "message": qr}
 
 
-@router.get("/getQrIdStatus")
+@router.post("/getQrIdStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         payload = await request.body()
