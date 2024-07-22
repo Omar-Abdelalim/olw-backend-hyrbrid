@@ -1562,7 +1562,7 @@ async def test(request: Request, payload: dict = Body(...), db: Session = Depend
     }
 
 
-@router.get("/getUserDetails")
+@router.post("/getUserDetails")
 async def getBal(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         payload = await request.body()
