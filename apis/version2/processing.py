@@ -663,7 +663,7 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -694,7 +694,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -722,7 +722,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -750,7 +750,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -777,7 +777,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
@@ -800,7 +800,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         # payload = json.loads(payload)
         # payload = payload['message']
         payload = json.loads(payload)
-        token = payload['token']
+        # token = payload['token']
 
     
         print('payload:',payload)
