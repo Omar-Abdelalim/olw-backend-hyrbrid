@@ -106,17 +106,22 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction":
             response = await call_next(request)
             return response
-        if requested_url == "/createQRTer" or requested_url == "/cancelQrTerStatus" or requested_url == "/timeOutQrTerStatus" or requested_url == "/NOTrejectQrTerStatus" or requested_url ==  "/getQrTerStatus" or requested_url == "/getQrTerIdStatus":
+        if requested_url == "/createQRTer" or requested_url == "/cancelQrTerStatus" or requested_url == "/timeOutQrTerStatus" or requested_url == "/NOTrejectQrTerStatus" or requested_url ==  "/NOTgetQrTerStatus" or requested_url == "/getQrTerIdStatus":
             response = await call_next(request)
             return response
         if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url):
             response = await call_next(request)
             return response
         
+
+        
         
         
         body = await request.body()
         json_body = json.loads(body)
+        if requested_url ==  "/getQrTerStatus" and not 'message' in json_body:
+            response = await call_next(request)
+            return response
         print("body from request",json_body)
         substrings = json_body['message'].split(":::")
         alldicts = []
