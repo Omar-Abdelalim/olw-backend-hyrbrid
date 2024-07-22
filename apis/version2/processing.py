@@ -772,23 +772,23 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
 @router.get("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
 
-    
-        print('payload:',payload)
-        qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
-        if qr is None:
-            return {"status_code": 401, "message": "no QR request active by this terminal"}
+
+    print('payload:',payload)
+    qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
+    if qr is None:
+        return {"status_code": 401, "message": "no QR request active by this terminal"}
         
-    except:
-        message = "exception occurred with getting QR request"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    # except:
+    #     message = "exception occurred with getting QR request"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
     return {"status_code": 201, "message": qr}#,"customer":cus, "token": token}
 
