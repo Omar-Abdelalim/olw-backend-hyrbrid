@@ -770,7 +770,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
     return {"status_code": 201, "message": "Qr request rejected"}
 
-@router.post("/getQrTerStatus")
+@router.get("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         payload = await request.body()
