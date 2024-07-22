@@ -770,7 +770,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
     return {"status_code": 201, "message": "Qr request rejected"}
 
-@router.get("/getQrTerStatus")
+@router.post("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         payload = await request.body()
@@ -994,7 +994,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 #     return {"status_code": 201, "message": qr}
 
 
-@router.post("/getQrIdStatus")
+@router.get("/getQrIdStatus")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
         payload = await request.body()
