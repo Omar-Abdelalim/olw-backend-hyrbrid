@@ -1302,6 +1302,7 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
         cus.emailCode = send_template_email(cus.email, 1, cus)
 
         db.query(EmailCode).filter(EmailCode.customerID == cus.id).update({"result": "expired"})
+        db.commit()
         db.query(Customer).filter(Customer.id == cus.id).update({"emailCode": cus.emailCode})
 
         ec = EmailCode(customerID=cus.id, dateTime=datetime.now(), code=cus.emailCode, email=cus.email,
@@ -1332,6 +1333,7 @@ async def sendVerEmail(request: Request, payload: dict = Body(...), db: Session 
         
 
         db.query(EmailCode).filter(EmailCode.customerID == cus.id).update({"result": "expired"})
+        db.commit()
         db.query(Customer).filter(Customer.id == cus.id).update({"emailCode": cus.emailCode})
 
         ec = EmailCode(customerID=cus.id, dateTime=datetime.now(), code=cus.emailCode, email=cus.email,
