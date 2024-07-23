@@ -558,7 +558,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
         print('payload:',payload)
         if not payload["pin1"] == payload["pin2"]:
-            return {"status_code": 401, "message": "pins need to match"}
+            return {"status_code": 401, "message": "Please ensure Pin entries are matching"}
 
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
