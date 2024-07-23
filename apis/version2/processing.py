@@ -127,7 +127,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
     checkPhone = db.query(Customer).filter(Customer.countryCode == payload["countryCode"],Customer.phoneNumber == payload["mobileNumber"]).first()
     if not(checkemailexsit is None and checkemailexsit2 is None):
         return {"status_code": 401, "message": "Email Already Exsit"}
-    phone = db.query(Mobile).filter(Mobile.countryCode == payload["countryCode"],Mobile.mobileNumber == payload["mobileNumber"],Mobile.status == "active").first()
+    phone = db.query(Mobile).filter(Mobile.countryCode == payload["countryCode"],Mobile.mobileNumber == payload["mobileNumber"],Mobile.numberStatus == "active").first()
     if not (phone is None and checkPhone is None):
         return {"status_code": 401, "message": "Phone Already Exsit"}
     passcur = newPassword(password)
