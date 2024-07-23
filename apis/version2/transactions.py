@@ -441,7 +441,7 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
             message = "exception occurred with creating bank"
             log(0,message)
             return {"status_code":401,"message":message}
-        return {"status_code": 201, "token":token,"message":"bank account created"}
+        return {"status_code": 201, "token":token,"message":"linked bank account created successfully"}
 
 @router.post("/getBanks")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
@@ -552,7 +552,7 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
             message = "exception occurred with creating bank"
             log(0,message)
             return {"status_code":401,"message":message}
-        return {"status_code": 201, "token":token,"message":"bank account created"}        
+        return {"status_code": 201, "token":token,"message":"linked bank account created successfully"}        
 
 @router.post("/getBanksB")
 async def createBank(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
