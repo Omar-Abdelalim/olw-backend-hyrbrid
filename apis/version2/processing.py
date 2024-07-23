@@ -282,7 +282,7 @@ async def reg2(request: Request, payload: dict = Body(...), db: Session = Depend
         log(0, message)
         return {"status_code": 401, "message": message}
 
-    return {"status_code": 201, "message": "Registration Succeful"}
+    return {"status_code": 201, "message": "Account successfully upgraded"}
 
 @router.post("/reg3")
 async def reg3(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
@@ -324,7 +324,7 @@ async def reg3(request: Request, payload: dict = Body(...), db: Session = Depend
         log(0, message)
         return {"status_code": 401, "message": message}
 
-    return {"status_code": 201, "message": "Registration Succeful"}
+    return {"status_code": 201, "message": "Account successfully upgraded"}
 
 
 

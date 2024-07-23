@@ -123,6 +123,8 @@ class decryptMiddleware(BaseHTTPMiddleware):
         #     response = await call_next(request)
         #     return response
         print("body from request",json_body)
+        if not 'message' in json_body:
+            return JSONResponse(content={"status_code": 410, "message": "invalid request"})
         substrings = json_body['message'].split(":::")
         alldicts = []
         for i in substrings:
