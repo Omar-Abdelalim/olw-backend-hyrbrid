@@ -574,7 +574,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
         log(0, message)
         return {"status_code": 401, "message": message}
 
-    return {"status_code": 201, "message": "pin successfully created ", "token": token}
+    return {"status_code": 201, "message": "PIN successfully created ", "token": token}
 
 @router.post("/createBio")
 async def createPin(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
