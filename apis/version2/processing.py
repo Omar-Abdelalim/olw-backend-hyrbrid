@@ -199,7 +199,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
-                        db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
+                        db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","xyz 123","One Link Wallet","Dublin, Ireland")
         if not acco["status_code"] == 201:
             return acco
         db.commit()
@@ -1185,7 +1185,7 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
         # same procsess for different currencies
 
         acco = addAccnt(payload["id"], newAccountNumber, payload["accountType"], payload["balance"], "active", False,
-                        db, payload["country"], payload["currency"], payload["friendlyName"],"IEOLW"+newAccountNumber,"IEOLW","SWIFT/PIC xyz 123","One Link Wallet","Dublin, Ireland")
+                        db, payload["country"], payload["currency"], payload["friendlyName"],"IEOLW"+newAccountNumber,"IEOLW","xyz 123","One Link Wallet","Dublin, Ireland")
         if not acco["status_code"] == 201:
             return acco
         a = acco["message"]
