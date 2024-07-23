@@ -124,9 +124,12 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         return {"status_code": 401, "message": "address too short"}
     checkemailexsit = db.query(Customer).filter(Customer.email == c.email).first()
     checkemailexsit2 = db.query(Email).filter(Email.emailAddress == c.email).first()
+    checkPhone = db.query(Customer).filter(Customer.countryCode == payload["countryCode"],Customer.mobileNumber == payload["mobileNumber"]).first()
     if not(checkemailexsit is None and checkemailexsit2 is None):
         return {"status_code": 401, "message": "Email Already Exsit"}
-
+    phone = db.query(Mobile).filter(Mobile.countryCode == payload["countryCode"],Mobile.mobileNumber == payload["mobileNumber"],Mobile.status == "active").first()
+    if not (phone is None and checkPhone is None):
+        return {"status_code": 401, "message": "Phone Already Exsit"}
     passcur = newPassword(password)
     if not passcur:
         return {"status_code": 401, "message": "please pick a password between 8 and 16 "}
@@ -400,7 +403,8 @@ async def pinLogin(request: Request, payload: dict = Body(...), db: Session = De
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         if cus is None:
             return {"status_code": 401, "message": "no customer exists with this id"}
-
+        if cus.pin is None:
+            return {"status_code": 401, "message": "customer has no pin yet"}
         pin = cus.pin
         if pin == payload["pin"]:
             tokens[token]['id'] = cus.id
@@ -1678,11 +1682,11 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     user = db.query(Customer).filter(Customer.email == em).first()
 
     if not user:
-        return {"status_code": 403, "message": "wrong credentials!"}
+        return {"status_code": 403, "message": "wrong email or password!"}
     password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
     hashed_password = pa.encode('utf-8')
     if not Hasher.verify_password(hashed_password, password.passwordHash):
-        return {"status_code": 404, "message": "wrong credentials!!", "orig": hashed_password,
+        return {"status_code": 404, "message": "wrong email or password!!", "orig": hashed_password,
                 "other": password}
     otp = "1111"
     user.smsCode = otp

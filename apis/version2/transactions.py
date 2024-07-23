@@ -138,7 +138,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             acc = db.query(Account).filter(Account.customerID ==customerID , Account.primaryAccount).first()
             
             if not sendCus.pin == payload["pin"]:
-                return {"status_code": 401,"message":"pins don't match"}
+                return {"status_code": 401,"message":"Pin incorrect!!"}
             sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
             if payload["amount"]+payload["fees"] > sendAcc.balance:
                 return {"status_code": 401,"message":"balance not enough"}
@@ -189,7 +189,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             acc = db.query(Account).filter(Account.customerID ==payload["recID"]  ,Account.primaryAccount).first()
             if not sendCus.pin == payload["pin"]:
-                return {"status_code": 401,"message":"pins don't match"}
+                return {"status_code": 401,"message":"Pin incorrect"}
             sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
             if payload["amount"]+payload["fees"] > sendAcc.balance:
                 return {"status_code": 401,"message":"balance not enough"}
@@ -251,7 +251,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
 
             if not sendCus.pin == payload["pin"]:
-                return {"status_code": 401,"message":"pins don't match"}
+                return {"status_code": 401,"message":"Pin incorrect"}
 
             sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
             if sendAcc is None:
@@ -321,7 +321,7 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
         
         
         if not sendCus.pin == payload["pin"]:
-            return {"status_code": 401,"message":"pins don't match"}
+            return {"status_code": 401,"message":"Pin incorrect"}
         sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
         if sendAcc is None:
             return {"status_code": 401,"message":"sending account doesn't exist"}
