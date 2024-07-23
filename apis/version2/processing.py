@@ -124,7 +124,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         return {"status_code": 401, "message": "address too short"}
     checkemailexsit = db.query(Customer).filter(Customer.email == c.email).first()
     checkemailexsit2 = db.query(Email).filter(Email.emailAddress == c.email).first()
-    checkPhone = db.query(Customer).filter(Customer.countryCode == payload["countryCode"],Customer.mobileNumber == payload["mobileNumber"]).first()
+    checkPhone = db.query(Customer).filter(Customer.countryCode == payload["countryCode"],Customer.phoneNumber == payload["mobileNumber"]).first()
     if not(checkemailexsit is None and checkemailexsit2 is None):
         return {"status_code": 401, "message": "Email Already Exsit"}
     phone = db.query(Mobile).filter(Mobile.countryCode == payload["countryCode"],Mobile.mobileNumber == payload["mobileNumber"],Mobile.status == "active").first()
