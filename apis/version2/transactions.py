@@ -1366,33 +1366,33 @@ def addCard(db,custID,cardNum,expM,expY,name,secretNum):
         return {"status_code":401,"message":message}
 
 def addCharge(db,custID,curr,am,feeS,feeC,meth):
-    try:
-        cus = db.query(Customer).filter(Customer.id == custID).first()
-        if cus is None:
-            return {"status_code":401,"message":"customer with this ID does not exist"}
-        a = db.query(Account).filter(Account.customerID == cus.id,Account.primaryAccount).first()
-        if a is None:
-            return {"status_code":401,"message":"customer with this ID does not have primary account"}
-        k = db.query(KYC).filter(KYC.customerID == cus.id).first()
-        if k is None:
-            return {"status_code":401,"message":"customer with this ID does not have KYC"}
-        ad = db.query(Address).filter(Address.customerID == cus.id).first()
-        if ad is None:
-            return {"status_code":401,"message":"customer with this ID does not have address"}
-        # m = db.query(Mobile).filter(Mobile.customerID == cus.id).first()
-        # if m is None:
-        #     return {"status_code":401,"message":"customer with this ID does not have mobile"}
-        
-        c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.mobileNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
-        db.add(c)
-        db.commit()
-        db.refresh(c)
+    # try:
+    cus = db.query(Customer).filter(Customer.id == custID).first()
+    if cus is None:
+        return {"status_code":401,"message":"customer with this ID does not exist"}
+    a = db.query(Account).filter(Account.customerID == cus.id,Account.primaryAccount).first()
+    if a is None:
+        return {"status_code":401,"message":"customer with this ID does not have primary account"}
+    k = db.query(KYC).filter(KYC.customerID == cus.id).first()
+    if k is None:
+        return {"status_code":401,"message":"customer with this ID does not have KYC"}
+    ad = db.query(Address).filter(Address.customerID == cus.id).first()
+    if ad is None:
+        return {"status_code":401,"message":"customer with this ID does not have address"}
+    # m = db.query(Mobile).filter(Mobile.customerID == cus.id).first()
+    # if m is None:
+    #     return {"status_code":401,"message":"customer with this ID does not have mobile"}
+    
+    c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.mobileNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
+    db.add(c)
+    db.commit()
+    db.refresh(c)
 
-        return {"status_code":201,"message":c}
-    except:
-        message = "exception occurred with creating charge"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    return {"status_code":201,"message":c}
+    # except:
+    #     message = "exception occurred with creating charge"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
     
 
 class AlphanumericConverter:
