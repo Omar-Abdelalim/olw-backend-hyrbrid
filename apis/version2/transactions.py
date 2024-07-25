@@ -1022,80 +1022,80 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 
 @router.post("/charge")
 async def charge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
 
+
+    print('payload:',payload)
+
+    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+    if cus is None:
+        return {"status_code":401,"message":"No customer exists with this ID"}
     
-        print('payload:',payload)
-
-        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        if cus is None:
-            return {"status_code":401,"message":"No customer exists with this ID"}
-        
-        ch = addCharge(db,payload["id"],payload["currency"],payload["amount"],payload["feeService"],payload["feeCurrency"],payload["method"])
-        if not ch["status_code"] == 201:
-            return ch
-        charge_instance = ch["message"]
-        url = "http://192.223.11.185:9000/v1/card_process"
-        # if charge.method == "crypto":
-        #     url = "http://192.223.11.185:9000/v1/crypto_process"
-        charge_dict = {
-        'id': charge_instance.id,
-        'dateTime': charge_instance.dateTime,
-        'customerID': charge_instance.customerID,
-        'accountNo': charge_instance.accountNo,
-        'currency': charge_instance.currency,
-        'amount': charge_instance.amount+charge_instance.feesService+charge_instance.feesCurrency,
-        'feesService': charge_instance.feesService,
-        'feesCurrency': charge_instance.feesCurrency,
-        'email': charge_instance.email,
-        'firstName': charge_instance.firstName,
-        'lastName': charge_instance.lastName,
-        'address': charge_instance.address,
-        'zipcode': charge_instance.zipcode,
-        'city': charge_instance.city,
-        'country': charge_instance.country,
-        'countryCode': charge_instance.countryCode,
-        'mobilenumber': charge_instance.mobilenumber,
-        'birthDate': charge_instance.birthDate,
-        'chargeStatus': charge_instance.chargeStatus,
-        'method': charge_instance.method,
-        'transactionID': charge_instance.id,
-        'webhookID': charge_instance.webhookID
+    ch = addCharge(db,payload["id"],payload["currency"],payload["amount"],payload["feeService"],payload["feeCurrency"],payload["method"])
+    if not ch["status_code"] == 201:
+        return ch
+    charge_instance = ch["message"]
+    url = "http://192.223.11.185:9000/v1/card_process"
+    # if charge.method == "crypto":
+    #     url = "http://192.223.11.185:9000/v1/crypto_process"
+    charge_dict = {
+    'id': charge_instance.id,
+    'dateTime': charge_instance.dateTime,
+    'customerID': charge_instance.customerID,
+    'accountNo': charge_instance.accountNo,
+    'currency': charge_instance.currency,
+    'amount': charge_instance.amount+charge_instance.feesService+charge_instance.feesCurrency,
+    'feesService': charge_instance.feesService,
+    'feesCurrency': charge_instance.feesCurrency,
+    'email': charge_instance.email,
+    'firstName': charge_instance.firstName,
+    'lastName': charge_instance.lastName,
+    'address': charge_instance.address,
+    'zipcode': charge_instance.zipcode,
+    'city': charge_instance.city,
+    'country': charge_instance.country,
+    'countryCode': charge_instance.countryCode,
+    'mobilenumber': charge_instance.mobilenumber,
+    'birthDate': charge_instance.birthDate,
+    'chargeStatus': charge_instance.chargeStatus,
+    'method': charge_instance.method,
+    'transactionID': charge_instance.id,
+    'webhookID': charge_instance.webhookID
+    }
+    if payload["method"]=="card":
+        card = db.query(Card).filter(Card.token == payload["cardToken"]).first()
+        if card is None:
+            return {"status_code":401,"message":"no card with this token"}
+        charge_dict["cardInfo"]={
+            "cardNumber":card.cardNumber,
+            "expMonth":card.expMonth,
+            "expYear":card.expYear,
+            "holderName":card.holderName,
+            "secretNumber":card.secretNumber,
+            "firstName":charge_instance.firstName,
+            "lastName":charge_instance.lastName,
+            "amount":charge_instance.amount
         }
-        if payload["method"]=="card":
-            card = db.query(Card).filter(Card.token == payload["cardToken"]).first()
-            if card is None:
-                return {"status_code":401,"message":"no card with this token"}
-            charge_dict["cardInfo"]={
-                "cardNumber":card.cardNumber,
-                "expMonth":card.expMonth,
-                "expYear":card.expYear,
-                "holderName":card.holderName,
-                "secretNumber":card.secretNumber,
-                "firstName":charge_instance.firstName,
-                "lastName":charge_instance.lastName,
-                "amount":charge_instance.amount
-            }
-            charge_dict["cardNumber"]=card.cardNumber
-            charge_dict["expMonth"]=card.expMonth
-            charge_dict["expYear"]=card.expYear
-            charge_dict["holderName"]=card.holderName
-            charge_dict["secretNumber"]=card.secretNumber
-            
-
-        req = requests.post(url, json=json.dumps(charge_dict)) 
-         
-        return {"status_code":201,"url":json.loads(req.content),"charge":charge_instance,"token":token}
+        charge_dict["cardNumber"]=card.cardNumber
+        charge_dict["expMonth"]=card.expMonth
+        charge_dict["expYear"]=card.expYear
+        charge_dict["holderName"]=card.holderName
+        charge_dict["secretNumber"]=card.secretNumber
         
-    except:
-        message = "exception occurred with charge process"
-        log(0,message)
-        return {"status_code":401,"message":message}
+
+    req = requests.post(url, json=json.dumps(charge_dict)) 
+        
+    return {"status_code":201,"url":json.loads(req.content),"charge":charge_instance,"token":token}
+        
+    # except:
+    #     message = "exception occurred with charge process"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
 
 @router.get("/getCharge")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
