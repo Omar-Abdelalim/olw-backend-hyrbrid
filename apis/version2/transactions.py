@@ -1383,7 +1383,7 @@ def addCharge(db,custID,curr,am,feeS,feeC,meth):
     # if m is None:
     #     return {"status_code":401,"message":"customer with this ID does not have mobile"}
     
-    c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.mobileNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
+    c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.phoneNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
     db.add(c)
     db.commit()
     db.refresh(c)
