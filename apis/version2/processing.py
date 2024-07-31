@@ -83,7 +83,7 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
     c = Customer(firstName = payload["firstName"],customerNumber = "0",lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthDate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"])
     db.add(c)
     db.commit()
-    cus = db.query(Customer).filter(Customer.email == c.email)
+    cus = db.query(Customer).filter(Customer.email == c.email).first()
     db.query(Customer).filter(Customer.email == c.email).update({"customerNumber":str(cus.id).zfill(9)})
     cur = db.query(Currency).filter(
             Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
