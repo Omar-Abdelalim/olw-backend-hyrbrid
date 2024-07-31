@@ -80,10 +80,22 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 async def regMer(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
     payload = json.loads(payload)
+    e = db.query(Customer).filter(Customer.email == payload["email"]).first()
+    if e is None:
+        return {"status_code": 402, "message": "email already taken by another customer"}
+    e = db.query(Customer).filter(Customer.phoneNumber == payload["PhoneNumber"],Customer.countryCode == payload["countryCode"]).first()
+    if e is None:
+        return {"status_code": 402, "message": "phone number already taken by another customer"}
     c = Customer(firstName = payload["firstName"],customerNumber = "0",lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthDate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"])
+    
     db.add(c)
     db.commit()
     cus = db.query(Customer).filter(Customer.email == c.email).first()
+    e = Email(customerID = cus.id,dateTime = datetime.now(),emailStatus = "active",emailAddress = cus.email)
+    m = Mobile(customerID = cus.id,dateTime = datetime.now(),numberStatus = "active",mobileNumber = payload["phoneNumber"],countryCode = payload["countryCode"])
+    p = Password(customerID = cus.id,dateTime = datetime.now(),passwordStatus = "active",passwordHash = newPassword(payload["password"]))
+    db.add(e)
+    db.add(m)
     db.query(Customer).filter(Customer.email == c.email).update({"customerNumber":str(cus.id).zfill(9)})
     cur = db.query(Currency).filter(
             Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
