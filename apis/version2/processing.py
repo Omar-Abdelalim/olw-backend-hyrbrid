@@ -80,7 +80,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 async def regMer(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     payload = await request.body()
     payload = json.loads(payload)
-    c = Customer(firstName = payload["firstName"],lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthdate"],customerStatus = "active",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"],dateTime = datetime.now())
+    c = Customer(firstName = payload["firstName"],lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthdate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"],dateTime = datetime.now())
     db.add(c)
     db.commit()
     cus = db.query(Customer).filter(Customer.email == c.email)
@@ -98,6 +98,8 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
     if not acco["status_code"] == 201:
         return acco
     db.commit()
+    
+    return {"status_code":200,"message":"account added","accountNumber":account["accountNumber"]}
     
 
 @router.post("/handshake")
