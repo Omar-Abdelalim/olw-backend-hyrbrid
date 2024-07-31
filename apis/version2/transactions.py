@@ -264,7 +264,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
             if qrt is None:
                 return{"status_code":403,"message":"terminal qr code is not pending here"}
-            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName)
+            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
 
             if not trans["status_code"]==201:
                 return trans
@@ -697,7 +697,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 
     return {"status_code": 201,"message":f"Data has been written to {csv_file}"}
 
-def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None"):
+def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
     # try:
     OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-000").first()
     
@@ -751,7 +751,10 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
         desc=receiver
         if not displayName == "None":
             desc = displayName
-        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
+        if not merchantAccount == None:
+            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
+        else:
+            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
     else:
         t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount)
 

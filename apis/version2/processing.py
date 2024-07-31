@@ -714,7 +714,7 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
         if not qr is None:
             return {"status_code": 401, "message": "terminal has active QR request"}
         
-        q = QRTer(terminalID = payload["terminalID"],dateTime= datetime.now(),currency=payload["currency"],amount=payload["amount"],displayName=payload["displayName"],merchantName=payload["merchantName"],qrStatus="pending")
+        q = QRTer(terminalID = payload["terminalID"],merchantAccount = payload["merchantAccount"],dateTime= datetime.now(),currency=payload["currency"],amount=payload["amount"],displayName=payload["displayName"],merchantName=payload["merchantName"],qrStatus="pending")
         
 
         db.add(q)

@@ -10,6 +10,7 @@ class QRTer(Base):
 
     displayName=Column(String,nullable=False)
     merchantName=Column(String,nullable=False)
+    merchantAccount = Column(String,nullable=True)
     currency=Column(String,nullable=False)
     qrStatus=Column(String,nullable=False)
     amount=Column(Float,nullable=False)
