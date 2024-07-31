@@ -76,6 +76,30 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         return {"status_code": 201, "message": "phone number available"}
     return {"status_code": 401, "message": "phone Already Exsit"}
 
+@router.post("/merchantAccount")
+async def regMer(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
+    payload = await request.body()
+    payload = json.loads(payload)
+    c = Customer(firstName = payload["firstName"],lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthdate"],customerStatus = "active",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"],dateTime = datetime.now())
+    db.add(c)
+    db.commit()
+    cus = db.query(Customer).filter(Customer.email == c.email)
+    db.query(Customer).filter(Customer.email == c.email).update({"customerNumber":str(cus.id).zfill(9)})
+    cur = db.query(Currency).filter(
+            Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
+    if cur is None:
+        return {"status_code": 401, "message": "currency doesn't exist in currency table"}
+
+    account = {"accountNumber": generate_bank_account(currency_code=cur.code), "accountType": "eWallet",
+                   "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
+
+    acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
+                    db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","xyz 123","One Link Wallet","Dublin, Ireland")
+    if not acco["status_code"] == 201:
+        return acco
+    db.commit()
+    
+
 @router.post("/handshake")
 async def handshake(request: Request, response: Response, data: DecryptRequest, db: Session = Depends(get_db)):
     b = await request.body()
