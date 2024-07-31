@@ -81,10 +81,10 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
     payload = await request.body()
     payload = json.loads(payload)
     e = db.query(Customer).filter(Customer.email == payload["email"]).first()
-    if e is None:
+    if not e is None:
         return {"status_code": 402, "message": "email already taken by another customer"}
     e = db.query(Customer).filter(Customer.phoneNumber == payload["phoneNumber"],Customer.countryCode == payload["countryCode"]).first()
-    if e is None:
+    if not e is None:
         return {"status_code": 402, "message": "phone number already taken by another customer"}
     c = Customer(firstName = payload["firstName"],customerNumber = "0",lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthDate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"])
     
