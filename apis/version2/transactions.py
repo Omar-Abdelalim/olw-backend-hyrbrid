@@ -994,36 +994,36 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 
 @router.post("/getFees")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+    # try:
+    payload = await request.body()
+    # payload = json.loads(payload)
+    # payload = payload['message']
+    payload = json.loads(payload)
+    token = payload['token']
 
-        if payload["feecode"] == "00010003":
-            payload["feecode"] = "TF001"
-            print("payload temp update") 
-        print('payload:',payload)
-        if not "merchantID" in payload:
-            payload["merchantID"] = None
-        returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
-        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-        returning["level"] = cus.customerStatus
-        if returning["level"]=="third level":
-            returning["limit"]=lvl3Max
-        elif returning["level"]=="second level":
-            returning["limit"]=lvl2Max
-        else:
-            returning["limit"]=lvl1Max
-        
-        return returning 
+    if payload["feecode"] == "00010003":
+        payload["feecode"] = "TF001"
+        print("payload temp update") 
+    print('payload:',payload)
+    if not "merchantID" in payload:
+        payload["merchantID"] = None
+    returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
+    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+    returning["level"] = cus.customerStatus
+    if returning["level"]=="third level":
+        returning["limit"]=lvl3Max
+    elif returning["level"]=="second level":
+        returning["limit"]=lvl2Max
+    else:
+        returning["limit"]=lvl1Max
+    
+    return returning 
 
         
-    except:
-        message = "exception occurred with retrieving fees"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # except:
+    #     message = "exception occurred with retrieving fees"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
 
 @router.post("/getEligibility")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
