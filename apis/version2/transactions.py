@@ -1001,8 +1001,8 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
     payload = json.loads(payload)
     token = payload['token']
 
-    if payload["feecode"] == "00010003":
-        payload["feecode"] = "TF001"
+    if payload["feeCode"] == "00010003":
+        payload["feeCode"] = "TF001"
         print("payload temp update") 
     print('payload:',payload)
     if not "merchantID" in payload:
