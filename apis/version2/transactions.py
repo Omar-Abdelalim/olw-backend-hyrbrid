@@ -859,24 +859,24 @@ def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription
     return {"status_code":201,"message":"fee added successfully"}
 
 def calcFee(db,amount,serviceCode,merchantID:None):
-    try:
-        sCode = serviceCode
-        mID = merchantID
-        fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
-        if fee is None:
-            return {"status_code":401,"message":"no fee exists with this code"}
-        print("fee:",fee)
-        print("amount:",amount)
-        print((fee.feeFixed+fee.feeRate/100*float(amount)))
-        feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
-        if feeAmount>fee.feeMax:
-            feeAmount = fee.feeMax
-        if feeAmount<fee.feeMin:
-            feeAmount = fee.feeMin
-    except:
-        message = "exception occurred with retrieving fee"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # try:
+    sCode = serviceCode
+    mID = merchantID
+    fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
+    if fee is None:
+        return {"status_code":401,"message":"no fee exists with this code"}
+    print("fee:",fee)
+    print("amount:",amount)
+    print((fee.feeFixed+fee.feeRate/100*float(amount)))
+    feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
+    if feeAmount>fee.feeMax:
+        feeAmount = fee.feeMax
+    if feeAmount<fee.feeMin:
+        feeAmount = fee.feeMin
+    # except:
+    #     message = "exception occurred with retrieving fee"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
     
     return {"status_code":201,"fee":feeAmount}
 
