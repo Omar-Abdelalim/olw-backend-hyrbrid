@@ -73,9 +73,41 @@ origins = [
 async def intiAccts(request: Request=None,response: Response=None,db: Session = Depends(get_db)):
         print("init")
         adm = db.query(Customer).filter(Customer.customerStatus == "admin").first()
-        addFee("00010001","0001","send money to wallet user",0.5,1,0,0,db)
-        addFee("00010002","0001","National money transfer",0.5,1,5,1,db)
-        addFee("00010003","0001","international money transfer",1,1,10,5,db)
+        addFee(None,"ACM","Account Maintenance","Fees for maintaining an active eWallet account","Monthly/Annual account maintenance fee","AMF001",0,10,2,5,1,db)
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for sending money to other users or external accounts", "TF001", 0, 50, 0.5, 1, 1, db)
+
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for receiving money from other users or external accounts", "TF002", 0, 30, 0.3, 0.5, 1, db)
+
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for merchant payments", "TF003", 0, 100, 1, 2.5, 1, db)
+
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for bill payments", "TF004", 0, 20, 1, 3, 1, db)
+
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for currency conversion", "TF005", 0, 50, 1, 2.5, 1, db)
+
+        addFee(None, "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for bank transfers to/from eWallet", "DWF001", 0, 25, 0.5, 1.3, 1, db)
+
+        addFee(None, "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for adding money using a credit/debit card", "DWF002", 0, 30, 1, 2.4, 1, db)
+
+        addFee(None, "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for ATM withdrawals using eWallet card", "DWF003", 0, 5, 1, 1.2, 1, db)
+
+        addFee(None, "SRV", "Service Fees", "Additional service-related fees", "Fee for inactive accounts", "SF001", 0, 20, 1, 0, 1, db)
+
+        addFee(None, "SRV", "Service Fees", "Additional service-related fees", "Fee for account closure", "SF002", 0, 10, 2, 0, 1, db)
+
+        addFee(None, "SRV", "Service Fees", "Additional service-related fees", "Fee for chargebacks", "SF003", 0, 25, 5, 1.5, 1, db)
+
+        addFee(None, "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Subscription fee for premium services", "PSF001", 0, 100, 10, 0, 1, db)
+
+        addFee(None, "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Fee for issuing and using virtual card", "PSF002", 0, 50, 5, 0, 1, db)
+
+        addFee(None, "INT", "International Transaction Fees", "Fees for international transactions", "Fee for cross-border transactions", "ITF001", 0, 40, 2, 1.4, 1, db)
+
+        addFee(None, "INT", "International Transaction Fees", "Fees for international transactions", "Fee for international money transfers", "ITF002", 0, 60, 5, 2.6, 1, db)
+
+        addFee(None, "ADM", "Administrative Fees", "Fees for administrative services", "Fee for providing paper account statements", "AF001", 0, 15, 1, 0, 1, db)
+
+        addFee(None, "ADM", "Administrative Fees", "Fees for administrative services", "Fee for reissuing lost or expired cards", "AF002", 0, 20, 2, 0, 1, db)
+
 
         cur = Currency(country="USA",currencyName="USD",code="01",status="Active")
         db.add(cur)
@@ -371,7 +403,7 @@ def tansaction3(intransID,db: Session = Depends(get_db)):
             if not trans["status_code"]==201:
                 return trans
             
-            feeM = calcFee(db,feesCode,amount)   
+            feeM = calcFee(db,amount,feesCode)   
             
             if not feeM["status_code"]==201:
                 return feeM
@@ -809,27 +841,32 @@ def log(logFile,message):
     file_object.close()
     return True
 
-def addFee(feeCode,feeGroup,feeDesc,feeRate,feeAmount,feeMax,feeMin,db):
+def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription,serviceCode,campaign,feeMax,feeMin,feeRate,feeFixed,db):
     try:
-        fee = db.query(Fee).filter(Fee.feeCode == feeCode and Fee.groupCode==feeGroup and Fee.feeStatus == "active").first()
+        mID = merchantID
+        sCode = serviceCode
+        fee = db.query(Fee).filter(Fee.merchantID == mID,Fee.serviceCode == sCode,Fee.status == "active").first()
         if not fee is None:
             return False
-        f = Fee(feeCode=feeCode,groupCode=feeGroup,feeDesc=feeDesc,feeRate=feeRate,feeAmount=feeAmount,feeStatus="active",feeMax=feeMax,feeMin=feeMin)
+        f = Fee(merchantID=merchantID,categoryID=categoryID,categoryName=categoryName,categoryDescription=categoryDescription,feeDescription=feeDescription,serviceCode=serviceCode,campaign=campaign,status = "active",feeMax=feeMax,feeMin=feeMin,feeFixed=feeFixed,feeRate=feeRate)
     
         db.add(f)
+        db.commit()
     except:
-        message = "exception occurred with retrieving fees"
+        message = "exception occurred with creating fees"
         log(0,message)
         return {"status_code":401,"message":message}
     return {"status_code":201,"message":"fee added successfully"}
 
-def calcFee(db,feeCode,amount):
+def calcFee(db,amount,serviceCode,merchantID:None):
     try:
-        fee = db.query(Fee).filter(Fee.feeCode==feeCode).first()
+        sCode = serviceCode
+        mID = merchantID
+        fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
         if fee is None:
-            return {"status_code":401,"message":"no fee exists with this fee code"}
+            return {"status_code":401,"message":"no fee exists with this code"}
     
-        feeAmount = fee.feeAmount+fee.feeRate/100*float(amount)
+        feeAmount = fee.feeFixed+fee.feeRate/100*float(amount)
         if feeAmount>fee.feeMax:
             feeAmount = fee.feeMax
         if feeAmount<fee.feeMin:
@@ -964,9 +1001,13 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
         payload = json.loads(payload)
         token = payload['token']
 
-    
+        if payload["feecode"] == "00010003":
+            payload["feecode"] = "TF001"
+            print("payload temp update") 
         print('payload:',payload)
-        returning = calcFee(db,payload["feeCode"],payload["amount"])
+        if not "merchantID" in payload:
+            payload["merchantID"] = None
+        returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         returning["level"] = cus.customerStatus
         if returning["level"]=="third level":

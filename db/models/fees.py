@@ -5,16 +5,20 @@ from db.base_class import Base
 
 class Fee(Base):
     id = Column(Integer, primary_key=True, index=True)
-    groupCode = Column(String,nullable=False)
-    feeCode=Column(String,nullable=False)
-    feeDesc=Column(String,nullable=False)
-    feeRate=Column(Float,nullable=False)
-    feeAmount=Column(Float,nullable=False)
-    feeStatus=Column(String,nullable=False)
+    merchantID = Column(String,nullable=True)
+    categoryID = Column(String,nullable=False)
+    categoryName = Column(String,nullable=False)
+    categoryDescription = Column(String,nullable=True)
 
-    feeMax=Column(Float,nullable=False)
-    feeMin=Column(Float,nullable=False)
-    
+    serviceCode = Column(String,nullable=False)
+    campaign = Column(float,nullable=False)
+    status = Column(String,nullable=False)
+    feeDescription = Column(String,nullable=True)
+
+    feeMax= Column(Float,nullable=False)
+    feeMin= Column(Float,nullable=False)
+    feeFixed = Column(Float,nullable=False)
+    feeRate = Column(Float,nullable=False)
     
 
     def __str__(self):
