@@ -865,7 +865,7 @@ def calcFee(db,amount,serviceCode,merchantID:None):
     fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
     if fee is None:
         return {"status_code":401,"message":"no fee exists with this code"}
-    print(fee)
+    print(fee.feeFixed,fee.feeRate)
     print(amount)
     print((fee.feeFixed+fee.feeRate/100*float(amount)))
     feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
