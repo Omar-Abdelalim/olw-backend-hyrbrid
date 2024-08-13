@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header, Request, Body, Response, status
+from fastapi import APIRouter, Depends, Header, Request, Body, Response, status,HTTPException
 from sqlalchemy.orm import Session
 from db.session import get_db
 from typing import Annotated
@@ -45,7 +45,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from apis.version2.middleware import DecryptRequest, decrypt_data
 from pydantic import BaseModel
-from db.globals.globals import tokens
+from db.globals.globals import tokens,smsList
 
 from core.hashing import Hasher
 
@@ -1731,8 +1731,21 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
     otp = "1111"
     user.smsCode = otp
     user.smsValid = datetime.now() + timedelta(days=365)
+    smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
     return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
 
+class SMSResponse(BaseModel):
+    phone_number: str
+    message: str
+
+@router.post("/getsms", response_model=SMSResponse)
+def get_sms():
+    if not smsList:
+        raise HTTPException(status_code=404, detail="No SMS found")
+
+    latest_sms = smsList.pop(0)  # Get and remove the first (oldest) SMS
+    print("Sent sms", latest_sms)
+    return latest_sms
 
 @router.post("/login")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
