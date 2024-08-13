@@ -74,7 +74,7 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
         print("init")
         adm = db.query(Customer).filter(Customer.customerStatus == "admin").first()
         addFee(None,"ACM","Account Maintenance","Fees for maintaining an active eWallet account","Monthly/Annual account maintenance fee","AMF001",0,10,2,5,1,db)
-        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for sending money to other users or external accounts", "TF001", 0, 50, 0.5, 1, 1, db)
+        addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for sending money to other users or external accounts", "TF001", 0, 50, 0.5, 1.5, 1, db)
 
         addFee(None, "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for receiving money from other users or external accounts", "TF002", 0, 30, 0.3, 0.5, 1, db)
 
@@ -859,24 +859,21 @@ def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription
     return {"status_code":201,"message":"fee added successfully"}
 
 def calcFee(db,amount,serviceCode,merchantID:None):
-    # try:
-    sCode = serviceCode
-    mID = merchantID
-    fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
-    if fee is None:
-        return {"status_code":401,"message":"no fee exists with this code"}
-    print(fee.feeFixed,fee.feeRate)
-    print(amount)
-    print((fee.feeFixed+fee.feeRate/100*float(amount)))
-    feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
-    if feeAmount>fee.feeMax:
-        feeAmount = fee.feeMax
-    if feeAmount<fee.feeMin:
-        feeAmount = fee.feeMin
-    # except:
-    #     message = "exception occurred with retrieving fee"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    try:
+        sCode = serviceCode
+        mID = merchantID
+        fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
+        if fee is None:
+            return {"status_code":401,"message":"no fee exists with this code"}
+        feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
+        if feeAmount>fee.feeMax:
+            feeAmount = fee.feeMax
+        if feeAmount<fee.feeMin:
+            feeAmount = fee.feeMin
+    except:
+        message = "exception occurred with retrieving fee"
+        log(0,message)
+        return {"status_code":401,"message":message}
     
     return {"status_code":201,"fee":feeAmount}
 
