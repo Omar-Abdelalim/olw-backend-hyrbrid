@@ -866,7 +866,7 @@ def calcFee(db,amount,serviceCode,merchantID:None):
         if fee is None:
             return {"status_code":401,"message":"no fee exists with this code"}
     
-        feeAmount = fee.feeFixed+fee.feeRate/100*float(amount)
+        feeAmount = fee.campaign*(fee.feeFixed+fee.feeRate/100*float(amount))
         if feeAmount>fee.feeMax:
             feeAmount = fee.feeMax
         if feeAmount<fee.feeMin:
