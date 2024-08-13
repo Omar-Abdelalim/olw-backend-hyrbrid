@@ -1025,7 +1025,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
     #     return {"status_code":401,"message":message}
 
 @router.post("/getEligibility")
-async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
+async def getEle(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     try:
         payload = await request.body()
         # payload = json.loads(payload)
@@ -1141,7 +1141,7 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
     #     return {"status_code":401,"message":message}
 
 @router.get("/getCharge")
-async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
+async def getCharge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
     # try:
     payload = await request.body()
     # payload = json.loads(payload)
