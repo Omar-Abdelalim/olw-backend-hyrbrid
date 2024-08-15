@@ -875,7 +875,7 @@ def calcFee(db,amount,serviceCode,merchantID:None):
         log(0,message)
         return {"status_code":401,"message":message}
     
-    return {"status_code":201,"fee":feeAmount}
+    return {"status_code":201,"fee":round(feeAmount,2)}
 
 def addBank(db,accountNo,bankName,friendlyName,country,currency,otherNames,surName,bankType,iBan,bic,ben,benAdd):
     try:
