@@ -13,7 +13,7 @@ class Transaction(Base):
     
     transactionStatus=Column(String,nullable=False)
     description=Column(String,nullable=True)
-    amount=Column(Integer,nullable=False)
+    amount=Column(Float,nullable=False)
 
     sendID=Column(Integer,nullable=False)
     recID = Column(Integer,nullable=False)

@@ -332,3 +332,7 @@ from:OLW bank, to:{acc.accountNumber}, amount:{charge.amount},sending currency:{
 from:01-00000103-001-01, to:01-00000102-001-01, amount:12,sending currency:USD, receiving currency:USD
 from:01-00000103-001-01, to:01-00000102-001-01, amount:4,sending currency:USD, receiving currency:USD
 from:01-00000103-001-01, to:01-00000102-001-01, amount:2,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000113-001-01, amount:95.5,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000113-001-01, amount:1.5,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000113-001-01, amount:1.5,sending currency:USD, receiving currency:USD
+from:01-00000102-001-01, to:01-00000113-001-01, amount:250.5,sending currency:USD, receiving currency:USD
