@@ -1738,6 +1738,16 @@ class SMSResponse(BaseModel):
     phone_number: str
     message: str
 
+class SMSRequest(BaseModel):
+    phone_number: str
+    message: str
+
+@router.post("/postsms")
+def post_sms(sms: SMSRequest):
+    smsList.append({"phone_number": sms.phone_number, "message": sms.message})
+    print("Post message", sms.phone_number, sms.message)
+    return {"status": "SMS received"}
+
 @router.post("/getsms", response_model=SMSResponse)
 def get_sms():
     if not smsList:
