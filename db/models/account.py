@@ -11,7 +11,7 @@ class Account(Base):
     accountNumber=Column(String,nullable=False)
     accountType=Column(String,nullable=False)
     primaryAccount=Column(Boolean,nullable=False)
-    balance=Column(Integer,nullable=False)
+    balance=Column(Float,nullable=False)
     country=Column(String,nullable=False)
     currency=Column(String,nullable=False)
     friendlyName=Column(String,nullable=False)

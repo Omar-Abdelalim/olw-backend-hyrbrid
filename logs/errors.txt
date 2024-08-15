@@ -626,3 +626,6 @@ exception occurred with outgoing transactions
 exception occurred with retrieving token
 exception occurred with retrieving token
 exception occurred with checking balance
+exception occurred with retrieving fees
+exception occurred with retrieving fee
+exception occurred with creating transaction
