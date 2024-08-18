@@ -28,8 +28,8 @@ def startapplication():
     db = next(get_db()) 
 
     create_tables()
-    loop = asyncio.get_event_loop()
-    loop.create_task(periodic_task(db))
+    # loop = asyncio.get_event_loop()
+    # loop.create_task(periodic_task(db))
     return app
 
 
