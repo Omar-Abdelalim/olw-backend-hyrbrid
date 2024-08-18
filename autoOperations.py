@@ -58,21 +58,6 @@ countryCodes = {"Egypt":"+20","USA":"+1"}  # Example list of allowed countries
 tokenValidMins = 15
 chargePendingTime = 20
 
-
-def create_tables():
-    Base.metadata.create_all(bind=engine)
-
-def startapplication():
-    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION,docs_url=None, redoc_url=None)
-    db = next(get_db()) 
-
-    create_tables()
-    loop = asyncio.get_event_loop()
-    loop.create_task(periodic_task(db))
-    return app
-
-app = startapplication()
-
 async def periodic_task(db: Session):
 
     # pend = db.query(EmailCode).filter(EmailCode.result == "pending").all()
@@ -127,4 +112,20 @@ def log(logFile,message):
     file_object.close()
     return True
 
+
+
+
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
+def startapplication():
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION,docs_url=None, redoc_url=None)
+    db = next(get_db()) 
+
+    create_tables()
+    loop = asyncio.get_event_loop()
+    loop.create_task(periodic_task(db))
+    return app
+
+app = startapplication()
 
