@@ -71,48 +71,56 @@ def preprocess():
 
 @router.post("/checkPhone")
 async def reg1(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
-    ph = db.query(Mobile).filter(Mobile.mobileNumber == payload["mobileNumber"],Mobile.countryCode == payload["countryCode"],Mobile.numberStatus == "active").first()
-    if ph is None:
-        return {"status_code": 201, "message": "phone number available"}
-    return {"status_code": 401, "message": "phone Already Exsit"}
-
+    try:
+        ph = db.query(Mobile).filter(Mobile.mobileNumber == payload["mobileNumber"],Mobile.countryCode == payload["countryCode"],Mobile.numberStatus == "active").first()
+        if ph is None:
+            return {"status_code": 201, "message": "phone number available"}
+        return {"status_code": 401, "message": "phone Already Exsit"}
+    except:
+        message = "exception occured with checking phone"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 @router.post("/merchantAccount")
 async def regMer(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
-    payload = await request.body()
-    payload = json.loads(payload)
-    e = db.query(Customer).filter(Customer.email == payload["email"]).first()
-    if not e is None:
-        return {"status_code": 402, "message": "email already taken by another customer"}
-    e = db.query(Customer).filter(Customer.phoneNumber == payload["phoneNumber"],Customer.countryCode == payload["countryCode"]).first()
-    if not e is None:
-        return {"status_code": 402, "message": "phone number already taken by another customer"}
-    c = Customer(firstName = payload["firstName"],customerNumber = "0",lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthDate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"])
-    
-    db.add(c)
-    db.commit()
-    cus = db.query(Customer).filter(Customer.email == c.email).first()
-    e = Email(customerID = cus.id,dateTime = datetime.now(),emailStatus = "active",emailAddress = cus.email)
-    m = Mobile(customerID = cus.id,dateTime = datetime.now(),numberStatus = "active",mobileNumber = payload["phoneNumber"],countryCode = payload["countryCode"])
-    p = Password(customerID = cus.id,dateTime = datetime.now(),passwordStatus = "active",passwordHash = newPassword(payload["password"]))
-    db.add(e)
-    db.add(m)
-    db.query(Customer).filter(Customer.email == c.email).update({"customerNumber":str(cus.id).zfill(9)})
-    cur = db.query(Currency).filter(
-            Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
-    if cur is None:
-        return {"status_code": 401, "message": "currency doesn't exist in currency table"}
+    try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        e = db.query(Customer).filter(Customer.email == payload["email"]).first()
+        if not e is None:
+            return {"status_code": 402, "message": "email already taken by another customer"}
+        e = db.query(Customer).filter(Customer.phoneNumber == payload["phoneNumber"],Customer.countryCode == payload["countryCode"]).first()
+        if not e is None:
+            return {"status_code": 402, "message": "phone number already taken by another customer"}
+        c = Customer(firstName = payload["firstName"],customerNumber = "0",lastName = payload["lastName"],email = payload["email"],birthdate=payload["birthDate"],customerStatus = "third level",phoneNumber=payload["phoneNumber"],countryCode=payload["countryCode"],pin=payload["pin"],IDIqama=payload["IDIqama"])
+        
+        db.add(c)
+        db.commit()
+        cus = db.query(Customer).filter(Customer.email == c.email).first()
+        e = Email(customerID = cus.id,dateTime = datetime.now(),emailStatus = "active",emailAddress = cus.email)
+        m = Mobile(customerID = cus.id,dateTime = datetime.now(),numberStatus = "active",mobileNumber = payload["phoneNumber"],countryCode = payload["countryCode"])
+        p = Password(customerID = cus.id,dateTime = datetime.now(),passwordStatus = "active",passwordHash = newPassword(payload["password"]))
+        db.add(e)
+        db.add(m)
+        db.query(Customer).filter(Customer.email == c.email).update({"customerNumber":str(cus.id).zfill(9)})
+        cur = db.query(Currency).filter(
+                Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
+        if cur is None:
+            return {"status_code": 401, "message": "currency doesn't exist in currency table"}
 
-    account = {"accountNumber": generate_bank_account(currency_code=cur.code), "accountType": "eWallet",
-                   "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
+        account = {"accountNumber": generate_bank_account(currency_code=cur.code), "accountType": "eWallet",
+                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
-    acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
-                    db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","xyz 123","One Link Wallet","Dublin, Ireland")
-    if not acco["status_code"] == 201:
-        return acco
-    db.commit()
-    
-    return {"status_code":200,"message":"account added","accountNumber":account["accountNumber"]}
-    
+        acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
+                        db, account["country"], account["currency"], "primary","IEOLW"+account['accountNumber'],"IEOLW","xyz 123","One Link Wallet","Dublin, Ireland")
+        if not acco["status_code"] == 201:
+            return acco
+        db.commit()
+        
+        return {"status_code":200,"message":"account added","accountNumber":account["accountNumber"]}
+    except:
+        message = "exception occured with creating customer"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
 @router.post("/handshake")
 async def handshake(request: Request, response: Response, data: DecryptRequest, db: Session = Depends(get_db)):
@@ -371,28 +379,28 @@ async def reg3(request: Request, payload: dict = Body(...), db: Session = Depend
 
 @router.post("/confirmEmail")
 async def sendemail1(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    payload = json.loads(payload)
-    
+    try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        
 
-    print('payload:',payload)
-    cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
+        print('payload:',payload)
+        cus = db.query(Customer).filter(Customer.email == payload["email"]).first()
 
-    if cus is None:
-        return "no customer exists with this email"
+        if cus is None:
+            return "no customer exists with this email"
 
-    e = Email(emailAddress=payload["email"], emailStatus="active", customerID=cus.id, dateTime=datetime.now())
+        e = Email(emailAddress=payload["email"], emailStatus="active", customerID=cus.id, dateTime=datetime.now())
 
-    db.query(Customer).filter(Customer.email == payload["email"]).update({"customerStatus": "first level"})
+        db.query(Customer).filter(Customer.email == payload["email"]).update({"customerStatus": "first level"})
 
-    db.add(e)
-    db.commit()
-    db.refresh(e)
-    # except:
-    #     message = "exception occurred with creating email"
-    #     log(0, message)
-    #     return {"status_code": 401, "message": message}
+        db.add(e)
+        db.commit()
+        db.refresh(e)
+    except:
+        message = "exception occurred with creating email"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
     return {"status_code": 201, "message": "email Succefully added"}
 
@@ -554,38 +562,38 @@ async def changePhone(request: Request, payload: dict = Body(...), db: Session =
 
 @router.put("/password")
 async def changePhone(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
 
-    print('payload:',payload)
-    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-    if cus is None:
-        return {"status_code": 401, "message": "no customer exists with this id"}
+        print('payload:',payload)
+        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+        if cus is None:
+            return {"status_code": 401, "message": "no customer exists with this id"}
 
 
-    
-    if not cus.pin == payload["pin"]:
-        return {"status_code": 401, "message": "incorrect pin number"}
-    passcur = newPassword(payload["password"])
-    if not passcur:
-        return {"status_code": 401, "message": "please pick a password between 8 and 16 "}
-    p = Password(passwordHash=passcur, passwordStatus="active", customerID=cus.id, dateTime=datetime.now())
-    db.add(p)
-    db.query(Password).filter(Password.customerID == payload["id"]).update({"passwordStatus": "outdated"})
-    db.commit()
+        
+        if not cus.pin == payload["pin"]:
+            return {"status_code": 401, "message": "incorrect pin number"}
+        passcur = newPassword(payload["password"])
+        if not passcur:
+            return {"status_code": 401, "message": "please pick a password between 8 and 16 "}
+        p = Password(passwordHash=passcur, passwordStatus="active", customerID=cus.id, dateTime=datetime.now())
+        db.add(p)
+        db.query(Password).filter(Password.customerID == payload["id"]).update({"passwordStatus": "outdated"})
+        db.commit()
 
-    return {"status_code": 201, "message": "password updated", "token": token}
+        return {"status_code": 201, "message": "password updated", "token": token}
 
 
-    # except:
-    #     message = "exception occurred with checking email"
-    #     log(0, message)
-    #     return {"status_code": 401, "message": message}
+    except:
+        message = "exception occurred with checking email"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
 
 @router.post("/createPin")
@@ -814,23 +822,23 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
 @router.get("/getQrTerStatus")
 async def getqrter(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    # token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        # token = payload['token']
 
 
-    print('payload:',payload)
-    qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
-    if qr is None:
-        return {"status_code": 401, "message": "no QR request active by this terminal"}
-        
-    # except:
-    #     message = "exception occurred with getting QR request"
-    #     log(0, message)
-    #     return {"status_code": 401, "message": message}
+        print('payload:',payload)
+        qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
+        if qr is None:
+            return {"status_code": 401, "message": "no QR request active by this terminal"}
+            
+    except:
+        message = "exception occurred with getting QR request"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
     return {"status_code": 201, "message": qr}#,"customer":cus, "token": token}
 
@@ -1707,32 +1715,36 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
 
 @router.post("/loginCheck")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
-#   try:
-    payload = await request.body()
-    payload = json.loads(payload)
-    # payload = payload['message']
-    # payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        # payload = payload['message']
+        # payload = json.loads(payload)
+        token = payload['token']
 
 
-    print('payload:',payload)
-    em = payload["email"]
+        print('payload:',payload)
+        em = payload["email"]
 
-    pa = payload["password"]
-    user = db.query(Customer).filter(Customer.email == em).first()
+        pa = payload["password"]
+        user = db.query(Customer).filter(Customer.email == em).first()
 
-    if not user:
-        return {"status_code": 403, "message": "wrong email or password!"}
-    password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
-    hashed_password = pa.encode('utf-8')
-    if not Hasher.verify_password(hashed_password, password.passwordHash):
-        return {"status_code": 404, "message": "wrong email or password!!", "orig": hashed_password,
-                "other": password}
-    otp = "1111"
-    user.smsCode = otp
-    user.smsValid = datetime.now() + timedelta(days=365)
-    smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
-    return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
+        if not user:
+            return {"status_code": 403, "message": "wrong email or password!"}
+        password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
+        hashed_password = pa.encode('utf-8')
+        if not Hasher.verify_password(hashed_password, password.passwordHash):
+            return {"status_code": 404, "message": "wrong email or password!!", "orig": hashed_password,
+                    "other": password}
+        otp = "1111"
+        user.smsCode = otp
+        user.smsValid = datetime.now() + timedelta(days=365)
+        smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
+        return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
+    except:
+        message = "exception occurred with checking credentials"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
 class SMSResponse(BaseModel):
     phone_number: str
@@ -1744,54 +1756,64 @@ class SMSRequest(BaseModel):
 
 @router.post("/postsms")
 def post_sms(sms: SMSRequest):
-    smsList.append({"phone_number": sms.phone_number, "message": sms.message})
-    print("Post message", sms.phone_number, sms.message)
-    return {"status": "SMS received"}
-
+    try:
+        smsList.append({"phone_number": sms.phone_number, "message": sms.message})
+        print("Post message", sms.phone_number, sms.message)
+        return {"status": "SMS received"}
+    except:
+        message = "exception occurred with sms"
+        log(0, message)
+        return {"status_code": 401, "message": message}
+    
 @router.post("/getsms", response_model=SMSResponse)
 def get_sms():
-    if not smsList:
-        raise HTTPException(status_code=404, detail="No SMS found")
+    try:
+        if not smsList:
+            raise HTTPException(status_code=404, detail="No SMS found")
 
-    latest_sms = smsList.pop(0)  # Get and remove the first (oldest) SMS
-    print("Sent sms", latest_sms)
-    return latest_sms
-
+        latest_sms = smsList.pop(0)  # Get and remove the first (oldest) SMS
+        print("Sent sms", latest_sms)
+        return latest_sms
+    except:
+        message = "exception occurred with retrieving customer"
+        log(0, message)
+        return {"status_code": 401, "message": message}
+    
 @router.post("/login")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
-#   try:
-    payload = await request.body()
-    payload = json.loads(payload)
-    # payload = payload['message']
-    # payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        payload = json.loads(payload)
+        # payload = payload['message']
+        # payload = json.loads(payload)
+        token = payload['token']
 
 
-    print('payload:',payload)
-    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+        print('payload:',payload)
+        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
 
-    if not cus.smsCode == payload['code']:
-        print(cus.smsCode)
-        return {"status_code": 404, "message": "wrong code"}
-    elif datetime.now() > datetime.strptime(cus.smsValid, '%Y-%m-%d %H:%M:%S.%f'):
-        return {"status_code": 404, "message": "code timed- out"}
-
-
-    
-    tokens[token]['id'] = cus.id
-    
+        if not cus.smsCode == payload['code']:
+            print(cus.smsCode)
+            return {"status_code": 404, "message": "wrong code"}
+        elif datetime.now() > datetime.strptime(cus.smsValid, '%Y-%m-%d %H:%M:%S.%f'):
+            return {"status_code": 404, "message": "code timed- out"}
 
 
-    account = db.query(Account).filter(Account.customerID == str(cus.id), Account.primaryAccount == "1").first()
-    bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
-    bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
+        
+        tokens[token]['id'] = cus.id
+        
 
-    
 
-#   except:
-#          message = "exception occurred with retrieving token"
-#          log(0,message)
-#          return {"status_code":401,"message":message}
+        account = db.query(Account).filter(Account.customerID == str(cus.id), Account.primaryAccount == "1").first()
+        bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
+        bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
+
+        
+
+    except:
+         message = "exception occurred with retrieving token"
+         log(0,message)
+         return {"status_code":401,"message":message}
     return {"status_code":200,"user":cus,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
 
 @router.post("/getAddress")

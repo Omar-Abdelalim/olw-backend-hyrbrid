@@ -261,20 +261,21 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
-
-    
-        print('payload:',payload)
-        qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
-        if qrt is None:
-            return{"status_code":403,"message":"terminal qr code is not pending here"}
-        db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").update({"qrStatus":"processing"})
-        db.commit()
         try:
+            payload = await request.body()
+            # payload = json.loads(payload)
+            # payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
+
+        
+            print('payload:',payload)
+            qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
+            if qrt is None:
+                return{"status_code":403,"message":"terminal qr code is not pending here"}
+            db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").update({"qrStatus":"processing"})
+            db.commit()
+        
             
             
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
@@ -334,50 +335,50 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        # try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+        try:
+            payload = await request.body()
+            # payload = json.loads(payload)
+            # payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
 
-    
-        print('payload:',payload)
-        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-        OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
-        iBan = payload["iBan"]
         
-        
-
-        sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
-        
-        
-        if not sendCus.pin == payload["pin"]:
-            return {"status_code": 401,"message":"Pin incorrect"}
-        sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
-        if sendAcc is None:
-            return {"status_code": 401,"message":"sending account doesn't exist"}
-        elif sendAcc.customerID == payload["id"]:
-            return {"status_code": 401,"message":"sending account doesn't belong to this user"}
-        
-        if payload["amount"]+payload["fees"] > sendAcc.balance:
-            return {"status_code": 401,"message":"balance not enough"}
-        if OLWBank is None or OLWBank is None:
-            return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
-        
-        trans = transactionOperation(payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
-        if not trans["status_code"]==201:
-            return trans
-        
-        if payload["fees"]>0:
-            trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+            print('payload:',payload)
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+            iBan = payload["iBan"]
             
-            if not trans2["status_code"]==201:
-                return trans2
-        # except:
-        #     message = "exception occurred with creating transaction"
-        #     log(0,message)
-        #     return {"status_code":401,"message":message}
+            
+
+            sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
+            
+            
+            if not sendCus.pin == payload["pin"]:
+                return {"status_code": 401,"message":"Pin incorrect"}
+            sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
+            if sendAcc is None:
+                return {"status_code": 401,"message":"sending account doesn't exist"}
+            elif sendAcc.customerID == payload["id"]:
+                return {"status_code": 401,"message":"sending account doesn't belong to this user"}
+            
+            if payload["amount"]+payload["fees"] > sendAcc.balance:
+                return {"status_code": 401,"message":"balance not enough"}
+            if OLWBank is None or OLWBank is None:
+                return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
+            
+            trans = transactionOperation(payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
+            if not trans["status_code"]==201:
+                return trans
+            
+            if payload["fees"]>0:
+                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                
+                if not trans2["status_code"]==201:
+                    return trans2
+        except:
+            message = "exception occurred with creating transaction"
+            log(0,message)
+            return {"status_code":401,"message":message}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],("iBan"+iBan),payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
          
@@ -653,82 +654,90 @@ async def createBank(request: Request,response: Response,payload: dict = Body(..
 
 @router.post("/inTransaction")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
 
 
-    print('payload:',payload)
-    t = TransactionRequestIncoming(dateTime = datetime.now(),inIBan=payload["inIBan"],accountNo=payload["accountNo"],currency=payload["currency"],country=payload["country"],sendingCurrency=payload["sendingCurrency"],sendingCountry=payload["sendingCountry"],direction="in",transactionStatus="pending",amount=payload["amount"],feesCode=payload["feesCode"])
-    db.add(t)
-    db.commit()
-    return {"status_code": 201,"message":"transaction request sent"}
-
+        print('payload:',payload)
+        t = TransactionRequestIncoming(dateTime = datetime.now(),inIBan=payload["inIBan"],accountNo=payload["accountNo"],currency=payload["currency"],country=payload["country"],sendingCurrency=payload["sendingCurrency"],sendingCountry=payload["sendingCountry"],direction="in",transactionStatus="pending",amount=payload["amount"],feesCode=payload["feesCode"])
+        db.add(t)
+        db.commit()
+        return {"status_code": 201,"message":"transaction request sent"}
+    except:
+            message = "exception occurred with creating bank"
+            log(0,message)
+            return {"status_code":401,"message":message}
 @router.post("/balanceBank")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
+            
+        print('payload:',payload)
+        t1 = db.query(Transaction).filter(Transaction.id%2 == 1).all()
+        t2 = db.query(Transaction).filter(Transaction.id%2 == 0).all()
+
+        transactions_data_1 = []
+        for transaction in t1:
+            transactions_data_1.append({
+            'id': transaction.id,
+            'dateTime': transaction.dateTime,
+            'accountNo': transaction.accountNo,
+            'outAccountNo': transaction.outAccountNo,
+            'transactionStatus': transaction.transactionStatus,
+            'description': transaction.description,
+            'amount': transaction.amount,
+            'sendID': transaction.sendID,
+            'recID': transaction.recID
+        })
+            
+        transactions_data_2 = []
+        for transaction in t2:
+            transactions_data_2.append({
+            'id': transaction.id,
+            'dateTime': transaction.dateTime,
+            'accountNo': transaction.accountNo,
+            'outAccountNo': transaction.outAccountNo,
+            'transactionStatus': transaction.transactionStatus,
+            'description': transaction.description,
+            'amount': transaction.amount,
+            'sendID': transaction.sendID,
+            'recID': transaction.recID
+        })
         
-    print('payload:',payload)
-    t1 = db.query(Transaction).filter(Transaction.id%2 == 1).all()
-    t2 = db.query(Transaction).filter(Transaction.id%2 == 0).all()
-
-    transactions_data_1 = []
-    for transaction in t1:
-        transactions_data_1.append({
-        'id': transaction.id,
-        'dateTime': transaction.dateTime,
-        'accountNo': transaction.accountNo,
-        'outAccountNo': transaction.outAccountNo,
-        'transactionStatus': transaction.transactionStatus,
-        'description': transaction.description,
-        'amount': transaction.amount,
-        'sendID': transaction.sendID,
-        'recID': transaction.recID
-    })
         
-    transactions_data_2 = []
-    for transaction in t2:
-        transactions_data_2.append({
-        'id': transaction.id,
-        'dateTime': transaction.dateTime,
-        'accountNo': transaction.accountNo,
-        'outAccountNo': transaction.outAccountNo,
-        'transactionStatus': transaction.transactionStatus,
-        'description': transaction.description,
-        'amount': transaction.amount,
-        'sendID': transaction.sendID,
-        'recID': transaction.recID
-    })
-    
-    
-    df1 = pd.DataFrame(transactions_data_1)
-    df2 = pd.DataFrame(transactions_data_2)
+        df1 = pd.DataFrame(transactions_data_1)
+        df2 = pd.DataFrame(transactions_data_2)
 
-    df1['outAccountNo'] = df2['outAccountNo']
-    df1['recID'] = df2['sendID']
-    df1['description']=df2['description']
-    df1.rename(columns={'accountNo': 'account paying','outAccountNo':'account receiving'}, inplace=True)
-    df1["account receiving"][df1["account receiving"]=="10-00000005-001-000"]="Fees"
-    df1["account receiving"][df1["account receiving"]=="10-00000003-001-000"]="OLW Bank"
-    
-    
-    # df1['id'] = df1['id']/2+1
-    print(df1)
+        df1['outAccountNo'] = df2['outAccountNo']
+        df1['recID'] = df2['sendID']
+        df1['description']=df2['description']
+        df1.rename(columns={'accountNo': 'account paying','outAccountNo':'account receiving'}, inplace=True)
+        df1["account receiving"][df1["account receiving"]=="10-00000005-001-000"]="Fees"
+        df1["account receiving"][df1["account receiving"]=="10-00000003-001-000"]="OLW Bank"
+        
+        
+        # df1['id'] = df1['id']/2+1
+        print(df1)
 
-    csv_file = 'transactions.csv'
-    
-    df1.to_csv(csv_file, index=False)
-    
-    
+        csv_file = 'transactions.csv'
+        
+        df1.to_csv(csv_file, index=False)
+        
+        
 
-    return {"status_code": 201,"message":f"Data has been written to {csv_file}"}
-
+        return {"status_code": 201,"message":f"Data has been written to {csv_file}"}
+    except:
+            message = "exception occurred with creating bank"
+            log(0,message)
+            return {"status_code":401,"message":message}
 def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
     # try:
     OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-000").first()
@@ -993,36 +1002,36 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
 
 @router.post("/getFees")
 async def getFees(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
-    if payload["feeCode"] == "00010003":
-        payload["feeCode"] = "TF001"
-        print("payload temp update") 
-    print('payload:',payload)
-    if not "merchantID" in payload:
-        payload["merchantID"] = None
-    returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
-    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-    returning["level"] = cus.customerStatus
-    if returning["level"]=="third level":
-        returning["limit"]=lvl3Max
-    elif returning["level"]=="second level":
-        returning["limit"]=lvl2Max
-    else:
-        returning["limit"]=lvl1Max
-    
-    return returning 
-
+        if payload["feeCode"] == "00010003":
+            payload["feeCode"] = "TF001"
+            print("payload temp update") 
+        print('payload:',payload)
+        if not "merchantID" in payload:
+            payload["merchantID"] = None
+        returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
+        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+        returning["level"] = cus.customerStatus
+        if returning["level"]=="third level":
+            returning["limit"]=lvl3Max
+        elif returning["level"]=="second level":
+            returning["limit"]=lvl2Max
+        else:
+            returning["limit"]=lvl1Max
         
-    # except:
-    #     message = "exception occurred with retrieving fees"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+        return returning 
+
+            
+    except:
+        message = "exception occurred with retrieving fees"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 @router.post("/getEligibility")
 async def getEle(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
@@ -1065,148 +1074,148 @@ async def getEle(request: Request,response: Response,payload: dict = Body(...),d
 
 @router.post("/charge")
 async def charge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
 
-    print('payload:',payload)
+        print('payload:',payload)
 
-    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-    if cus is None:
-        return {"status_code":401,"message":"No customer exists with this ID"}
-    
-    ch = addCharge(db,payload["id"],payload["currency"],payload["amount"],payload["feeService"],payload["feeCurrency"],payload["method"])
-    if not ch["status_code"] == 201:
-        return ch
-    charge_instance = ch["message"]
-    url = "http://192.223.11.185:9000/v1/card_process"
-    # if charge.method == "crypto":
-    #     url = "http://192.223.11.185:9000/v1/crypto_process"
-    charge_dict = {
-    'id': charge_instance.id,
-    'dateTime': charge_instance.dateTime,
-    'customerID': charge_instance.customerID,
-    'accountNo': charge_instance.accountNo,
-    'currency': charge_instance.currency,
-    'amount': charge_instance.amount+charge_instance.feesService+charge_instance.feesCurrency,
-    'feesService': charge_instance.feesService,
-    'feesCurrency': charge_instance.feesCurrency,
-    'email': charge_instance.email,
-    'firstName': charge_instance.firstName,
-    'lastName': charge_instance.lastName,
-    'address': charge_instance.address,
-    'zipcode': charge_instance.zipcode,
-    'city': charge_instance.city,
-    'country': charge_instance.country,
-    'countryCode': charge_instance.countryCode,
-    'mobilenumber': charge_instance.mobilenumber,
-    'birthDate': charge_instance.birthDate,
-    'chargeStatus': charge_instance.chargeStatus,
-    'method': charge_instance.method,
-    'transactionID': charge_instance.id,
-    'webhookID': charge_instance.webhookID
-    }
-    if payload["method"]=="card":
-        card = db.query(Card).filter(Card.token == payload["cardToken"]).first()
-        if card is None:
-            return {"status_code":401,"message":"no card with this token"}
-        charge_dict["cardInfo"]={
-            "cardNumber":card.cardNumber,
-            "expMonth":card.expMonth,
-            "expYear":card.expYear,
-            "holderName":card.holderName,
-            "secretNumber":card.secretNumber,
-            "firstName":charge_instance.firstName,
-            "lastName":charge_instance.lastName,
-            "amount":charge_instance.amount
+        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+        if cus is None:
+            return {"status_code":401,"message":"No customer exists with this ID"}
+        
+        ch = addCharge(db,payload["id"],payload["currency"],payload["amount"],payload["feeService"],payload["feeCurrency"],payload["method"])
+        if not ch["status_code"] == 201:
+            return ch
+        charge_instance = ch["message"]
+        url = "http://192.223.11.185:9000/v1/card_process"
+        # if charge.method == "crypto":
+        #     url = "http://192.223.11.185:9000/v1/crypto_process"
+        charge_dict = {
+        'id': charge_instance.id,
+        'dateTime': charge_instance.dateTime,
+        'customerID': charge_instance.customerID,
+        'accountNo': charge_instance.accountNo,
+        'currency': charge_instance.currency,
+        'amount': charge_instance.amount+charge_instance.feesService+charge_instance.feesCurrency,
+        'feesService': charge_instance.feesService,
+        'feesCurrency': charge_instance.feesCurrency,
+        'email': charge_instance.email,
+        'firstName': charge_instance.firstName,
+        'lastName': charge_instance.lastName,
+        'address': charge_instance.address,
+        'zipcode': charge_instance.zipcode,
+        'city': charge_instance.city,
+        'country': charge_instance.country,
+        'countryCode': charge_instance.countryCode,
+        'mobilenumber': charge_instance.mobilenumber,
+        'birthDate': charge_instance.birthDate,
+        'chargeStatus': charge_instance.chargeStatus,
+        'method': charge_instance.method,
+        'transactionID': charge_instance.id,
+        'webhookID': charge_instance.webhookID
         }
-        charge_dict["cardNumber"]=card.cardNumber
-        charge_dict["expMonth"]=card.expMonth
-        charge_dict["expYear"]=card.expYear
-        charge_dict["holderName"]=card.holderName
-        charge_dict["secretNumber"]=card.secretNumber
-        
+        if payload["method"]=="card":
+            card = db.query(Card).filter(Card.token == payload["cardToken"]).first()
+            if card is None:
+                return {"status_code":401,"message":"no card with this token"}
+            charge_dict["cardInfo"]={
+                "cardNumber":card.cardNumber,
+                "expMonth":card.expMonth,
+                "expYear":card.expYear,
+                "holderName":card.holderName,
+                "secretNumber":card.secretNumber,
+                "firstName":charge_instance.firstName,
+                "lastName":charge_instance.lastName,
+                "amount":charge_instance.amount
+            }
+            charge_dict["cardNumber"]=card.cardNumber
+            charge_dict["expMonth"]=card.expMonth
+            charge_dict["expYear"]=card.expYear
+            charge_dict["holderName"]=card.holderName
+            charge_dict["secretNumber"]=card.secretNumber
+            
 
-    req = requests.post(url, json=json.dumps(charge_dict)) 
+        req = requests.post(url, json=json.dumps(charge_dict)) 
+            
+        return {"status_code":201,"url":json.loads(req.content),"charge":charge_instance,"token":token}
         
-    return {"status_code":201,"url":json.loads(req.content),"charge":charge_instance,"token":token}
-        
-    # except:
-    #     message = "exception occurred with charge process"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with charge process"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 @router.get("/getCharge")
 async def getCharge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
 
-    print('payload:',payload)
+        print('payload:',payload)
 
-    cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
-    if cus is None:
-        return {"status_code":401,"message":"No customer exists with this ID"}
-    
-    ch = db.query(Charge).filter(Charge.id == payload["chargeID"]).first()
-    if ch is None:
-        return {"status_code":401,"message":"No charge exists with this ID"}
-    elif not int(ch.customerID) == cus.id:
-        return {"status_code":401,"message":"this charge does not belong to this customer"}
-    time  = datetime.strptime(ch.dateTime, '%Y-%m-%d %H:%M:%S.%f')+timedelta(minutes=20)
-    if datetime.now() > time:
-        db.query(Charge).filter(Charge.id == payload["chargeID"]).update({"chargeStatus":"Cancelled / Timed Out"})
-        db.commit()
-        db.refresh(ch)
-            
-        return {"status_code":401,"charge":ch,"token":token,"message":"timed out"}
-    return {"status_code":201,"charge":ch,"token":token,"time":20}
+        cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
+        if cus is None:
+            return {"status_code":401,"message":"No customer exists with this ID"}
+        
+        ch = db.query(Charge).filter(Charge.id == payload["chargeID"]).first()
+        if ch is None:
+            return {"status_code":401,"message":"No charge exists with this ID"}
+        elif not int(ch.customerID) == cus.id:
+            return {"status_code":401,"message":"this charge does not belong to this customer"}
+        time  = datetime.strptime(ch.dateTime, '%Y-%m-%d %H:%M:%S.%f')+timedelta(minutes=20)
+        if datetime.now() > time:
+            db.query(Charge).filter(Charge.id == payload["chargeID"]).update({"chargeStatus":"Cancelled / Timed Out"})
+            db.commit()
+            db.refresh(ch)
+                
+            return {"status_code":401,"charge":ch,"token":token,"message":"timed out"}
+        return {"status_code":201,"charge":ch,"token":token,"time":20}
 
         
-    # except:
-    #     message = "exception occurred with retrieving eligibility"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with retrieving eligibility"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    # token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        # token = payload['token']
 
 
-    print('payload:',payload)
-    ac = addCard(db,payload["id"],payload["cardNumber"],payload["expiryMonth"],payload["expiryYear"],payload["fName"]+" "+payload["lName"],payload["secretNumber"])
-    if not ac["status_code"] == 201:
-        with open("formTemplates/failure.html", "r") as file:
+        print('payload:',payload)
+        ac = addCard(db,payload["id"],payload["cardNumber"],payload["expiryMonth"],payload["expiryYear"],payload["fName"]+" "+payload["lName"],payload["secretNumber"])
+        if not ac["status_code"] == 201:
+            with open("formTemplates/failure.html", "r") as file:
+                html_content = file.read()
+                html_content = html_content.replace('%status_code', str(ac["status_code"]))
+                html_content = html_content.replace('%errorMessage', str(ac["message"]))
+                
+                
+            return Response(content=html_content, media_type="text/html")
+            
+        with open("formTemplates/success.html", "r") as file:
             html_content = file.read()
-            html_content = html_content.replace('%status_code', str(ac["status_code"]))
-            html_content = html_content.replace('%errorMessage', str(ac["message"]))
-            
-            
+            html_content = html_content.replace('%status_code', "201")
         return Response(content=html_content, media_type="text/html")
-        
-    with open("formTemplates/success.html", "r") as file:
-        html_content = file.read()
-        html_content = html_content.replace('%status_code', "201")
-    return Response(content=html_content, media_type="text/html")
 
         
-    # except:
-    #     message = "exception occurred with adding card"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with adding card"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 @router.post("/removeCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
@@ -1243,22 +1252,22 @@ async def addcard(cusID,request: Request,response: Response,db: Session = Depend
 
 @router.post("/encodeID")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
-    payload = await request.body()
-    # payload = json.loads(payload)
-    # payload = payload['message']
-    payload = json.loads(payload)
-    token = payload['token']
+    try:
+        payload = await request.body()
+        # payload = json.loads(payload)
+        # payload = payload['message']
+        payload = json.loads(payload)
+        token = payload['token']
 
-    
-    print('payload:',payload)
+        
+        print('payload:',payload)
 
-    re = AlphanumericConverter.encode(payload["id"])
-    return {"status_code":200,"message":re}
-    # except:
-    #     message = "exception occurred with encoding id"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+        re = AlphanumericConverter.encode(payload["id"])
+        return {"status_code":200,"message":re}
+    except:
+        message = "exception occurred with encoding id"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 
 @router.get("/getCards")
@@ -1409,33 +1418,33 @@ def addCard(db,custID,cardNum,expM,expY,name,secretNum):
         return {"status_code":401,"message":message}
 
 def addCharge(db,custID,curr,am,feeS,feeC,meth):
-    # try:
-    cus = db.query(Customer).filter(Customer.id == custID).first()
-    if cus is None:
-        return {"status_code":401,"message":"customer with this ID does not exist"}
-    a = db.query(Account).filter(Account.customerID == cus.id,Account.primaryAccount).first()
-    if a is None:
-        return {"status_code":401,"message":"customer with this ID does not have primary account"}
-    k = db.query(KYC).filter(KYC.customerID == cus.id).first()
-    if k is None:
-        return {"status_code":401,"message":"customer with this ID does not have KYC"}
-    ad = db.query(Address).filter(Address.customerID == cus.id).first()
-    if ad is None:
-        return {"status_code":401,"message":"customer with this ID does not have address"}
-    # m = db.query(Mobile).filter(Mobile.customerID == cus.id).first()
-    # if m is None:
-    #     return {"status_code":401,"message":"customer with this ID does not have mobile"}
-    
-    c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.phoneNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
-    db.add(c)
-    db.commit()
-    db.refresh(c)
+    try:
+        cus = db.query(Customer).filter(Customer.id == custID).first()
+        if cus is None:
+            return {"status_code":401,"message":"customer with this ID does not exist"}
+        a = db.query(Account).filter(Account.customerID == cus.id,Account.primaryAccount).first()
+        if a is None:
+            return {"status_code":401,"message":"customer with this ID does not have primary account"}
+        k = db.query(KYC).filter(KYC.customerID == cus.id).first()
+        if k is None:
+            return {"status_code":401,"message":"customer with this ID does not have KYC"}
+        ad = db.query(Address).filter(Address.customerID == cus.id).first()
+        if ad is None:
+            return {"status_code":401,"message":"customer with this ID does not have address"}
+        # m = db.query(Mobile).filter(Mobile.customerID == cus.id).first()
+        # if m is None:
+        #     return {"status_code":401,"message":"customer with this ID does not have mobile"}
+        
+        c = Charge(dateTime=datetime.now(),customerID=cus.id,accountNo=a.accountNumber,currency=curr,amount=am,feesService=feeS,feesCurrency=feeC,email=cus.email,firstName=cus.firstName,lastName=cus.lastName,address=ad.address1,zipcode=ad.zipCode,city=ad.city,country=ad.country,countryCode=cus.countryCode,mobilenumber=cus.phoneNumber,birthDate=k.birthDate,chargeStatus="pending",method=meth)
+        db.add(c)
+        db.commit()
+        db.refresh(c)
 
-    return {"status_code":201,"message":c}
-    # except:
-    #     message = "exception occurred with creating charge"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+        return {"status_code":201,"message":c}
+    except:
+        message = "exception occurred with creating charge"
+        log(0,message)
+        return {"status_code":401,"message":message}
     
 
 class AlphanumericConverter:
