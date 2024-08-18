@@ -383,8 +383,12 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
          
         return {"status_code": 201, "token":token,"message":"transaction registered"}        
 
-def tansaction3(intransID,db: Session = Depends(get_db)):
+@router.post("/transactionIn")
+async def tansaction3(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
+            payload = await request.body()
+            payload = json.loads(payload)
+            intransID = payload["intransID"]
             intrans = db.query(TransactionRequestIncoming).filter(TransactionRequestIncoming.id == intransID).first()
             
             if intrans == None:

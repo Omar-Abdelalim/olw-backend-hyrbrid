@@ -11,7 +11,7 @@ class QR(Base):
 
     currency=Column(String,nullable=False)
     qrStatus=Column(String,nullable=False)
-    amount=Column(Integer,nullable=False)
+    amount=Column(Float,nullable=False)
     transactionID = Column(Integer,nullable=True)
     
 
