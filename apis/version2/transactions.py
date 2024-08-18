@@ -663,6 +663,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
     t = TransactionRequestIncoming(dateTime = datetime.now(),inIBan=payload["inIBan"],accountNo=payload["accountNo"],currency=payload["currency"],country=payload["country"],sendingCurrency=payload["sendingCurrency"],sendingCountry=payload["sendingCountry"],direction="in",transactionStatus="pending",amount=payload["amount"],feesCode=payload["feesCode"])
     db.add(t)
     db.commit()
+    return {"status_code": 201,"message":"transaction request sent"}
 
 @router.post("/balanceBank")
 async def testT(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
