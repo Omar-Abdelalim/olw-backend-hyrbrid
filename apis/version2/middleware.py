@@ -103,7 +103,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         requested_url = request.url.path
-        if requested_url == "/postsms" or requested_url == "/getsms" or requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction":
+        if requested_url == "/postsms" or requested_url == "/getsms" or requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction" or requested_url == "/inTransaction":
             response = await call_next(request)
             return response
         if requested_url =="/merchantAccount" or requested_url == "/createQRTer" or requested_url == "/cancelQrTerStatus" or requested_url == "/timeOutQrTerStatus" or requested_url == "/NOTrejectQrTerStatus" or requested_url ==  "/getQrTerStatus" or requested_url == "/getQrTerIdStatus":
