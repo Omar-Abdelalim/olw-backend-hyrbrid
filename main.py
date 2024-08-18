@@ -6,9 +6,8 @@ from db.base import Base
 import asyncio
 from apis.version2.processing import router as processing_router
 from apis.version2.transactions import router as transaction_router
-from apis.version2.autoOperations import router as background_router
 from apis.version2.vcard import router as vcard_router
-from apis.version2.autoOperations import periodic_task
+from autoOperations import periodic_task
 
 from apis.version2.middleware import decryptMiddleware
 
@@ -23,7 +22,6 @@ def startapplication():
     app.include_router(processing_router)
     app.include_router(vcard_router)
     app.include_router(transaction_router)
-    app.include_router(background_router)
     
     db = next(get_db()) 
 

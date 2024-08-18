@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,Header,Request,Body,Response, status,BackgroundTasks
 from sqlalchemy.orm import Session
-from db.session import get_db
+from db.session import engine,get_db
 from typing import Annotated
 import json
 import bcrypt
@@ -19,6 +19,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from db.base import Base
 from db.models.account import Account
 from db.models.address import Address
 from db.models.customer import Customer
@@ -44,8 +45,10 @@ import requests
 from fastapi.responses import HTMLResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
+from core.config import settings
+from fastapi import FastAPI
 
-router = APIRouter()
+
 
 minNameLength = 3
 maxNameLength = 12
@@ -56,11 +59,19 @@ tokenValidMins = 15
 chargePendingTime = 20
 
 
-origins = [
+def create_tables():
+    Base.metadata.create_all(bind=engine)
 
-    "http://localhost",
-    "http://localhost:8080",
-]
+def startapplication():
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION,docs_url=None, redoc_url=None)
+    db = next(get_db()) 
+
+    create_tables()
+    loop = asyncio.get_event_loop()
+    loop.create_task(periodic_task(db))
+    return app
+
+app = startapplication()
 
 async def periodic_task(db: Session):
 
