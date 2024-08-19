@@ -303,7 +303,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 return trans
             r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminalID"]})
             r = json.loads(r.content)
-            print(r)
+            print("response:",r)
 
             fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
             print(fee)
