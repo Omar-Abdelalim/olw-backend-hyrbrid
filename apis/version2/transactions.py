@@ -886,7 +886,7 @@ def calcFee(db,amount,serviceCode,merchantID:None):
     # try:
         sCode = serviceCode
         mID = merchantID
-        fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
+        fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == str(mID),Fee.status == "active").first()
         if fee is None:
             fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == None,Fee.status == "active").first()
             return {"status_code":401,"message":"no fee exists with this code"}
