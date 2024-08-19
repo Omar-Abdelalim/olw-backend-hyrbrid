@@ -717,7 +717,9 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
 
     
         print('payload:',payload)
+        print('a')
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
+        print('b')
         
         if not qr is None:
             return {"status_code": 401, "message": "terminal has active QR request"}
