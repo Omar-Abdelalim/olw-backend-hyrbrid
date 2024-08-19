@@ -298,9 +298,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
             if qrt is None:
                 return{"status_code":403,"message":"terminal qr code is not pending here"}
-            print("amount:",payload["amount"])
-            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
-
+            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
+            print(trans)
             if not trans["status_code"]==201:
                 return trans
             r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminalID"]})
