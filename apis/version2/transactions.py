@@ -262,79 +262,79 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        # try:
-        payload = await request.body()
-        # payload = json.loads(payload)
-        # payload = payload['message']
-        payload = json.loads(payload)
-        token = payload['token']
+        try:
+            payload = await request.body()
+            # payload = json.loads(payload)
+            # payload = payload['message']
+            payload = json.loads(payload)
+            token = payload['token']
 
-    
-        print('payload:',payload)
-        qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
-        if qrt is None:
-            return{"status_code":403,"message":"terminal qr code is not pending here"}
-        db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").update({"qrStatus":"processing"})
-        db.commit()
-    
         
+            print('payload:',payload)
+            qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
+            if qrt is None:
+                return{"status_code":403,"message":"terminal qr code is not pending here"}
+            db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").update({"qrStatus":"processing"})
+            db.commit()
         
-        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-
-
-        sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
-
-        if not sendCus.pin == payload["pin"]:
-            return {"status_code": 401,"message":"Pin incorrect"}
-
-        sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
-        if sendAcc is None:
-            return {"status_code": 401,"message":"return account doesn't exist"}
-        if payload["amount"] > sendAcc.balance:
-            return {"status_code": 401,"message":"balance not enough"}
-
-        if OLWBank is None:
-            return{"status_code":404,"message":"please make sure olw bank account are intialized"}
-        qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
-        if qrt is None:
-            return{"status_code":403,"message":"terminal qr code is not pending here"}
-        trans = transactionOperation(payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
-        if not trans["status_code"]==201:
-            return trans
-        r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
-        print(r)
-        r = json.loads(r.content)
-        print("response:",r)
-
-        fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
-        print(fee)
-        if fee["status_code"] == 201:
-            trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
             
-            if not trans2["status_code"]==201:
-                return trans2
-        else:
-            return fee
-    
+            
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
 
-        # q = db.query(QR).filter(QR.id == payload["qrID"]).first()
+
+            sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
+
+            if not sendCus.pin == payload["pin"]:
+                return {"status_code": 401,"message":"Pin incorrect"}
+
+            sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
+            if sendAcc is None:
+                return {"status_code": 401,"message":"return account doesn't exist"}
+            if payload["amount"] > sendAcc.balance:
+                return {"status_code": 401,"message":"balance not enough"}
+
+            if OLWBank is None:
+                return{"status_code":404,"message":"please make sure olw bank account are intialized"}
+            qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
+            if qrt is None:
+                return{"status_code":403,"message":"terminal qr code is not pending here"}
+            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
+            if not trans["status_code"]==201:
+                return trans
+            r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
+            print(r)
+            r = json.loads(r.content)
+            print("response:",r)
+
+            fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
+            print(fee)
+            if fee["status_code"] == 201:
+                trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
+                
+                if not trans2["status_code"]==201:
+                    return trans2
+            else:
+                return fee
         
-        # if q is None:
-        #     return{"status_code":404,"message":"no qr code exists with this ID"}
-        # elif q.qrStatus == "completed":
-        #     return{"status_code":404,"message":"transaction already complete"}
+
+            # q = db.query(QR).filter(QR.id == payload["qrID"]).first()
+            
+            # if q is None:
+            #     return{"status_code":404,"message":"no qr code exists with this ID"}
+            # elif q.qrStatus == "completed":
+            #     return{"status_code":404,"message":"transaction already complete"}
 
 
-        
-        db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
+            
+            db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
 
-        db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
+            db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
 
 
-        # except Exception as e:
-        #     message = "exception occurred with creating transaction"
-        #     log(0,message)
-        #     return {"status_code":401,"message":e}
+        except Exception as e:
+            message = "exception occurred with creating transaction"
+            log(0,message)
+            return {"status_code":401,"message":e}
         log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
         db.commit()
         db.refresh(sendAcc)
@@ -780,7 +780,7 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
         t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender)
     else:
         t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount)   
-    if sendAmount < 1:
+    if sendAmount < 0:
         return {"status_code":401,"message":"sending amount can't be less than 0"}
     if sendAmount > accountSending.balance:
         return {"status_code":401,"message":"balance can't cover this transaction"}
@@ -883,7 +883,7 @@ def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription
     return {"status_code":201,"message":"fee added successfully"}
 
 def calcFee(db,amount,serviceCode,merchantID:None):
-    # try:
+    try:
         sCode = serviceCode
         mID = merchantID
         fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == str(mID),Fee.status == "active").first()
@@ -896,12 +896,12 @@ def calcFee(db,amount,serviceCode,merchantID:None):
             feeAmount = fee.feeMax
         if feeAmount<fee.feeMin:
             feeAmount = fee.feeMin
-    # except:
-    #     message = "exception occurred with retrieving fee"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with retrieving fee"
+        log(0,message)
+        return {"status_code":401,"message":message}
     
-        return {"status_code":201,"fee":round(feeAmount,2)}
+    return {"status_code":201,"fee":round(feeAmount,2)}
 
 def addBank(db,accountNo,bankName,friendlyName,country,currency,otherNames,surName,bankType,iBan,bic,ben,benAdd):
     try:
