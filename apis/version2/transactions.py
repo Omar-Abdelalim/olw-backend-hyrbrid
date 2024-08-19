@@ -108,6 +108,7 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 
         addFee(None, "ADM", "Administrative Fees", "Fees for administrative services", "Fee for reissuing lost or expired cards", "AF002", 0, 20, 2, 0, 1, db)
 
+        addFee(None, "MRC", "Merchant Fees","Fees merchant transaction","Fee for merchant transaction","MR002",0,0,0,1.5,0.1,db)
 
         cur = Currency(country="USA",currencyName="USD",code="01",status="Active")
         db.add(cur)
@@ -301,6 +302,16 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
             if not trans["status_code"]==201:
                 return trans
+            r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminalID"]})
+            r = json.loads(r.content)
+
+            fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
+            if fee>0:
+                trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                
+                if not trans2["status_code"]==201:
+                    return trans2
+        
 
             # q = db.query(QR).filter(QR.id == payload["qrID"]).first()
             
@@ -873,9 +884,10 @@ def calcFee(db,amount,serviceCode,merchantID:None):
         mID = merchantID
         fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
         if fee is None:
+            fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == None,Fee.status == "active").first()
             return {"status_code":401,"message":"no fee exists with this code"}
         feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
-        if feeAmount>fee.feeMax:
+        if feeAmount>fee.feeMax and fee.feeMax>0:
             feeAmount = fee.feeMax
         if feeAmount<fee.feeMin:
             feeAmount = fee.feeMin
