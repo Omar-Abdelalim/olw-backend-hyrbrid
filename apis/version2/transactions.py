@@ -298,6 +298,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
             if qrt is None:
                 return{"status_code":403,"message":"terminal qr code is not pending here"}
+            print("amount:",payload["amount"])
             trans = transactionOperation(payload["fromAccount"],qrt.terminalID,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
 
             if not trans["status_code"]==201:
@@ -306,6 +307,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             r = json.loads(r.content)
 
             fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
+            print(fee)
             if fee>0:
                 trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
