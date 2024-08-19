@@ -308,11 +308,13 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
         fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
         print(fee)
-        if fee["fee"]>0:
+        if fee["status_code"] == 201:
             trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
             
             if not trans2["status_code"]==201:
                 return trans2
+        else:
+            return fee
     
 
         # q = db.query(QR).filter(QR.id == payload["qrID"]).first()
