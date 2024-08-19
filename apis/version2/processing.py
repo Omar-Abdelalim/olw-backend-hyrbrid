@@ -717,6 +717,8 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
 
     
         print('payload:',payload)
+        qr = db.query(QRTer).first()
+        return qr
         print('a')
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
         print('b')
