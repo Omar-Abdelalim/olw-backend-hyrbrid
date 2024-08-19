@@ -708,7 +708,7 @@ async def createPin(request: Request, payload: dict = Body(...), db: Session = D
 
 @router.post("/createQRTer")
 async def createQrTer(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    # try:
+    try:
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
@@ -717,11 +717,8 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
 
     
         print('payload:',payload)
-        qr = db.query(QRTer).first()
-        return qr
-        print('a')
+        
         qr = db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").first()
-        print('b')
         
         if not qr is None:
             return {"status_code": 401, "message": "terminal has active QR request"}
@@ -733,12 +730,12 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
         db.commit()
         db.refresh(q)
 
-    # except Exception as e:
-    #     message = "exception occurred with creating QR request"
-    #     log(0, message)
-    #     return {"status_code": 401, "message": message}
+    except Exception as e:
+        message = "exception occurred with creating QR request"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
-        return {"status_code": 201, "message": q}
+    return {"status_code": 201, "message": q}
 
 
 @router.post("/cancelQrTerStatus")
