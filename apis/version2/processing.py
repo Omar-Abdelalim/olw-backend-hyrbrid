@@ -716,6 +716,8 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
         # token = payload['token']
         r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminalID"]})
         r = json.loads(r.content)
+        if not r["status_code"] == 200:
+            return r
         
         mName = r["merchantName"]
         mAccount = r["merchantAccount"]
