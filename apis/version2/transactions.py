@@ -889,7 +889,8 @@ def calcFee(db,amount,serviceCode,merchantID:None):
         fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == str(mID),Fee.status == "active").first()
         if fee is None:
             fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == None,Fee.status == "active").first()
-            return {"status_code":401,"message":"no fee exists with this code"}
+            if fee is None:
+                return {"status_code":401,"message":"no fee exists with this code"}
         feeAmount = (1+fee.campaign)*(fee.feeFixed+fee.feeRate/100*float(amount))
         if feeAmount>fee.feeMax and fee.feeMax>0:
             feeAmount = fee.feeMax
