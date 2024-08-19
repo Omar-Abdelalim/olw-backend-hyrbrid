@@ -883,7 +883,7 @@ def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription
     return {"status_code":201,"message":"fee added successfully"}
 
 def calcFee(db,amount,serviceCode,merchantID:None):
-    try:
+    # try:
         sCode = serviceCode
         mID = merchantID
         fee = db.query(Fee).filter(Fee.serviceCode==sCode,Fee.merchantID == mID,Fee.status == "active").first()
@@ -895,12 +895,12 @@ def calcFee(db,amount,serviceCode,merchantID:None):
             feeAmount = fee.feeMax
         if feeAmount<fee.feeMin:
             feeAmount = fee.feeMin
-    except:
-        message = "exception occurred with retrieving fee"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # except:
+    #     message = "exception occurred with retrieving fee"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
     
-    return {"status_code":201,"fee":round(feeAmount,2)}
+        return {"status_code":201,"fee":round(feeAmount,2)}
 
 def addBank(db,accountNo,bankName,friendlyName,country,currency,otherNames,surName,bankType,iBan,bic,ben,benAdd):
     try:
