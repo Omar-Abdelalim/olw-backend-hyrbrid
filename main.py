@@ -3,11 +3,9 @@ from fastapi import FastAPI
 from core.config import settings
 from db.session import  engine,get_db
 from db.base import Base
-import asyncio
 from apis.version2.processing import router as processing_router
 from apis.version2.transactions import router as transaction_router
 from apis.version2.vcard import router as vcard_router
-from autoOperations import periodic_task
 
 from apis.version2.middleware import decryptMiddleware
 
