@@ -865,6 +865,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         qr = db.query(QRTer).filter(QRTer.id == payload["qrID"]).first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this id"}
+        print("qr:",qr)
 
     except:
         message = "exception occurred with getting QR request"

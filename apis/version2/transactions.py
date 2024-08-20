@@ -267,8 +267,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # payload = json.loads(payload)
             # payload = payload['message']
             payload = json.loads(payload)
-            token = payload['token']
-
+            print(payload)
         
             print('payload:',payload)
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
@@ -344,8 +343,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
         
         r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
         
-        
-        return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"token":token,"response":r.json}
+        print(r.json)
+        return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"response":r.json}
 
 
 @router.post("/transactionOut")
