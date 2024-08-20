@@ -108,7 +108,7 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
         if cur is None:
             return {"status_code": 401, "message": "currency doesn't exist in currency table"}
 
-        account = {"accountNumber": generate_bank_account(currency_code=cur.code), "accountType": "eWallet",
+        account = {"accountNumber": generate_bank_account(db,currency_code=cur.code), "accountType": "eWallet",
                     "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
@@ -245,7 +245,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         if cur is None:
             return {"status_code": 401, "message": "currency doesn't exist in currency table"}
 
-        account = {"accountNumber": generate_bank_account(currency_code=cur.code), "accountType": "eWallet",
+        account = {"accountNumber": generate_bank_account(db,currency_code=cur.code), "accountType": "eWallet",
                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
@@ -2113,14 +2113,14 @@ def updateToken(id, db):
     return token
 
 
-def generate_bank_account(account_type="01", sub_account="001", currency_code="01"):
+def generate_bank_account(db,account_type="01", sub_account="001", currency_code="01"):
     # Load the last generated account number from a file, or use defaults if the file doesn't exist.
     try:
         with open("last_account_number.txt", "r") as file:
             last_account_number = int(file.read())
     except (FileNotFoundError, ValueError):
         last_account_number = 100
-
+    customers=len(db.query(Customer).all())+100
     # Validate and format the input parameters
     account_type_str = f"{int(account_type):02}"
     sub_account_str = f"{int(sub_account):03}"
@@ -2132,7 +2132,7 @@ def generate_bank_account(account_type="01", sub_account="001", currency_code="0
         file.write(str(last_account_number))
 
     # Construct the bank account number
-    account_number_str = f"{last_account_number:08}"
+    account_number_str = f"{customers:08}"
     bank_account = f"{account_type_str}-{account_number_str}-{sub_account_str}-{currency_code_str}"
 
     return bank_account
