@@ -865,7 +865,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
         qr = db.query(QRTer).filter(QRTer.id == payload["qrID"]).first()
         if qr is None:
             return {"status_code": 401, "message": "no QR request active by this id"}
-        print("qr:",qr)
+        print(qr)
 
     except:
         message = "exception occurred with getting QR request"
@@ -1167,6 +1167,8 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         # payload = payload['message']
         payload = json.loads(payload)
         token = payload['token']
+        if not 'number' in payload:
+            payload["number"] = 20
 
     
         print('payload:',payload)
@@ -1186,6 +1188,8 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         s.sort(reverse=True)
         r.sort(reverse=True)
         tr = []
+        counter = payload["number"]
+
         for i in s:
             tran = db.query(Transaction).filter(Transaction.id == i).first()
             tran.accountNo = "from"
@@ -1197,7 +1201,11 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
             else:
                 tran.description = "Wallet Transfer"
             tr.append(tran)
+            if len(tr) == counter/2:
+                break
+            lenn = len(tr)
         for i in r:
+            
             tran = db.query(Transaction).filter(Transaction.id == i).first()
             tran.outAccountNo = "to"
             if tran.accountNo == "10-00000003-001-000":
@@ -1205,7 +1213,9 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
             else:
                 tran.description = "Wallet Transfer"
             tr.append(tran)
-            tr.reverse()
+            if len(tr) - lenn == counter/2:
+                break
+        # tr.reverse()
         
 
         return {"status_code": 200, "message": tr, "token": token,"length":len(tr)}
