@@ -1733,7 +1733,7 @@ async def signInSms(request: Request, payload: dict = Body(...), db: Session = D
 
 @router.post("/loginCheck")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
-    try:
+    # try:
         payload = await request.body()
         payload = json.loads(payload)
         # payload = payload['message']
@@ -1759,10 +1759,10 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
         user.smsValid = datetime.now() + timedelta(days=365)
         smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
         return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
-    except:
-        message = "exception occurred with checking credentials"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    # except:
+    #     message = "exception occurred with checking credentials"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
 class SMSResponse(BaseModel):
     phone_number: str
