@@ -2129,6 +2129,7 @@ def generate_bank_account(db,account_type="01", sub_account="001", currency_code
         if entry is None:
             return {"status_code": 401, "message": "no last account number entry in DB"}
         print(entry.busy)
+        print(numberOfTrials)
         if entry.busy:
             asyncio.sleep(timeoutTime)
             if numberOfTrials == 1:
