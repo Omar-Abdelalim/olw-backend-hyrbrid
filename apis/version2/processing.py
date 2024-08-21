@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
 import string
+import asyncio
 
 import smtplib
 from email.mime.text import MIMEText
@@ -37,6 +38,7 @@ from db.models.qr import QR
 from db.models.qrTerminal import QRTer
 from db.models.bank import Bank
 from db.models.bankBusiness import BankBusiness
+from db.models.lastAccount import LastAccount
 
 import requests
 from fastapi.responses import HTMLResponse
@@ -108,7 +110,10 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
         if cur is None:
             return {"status_code": 401, "message": "currency doesn't exist in currency table"}
 
-        account = {"accountNumber": generate_bank_account(db,currency_code=cur.code), "accountType": "eWallet",
+        bAccount = generate_bank_account(db,currency_code=cur.code)
+        if not bAccount["status_code"] == 201:
+            return bAccount
+        account = {"accountNumber": bAccount["message"], "accountType": "eWallet",
                     "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
@@ -244,8 +249,10 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
             Currency.country == payload["country"] and Currency.currencyName == payload["currency"]).first()
         if cur is None:
             return {"status_code": 401, "message": "currency doesn't exist in currency table"}
-
-        account = {"accountNumber": generate_bank_account(db,currency_code=cur.code), "accountType": "eWallet",
+        bAccount = generate_bank_account(db,currency_code=cur.code)
+        if not bAccount["status_code"] == 201:
+            return bAccount
+        account = {"accountNumber": bAccount["message"], "accountType": "eWallet",
                    "balance": 100, "country": "USA", "currency": "USD", "friendlyName": "primary"}
 
         acco = addAccnt(cus.id, account["accountNumber"], account["accountType"], account["balance"], "active", True,
@@ -2115,30 +2122,39 @@ def updateToken(id, db):
 
 def generate_bank_account(db,account_type="01", sub_account="001", currency_code="01"):
     # Load the last generated account number from a file, or use defaults if the file doesn't exist.
-    try:
-        with open("last_account_number.txt", "r") as file:
-            last_account_number = int(file.read())
-    except (FileNotFoundError, ValueError):
-        last_account_number = 100
-    cus = db.query(Customer).order_by(Customer.id.desc()).first()
-    curCus = cus.id
-        
-    customers=len(db.query(Customer).all())+100
-    # Validate and format the input parameters
-    account_type_str = f"{int(account_type):02}"
-    sub_account_str = f"{int(sub_account):03}"
-    currency_code_str = f"{int(currency_code):02}"
+    numberOfTrials = 20
+    timeoutTime = 1
+    while numberOfTrials>0:
+        entry = db.query(LastAccount).filter(LastAccount.status == "active").first()
+        if entry is None:
+            return {"status_code": 401, "message": "no last account number entry in DB"}
+        if entry.busy == True:
+            asyncio.sleep(timeoutTime)
+            if numberOfTrials == 1:
+                return {"status_code": 401, "message": "timed out creating account"}
+            numberOfTrials -=1
 
-    # Increment the account number and save it back to the file
-    last_account_number += 1
-    with open("last_account_number.txt", "w") as file:
-        file.write(str(last_account_number))
+        else:
+            last_account_number = entry.lastNumber
+            db.query(LastAccount).filter(LastAccount.id == entry.id).update({"busy":True})
+            db.commit()
 
-    # Construct the bank account number
-    account_number_str = f"{curCus:08}"
-    bank_account = f"{account_type_str}-{account_number_str}-{sub_account_str}-{currency_code_str}"
+            account_type_str = f"{int(account_type):02}"
+            sub_account_str = f"{int(sub_account):03}"
+            currency_code_str = f"{int(currency_code):02}"
 
-    return bank_account
+# Increment the account number and save it back to the file
+            last_account_number += 1
+
+
+# Construct the bank account number
+            account_number_str = f"{last_account_number+100:08}"
+            bank_account = f"{account_type_str}-{account_number_str}-{sub_account_str}-{currency_code_str}"
+
+            db.query(LastAccount).filter(LastAccount.id == entry.id).update({"busy":False,"lastAccountNumber":bank_account,"lastNumber":last_account_number})
+            db.commit()
+
+    return {"status_code": 201, "message":bank_account}
 
 def createNotif(db,customerID,notificationText,notificationType,action):
     n = Notification(customerID=customerID,dateTime=datetime.now(),notificationText=notificationText,notificationType=notificationType,notificationStatus="active",action=action)

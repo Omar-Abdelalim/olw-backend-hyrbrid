@@ -17,6 +17,8 @@ class Transaction(Base):
 
     sendID=Column(Integer,nullable=False)
     recID = Column(Integer,nullable=False)
+
+    flag = Column(String,nullable = True)
     
     
 
