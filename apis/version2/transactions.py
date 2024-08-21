@@ -74,42 +74,42 @@ origins = [
 async def intiAccts(request: Request=None,response: Response=None,db: Session = Depends(get_db)):
         print("init")
         adm = db.query(Customer).filter(Customer.customerStatus == "admin").first()
-        addFee("admin","ACM","Account Maintenance","Fees for maintaining an active eWallet account","Monthly/Annual account maintenance fee","AMF001",0,10,2,5,1,db)
-        addFee("admin", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for sending money to other users or external accounts", "TF001", 0, 50, 0.5, 1.5, 1, db)
+        addFee("M001","ACM","Account Maintenance","Fees for maintaining an active eWallet account","Monthly/Annual account maintenance fee","AMF001",0,10,2,5,1,db)
+        addFee("M001", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for sending money to other users or external accounts", "TF001", 0, 50, 0.5, 1.5, 1, db)
 
-        addFee("admin", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for receiving money from other users or external accounts", "TF002", 0, 30, 0.3, 0.5, 1, db)
+        addFee("M001", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for receiving money from other users or external accounts", "TF002", 0, 30, 0.3, 0.5, 1, db)
 
-        addFee("admin", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for merchant payments", "TF003", 0, 100, 1, 2.5, 1, db)
+        addFee("M001", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for merchant payments", "TF003", 0, 100, 1, 2.5, 1, db)
 
-        addFee("admin", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for bill payments", "TF004", 0, 20, 1, 3, 1, db)
+        addFee("M001", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for bill payments", "TF004", 0, 20, 1, 3, 1, db)
 
-        addFee("admin", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for currency conversion", "TF005", 0, 50, 1, 2.5, 1, db)
+        addFee("M001", "TRN", "Transaction Fees", "Fees associated with various types of transactions", "Fee for currency conversion", "TF005", 0, 50, 1, 2.5, 1, db)
 
-        addFee("admin", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for bank transfers to/from eWallet", "DWF001", 0, 25, 0.5, 1.3, 1, db)
+        addFee("M001", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for bank transfers to/from eWallet", "DWF001", 0, 25, 0.5, 1.3, 1, db)
 
-        addFee("admin", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for adding money using a credit/debit card", "DWF002", 0, 30, 1, 2.4, 1, db)
+        addFee("M001", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for adding money using a credit/debit card", "DWF002", 0, 30, 1, 2.4, 1, db)
 
-        addFee("admin", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for ATM withdrawals using eWallet card", "DWF003", 0, 5, 1, 1.2, 1, db)
+        addFee("M001", "DEP", "Deposit and Withdrawal Fees", "Fees for depositing or withdrawing money", "Fee for ATM withdrawals using eWallet card", "DWF003", 0, 5, 1, 1.2, 1, db)
 
-        addFee("admin", "SRV", "Service Fees", "Additional service-related fees", "Fee for inactive accounts", "SF001", 0, 20, 1, 0, 1, db)
+        addFee("M001", "SRV", "Service Fees", "Additional service-related fees", "Fee for inactive accounts", "SF001", 0, 20, 1, 0, 1, db)
 
-        addFee("admin", "SRV", "Service Fees", "Additional service-related fees", "Fee for account closure", "SF002", 0, 10, 2, 0, 1, db)
+        addFee("M001", "SRV", "Service Fees", "Additional service-related fees", "Fee for account closure", "SF002", 0, 10, 2, 0, 1, db)
 
-        addFee("admin", "SRV", "Service Fees", "Additional service-related fees", "Fee for chargebacks", "SF003", 0, 25, 5, 1.5, 1, db)
+        addFee("M001", "SRV", "Service Fees", "Additional service-related fees", "Fee for chargebacks", "SF003", 0, 25, 5, 1.5, 1, db)
 
-        addFee("admin", "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Subscription fee for premium services", "PSF001", 0, 100, 10, 0, 1, db)
+        addFee("M001", "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Subscription fee for premium services", "PSF001", 0, 100, 10, 0, 1, db)
 
-        addFee("admin", "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Fee for issuing and using virtual card", "PSF002", 0, 50, 5, 0, 1, db)
+        addFee("M001", "PRM", "Premium Services Fees", "Fees for premium eWallet services", "Fee for issuing and using virtual card", "PSF002", 0, 50, 5, 0, 1, db)
 
-        addFee("admin", "INT", "International Transaction Fees", "Fees for international transactions", "Fee for cross-border transactions", "ITF001", 0, 40, 2, 1.4, 1, db)
+        addFee("M001", "INT", "International Transaction Fees", "Fees for international transactions", "Fee for cross-border transactions", "ITF001", 0, 40, 2, 1.4, 1, db)
 
-        addFee("admin", "INT", "International Transaction Fees", "Fees for international transactions", "Fee for international money transfers", "ITF002", 0, 60, 5, 2.6, 1, db)
+        addFee("M001", "INT", "International Transaction Fees", "Fees for international transactions", "Fee for international money transfers", "ITF002", 0, 60, 5, 2.6, 1, db)
 
-        addFee("admin", "ADM", "Administrative Fees", "Fees for administrative services", "Fee for providing paper account statements", "AF001", 0, 15, 1, 0, 1, db)
+        addFee("M001", "ADM", "Administrative Fees", "Fees for administrative services", "Fee for providing paper account statements", "AF001", 0, 15, 1, 0, 1, db)
 
-        addFee("admin", "ADM", "Administrative Fees", "Fees for administrative services", "Fee for reissuing lost or expired cards", "AF002", 0, 20, 2, 0, 1, db)
+        addFee("M001", "ADM", "Administrative Fees", "Fees for administrative services", "Fee for reissuing lost or expired cards", "AF002", 0, 20, 2, 0, 1, db)
 
-        addFee("admin", "MRC", "Merchant Fees","Fees merchant transaction","Fee for merchant transaction","MR002",0,0,0,1.5,0.1,db)
+        addFee("M001", "MRC", "Merchant Fees","Fees merchant transaction","Fee for merchant transaction","MR002",0,0,0,1.5,0.1,db)
 
         cur = Currency(country="USA",currencyName="USD",code="01",status="active")
         db.query(Currency).filter(Currency.country=="USA",Currency.currencyName=="USD",Currency.code=="01").update({"status":"expired"})
