@@ -1168,7 +1168,7 @@ async def getBal(request: Request, payload: dict = Body(...), db: Session = Depe
 
 @router.post("/getTransactions")
 async def gettrans(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
-    # try:
+    try:
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
@@ -1228,10 +1228,10 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         
 
         return {"status_code": 200, "message": tr, "token": token,"length":len(tr)}
-    # except:
-    #     message = "exception occurred with checking transactions"
-    #     log(0, message)
-    #     return {"status_code": 401, "message": message}
+    except:
+        message = "exception occurred with checking transactions"
+        log(0, message)
+        return {"status_code": 401, "message": message}
 
 
 @router.post("/addAcc")
