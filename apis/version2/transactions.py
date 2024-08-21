@@ -125,17 +125,17 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
         
         OLWBank = db.query(Account).filter(Account.accountNumber == "1").first()
         if OLWBank is None:
-            olw = Account(customerID="1",accountNumber="10-00000003-001-00",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="bank",iban = "IEOLW10-00000003-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
+            olw = Account(customerID="1",accountNumber="10-00000003-001-00",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="bank",iban = "IEOLW10-00000003-001-00",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
 
         OLWAudit = db.query(Account).filter(Account.accountNumber == "2").first()
         if OLWBank is None:
-            olw = Account(customerID="1",accountNumber="10-00000001-001-00",accountType="OLW",balance=0,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="audit",iban = "IEOLW10-00000001-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
+            olw = Account(customerID="1",accountNumber="10-00000001-001-00",accountType="OLW",balance=0,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="audit",iban = "IEOLW10-00000001-001-00",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
             
         OLWFees = db.query(Account).filter(Account.accountNumber == "3").first()
         if OLWFees is None:
-            olw = Account(customerID="1",accountNumber="10-00000005-001-00",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="fees",iban = "IEOLW10-00000005-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
+            olw = Account(customerID="1",accountNumber="10-00000005-001-00",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="fees",iban = "IEOLW10-00000005-001-00",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
         
         db.commit()
@@ -154,8 +154,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
         
             print('payload:',payload)
             
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
+            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             
             emailPhone = payload["phoneORemail"]
             email = db.query(Email).filter(Email.emailAddress==emailPhone).first()
@@ -186,7 +186,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 return trans
                         
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -213,8 +213,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
         
             print('payload:',payload)
                 
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
+            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             
             
             cus = db.query(Customer).filter(Customer.id==payload["recID"]).first()
@@ -248,7 +248,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
             db.query(QR).filter(QR.id == payload["qrID"]).update({"qrStatus":"completed"})
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -282,7 +282,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
         
             
             
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
 
 
             sendCus = db.query(Customer).filter(Customer.id==payload["id"]).first()
@@ -312,7 +312,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
             print(fee)
             if fee["status_code"] == 201:
-                trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-000",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-00",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -362,8 +362,8 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
 
         
             print('payload:',payload)
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
+            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             iBan = payload["iBan"]
             
             
@@ -389,7 +389,7 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
                 return trans
             
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-000",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -408,8 +408,8 @@ def tansaction3(intransID,db: Session = Depends(get_db)):
             
             if intrans == None:
                 return {"status_code":404,"message":"no such transaction requested"}
-            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+            OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
+            OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             db.query(TransactionRequestIncoming).filter(TransactionRequestIncoming.id == intransID).update({"transactionStatus":"processed"})
             db.commit()
             
@@ -427,7 +427,7 @@ def tansaction3(intransID,db: Session = Depends(get_db)):
             if not feeM["status_code"]==201:
                 return feeM
             if feeM["fee"]>0:
-                trans2 = transactionOperation(intrans.accountNo,"10-00000005-001-000",feeM["fee"],intrans.sendingCurrency,intrans.currency,db)
+                trans2 = transactionOperation(intrans.accountNo,"10-00000005-001-00",feeM["fee"],intrans.sendingCurrency,intrans.currency,db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -738,8 +738,8 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
         df1['recID'] = df2['sendID']
         df1['description']=df2['description']
         df1.rename(columns={'accountNo': 'account paying','outAccountNo':'account receiving'}, inplace=True)
-        df1["account receiving"][df1["account receiving"]=="10-00000005-001-000"]="Fees"
-        df1["account receiving"][df1["account receiving"]=="10-00000003-001-000"]="OLW Bank"
+        df1["account receiving"][df1["account receiving"]=="10-00000005-001-00"]="Fees"
+        df1["account receiving"][df1["account receiving"]=="10-00000003-001-00"]="OLW Bank"
         
         
         # df1['id'] = df1['id']/2+1
@@ -758,7 +758,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             return {"status_code":401,"message":message}
 def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
     # try:
-    OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-000").first()
+    OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-00").first()
     
     now = datetime.now()
     recAmount = sendAmount * 1
@@ -776,7 +776,7 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
         #     return {"status_code":401,"message":"iBan does not exist"} 
         #
 
-        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
         accountSending=OLWBank
         currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
         
@@ -794,7 +794,7 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
     if accountRec is None:
         
         res  = checkExAccount(receiver)
-        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
         accountRec=OLWBank
         if not res["status_code"]==200:
             
@@ -1337,8 +1337,8 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
 
     
         print('payload:',payload)
-        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-000").first()
-        OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-000").first()
+        OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
+        OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
         
         chID = payload["chargeID"]
         charge = db.query(Charge).filter(Charge.id==chID).first()
@@ -1370,7 +1370,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
             return trans
                     
         if charge.feesCurrency>0:
-            trans2 = transactionOperation(acc.accountNumber,"10-00000005-001-000",charge.feesCurrency,charge.currency,charge.currency,db)
+            trans2 = transactionOperation(acc.accountNumber,"10-00000005-001-00",charge.feesCurrency,charge.currency,charge.currency,db)
             
             if not trans2["status_code"]==201:
                 db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failedF1"})
@@ -1378,7 +1378,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
                 return trans2
         
         if charge.feesService>0:
-            trans3 = transactionOperation(acc.accountNumber,"10-00000005-001-000",charge.feesService,charge.currency,charge.currency,db)
+            trans3 = transactionOperation(acc.accountNumber,"10-00000005-001-00",charge.feesService,charge.currency,charge.currency,db)
             
             if not trans3["status_code"]==201:
                 db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failedF2"})
