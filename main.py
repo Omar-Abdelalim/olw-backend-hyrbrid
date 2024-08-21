@@ -13,6 +13,13 @@ active_session = {}
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
+# Custom 404 handler
+async def custom_404_handler(request: Request, exc: HTTPException):
+    logger.error(f"Access denied: {request.url} - {exc.detail}")
+    return JSONResponse(
+        status_code=403,  # Returning 403 Forbidden instead of 404 Not Found
+        content={"message": "Access Denied"},
+    )
 
 def startapplication():
     app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION,docs_url=None, redoc_url=None)
@@ -20,19 +27,15 @@ def startapplication():
     app.include_router(processing_router)
     app.include_router(vcard_router)
     app.include_router(transaction_router)
-    
+    app.add_exception_handler(404, custom_404_handler)
+
     db = next(get_db()) 
 
     create_tables()
     # loop = asyncio.get_event_loop()
     # loop.create_task(periodic_task(db))
     return app
-@app.exception_handler(404)
-async def custom_404_handler(request: Request, exc: HTTPException):
-    return JSONResponse(
-        status_code=403,  # Returning 403 Forbidden instead of 404 Not Found
-        content={"message": "Access Denied"},
-    )
+
 
 
 app = startapplication()
