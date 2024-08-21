@@ -1196,7 +1196,8 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         r.sort(reverse=True)
         tr = []
         counter = payload["number"]
-
+        print(s)
+        print(r)
         for i in s:
             tran = db.query(Transaction).filter(Transaction.id == i).first()
             tran.accountNo = "from"
