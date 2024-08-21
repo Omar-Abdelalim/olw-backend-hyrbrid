@@ -222,4 +222,4 @@ class decryptMiddleware(BaseHTTPMiddleware):
             return JSONResponse(content=out_resp)
         except:
             message = "access denied"
-            return JSONResponse(message)
+            return JSONResponse(content =message)
