@@ -104,25 +104,6 @@ class decryptMiddleware(BaseHTTPMiddleware):
         return {"message": plaintext2_str}
 
     async def dispatch(self, request: Request, call_next):
-        response = await call_next(request)
-        print(response.status_code)
-        if response.status_code == 403:
-            # Log the error
-            
-            
-            # Modify the response to return 403 Forbidden instead
-            return JSONResponse(
-                status_code=403,
-                content={"message": "Access Denied"},
-            )
-        response = await call_next(request)
-        
-        # Check if the response status code is 404
-        if response.status_code == 404:
-            return JSONResponse(
-                status_code=403,
-                content={"message": "Access Denied"},
-            )
 
         requested_url = request.url.path
         if requested_url == "/postsms" or requested_url == "/getsms" or requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction" or requested_url == "/inTransaction":
@@ -222,5 +203,5 @@ class decryptMiddleware(BaseHTTPMiddleware):
                 out_resp = encrypt(response_body_str,respBody['session key'])
             return JSONResponse(content=out_resp)
         except:
-            message = "access denied"
+            message = "Access Denied"
             return PlainTextResponse(message)
