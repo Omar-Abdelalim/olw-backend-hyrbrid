@@ -82,7 +82,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
         return {"status_code": 401, "message": message}
 @router.post("/merchantAccount")
 async def regMer(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
-    try:
+    # try:
         payload = await request.body()
         payload = json.loads(payload)
         e = db.query(Customer).filter(Customer.email == payload["email"]).first()
@@ -118,10 +118,10 @@ async def regMer(request: Request, response: Response, payload: dict = Body(...)
         db.commit()
         
         return {"status_code":200,"message":"account added","accountNumber":account["accountNumber"]}
-    except:
-        message = "exception occured with creating customer"
-        log(0, message)
-        return {"status_code": 401, "message": message}
+    # except:
+    #     message = "exception occured with creating customer"
+    #     log(0, message)
+    #     return {"status_code": 401, "message": message}
 
 @router.post("/handshake")
 async def handshake(request: Request, response: Response, data: DecryptRequest, db: Session = Depends(get_db)):
