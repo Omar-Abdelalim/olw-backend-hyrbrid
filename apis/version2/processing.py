@@ -2156,7 +2156,7 @@ def generate_bank_account(db,account_type="01", sub_account="001", currency_code
             db.query(LastAccount).filter(LastAccount.id == entry.id).update({"busy":False,"lastAccountNumber":bank_account,"lastNumber":last_account_number})
             db.commit()
 
-    return {"status_code": 201, "message":bank_account}
+            return {"status_code": 201, "message":bank_account}
 
 def createNotif(db,customerID,notificationText,notificationType,action):
     n = Notification(customerID=customerID,dateTime=datetime.now(),notificationText=notificationText,notificationType=notificationType,notificationStatus="active",action=action)
