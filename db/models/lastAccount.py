@@ -7,7 +7,7 @@ class LastAccount(Base):
     id = Column(Integer, primary_key=True, index=True)
     lastNumber = Column(Integer,nullable = False)
 
-    lastAccountNumber = Column(Integer,nullable = True)
+    lastAccountNumber = Column(String,nullable = True)
     busy = Column(Boolean,nullable = False)
     status = Column(String,nullable=False)
 
