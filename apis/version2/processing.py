@@ -2128,7 +2128,8 @@ def generate_bank_account(db,account_type="01", sub_account="001", currency_code
         entry = db.query(LastAccount).filter(LastAccount.status == "active").first()
         if entry is None:
             return {"status_code": 401, "message": "no last account number entry in DB"}
-        if entry.busy == True:
+        print(entry)
+        if entry.busy:
             asyncio.sleep(timeoutTime)
             if numberOfTrials == 1:
                 return {"status_code": 401, "message": "timed out creating account"}
