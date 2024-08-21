@@ -17,6 +17,7 @@ from datetime import datetime,timedelta
 import random
 import string
 import logging
+from fastapi.responses import PlainTextResponse
 
 from pydantic import BaseModel
 
@@ -222,5 +223,5 @@ class decryptMiddleware(BaseHTTPMiddleware):
             return JSONResponse(content=out_resp)
         except:
             message = "access denied"
-            return message
-            return JSONResponse({message})
+            return PlainTextResponse(message)
+            return ({message})
