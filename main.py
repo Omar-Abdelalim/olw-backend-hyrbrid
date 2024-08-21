@@ -27,6 +27,12 @@ def startapplication():
     # loop = asyncio.get_event_loop()
     # loop.create_task(periodic_task(db))
     return app
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=403,  # Returning 403 Forbidden instead of 404 Not Found
+        content={"message": "Access Denied"},
+    )
 
 
 app = startapplication()
