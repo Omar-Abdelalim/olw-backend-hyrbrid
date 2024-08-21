@@ -15,7 +15,7 @@ def create_tables():
     Base.metadata.create_all(bind=engine)
 # Custom 404 handler
 async def custom_404_handler(request: Request, exc: HTTPException):
-    logger.error(f"Access denied: {request.url} - {exc.detail}")
+    
     return JSONResponse(
         status_code=403,  # Returning 403 Forbidden instead of 404 Not Found
         content={"message": "Access Denied"},
