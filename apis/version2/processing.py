@@ -2120,6 +2120,9 @@ def generate_bank_account(db,account_type="01", sub_account="001", currency_code
             last_account_number = int(file.read())
     except (FileNotFoundError, ValueError):
         last_account_number = 100
+        cus = db.query(Customer).order_by(Customer.id.desc()).first()
+        curCus = cus.id
+        
     customers=len(db.query(Customer).all())+100
     # Validate and format the input parameters
     account_type_str = f"{int(account_type):02}"
@@ -2132,7 +2135,7 @@ def generate_bank_account(db,account_type="01", sub_account="001", currency_code
         file.write(str(last_account_number))
 
     # Construct the bank account number
-    account_number_str = f"{customers:08}"
+    account_number_str = f"{curCus:08}"
     bank_account = f"{account_type_str}-{account_number_str}-{sub_account_str}-{currency_code_str}"
 
     return bank_account
