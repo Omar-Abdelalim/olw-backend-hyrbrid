@@ -1200,10 +1200,10 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         for i in s:
             tran = db.query(Transaction).filter(Transaction.id == i).first()
             tran.accountNo = "from"
-            if tran.outAccountNo == "10-00000005-001-000":
+            if tran.outAccountNo == "10-00000005-001-00":
                 tran.outAccountNo = "fees"
                 tran.description = "fees"
-            elif tran.outAccountNo == "10-00000003-001-000":
+            elif tran.outAccountNo == "10-00000003-001-00":
                 tran.outAccountNo = "external"
             else:
                 tran.description = "Wallet Transfer"
@@ -1215,7 +1215,7 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
             
             tran = db.query(Transaction).filter(Transaction.id == i).first()
             tran.outAccountNo = "to"
-            if tran.accountNo == "10-00000003-001-000":
+            if tran.accountNo == "10-00000003-001-00":
                 tran.accountNo = "external"
             else:
                 tran.description = "Wallet Transfer"
