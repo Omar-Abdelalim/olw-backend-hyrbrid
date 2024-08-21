@@ -11,7 +11,7 @@ class Fee(Base):
     categoryDescription = Column(String,nullable=True)
 
     serviceCode = Column(String,nullable=False)
-    campaign = Column(Float,nullable=False)
+    campaign = Column(String,nullable=False)
     status = Column(String,nullable=False)
     feeDescription = Column(String,nullable=True)
 
