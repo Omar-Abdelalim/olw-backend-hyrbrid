@@ -111,8 +111,12 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 
         addFee(None, "MRC", "Merchant Fees","Fees merchant transaction","Fee for merchant transaction","MR002",0,0,0,1.5,0.1,db)
 
-        cur = Currency(country="USA",currencyName="USD",code="01",status="Active")
+        cur = Currency(country="USA",currencyName="USD",code="01",status="active")
+        db.query(Currency).filter(country="USA",currencyName="USD",code="01").update({"status":"expired"})
         db.add(cur)
+        l = LastAccount(lastNumber = 100,lastAccountNumber = None,busy = False,status = "active")
+        db.query(LastAccount).update({"status":"expired"})
+        db.add(l)
         if not adm is None:
             db.commit()
             return {"status_code": 201,"message":"wallet initiated"}
@@ -133,9 +137,7 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
         if OLWFees is None:
             olw = Account(customerID="1",accountNumber="10-00000005-001-00",accountType="OLW",balance=10000,dateTime=datetime.now(),accountStatus="Admin",primaryAccount=1,currency="UNI",country="UNI",friendlyName="fees",iban = "IEOLW10-00000005-001-000",bic = "IEOLW",swift = "SWIFT/PIC xyz 123",bankName = "One Link Wallet",bankAddress = "Dublin, Ireland")
             db.add(olw)
-        l = LastAccount(lastNumber = 100,lastAccountNumber = None,busy = False,status = "active")
-        db.query(LastAccount).update({"status":"expired"})
-        db.add(l)
+        
         db.commit()
         return {"status_code": 201, "message": "wallet and fees added"}
 
