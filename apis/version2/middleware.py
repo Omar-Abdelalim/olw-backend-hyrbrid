@@ -224,4 +224,3 @@ class decryptMiddleware(BaseHTTPMiddleware):
         except:
             message = "access denied"
             return PlainTextResponse(message)
-            return ({message})
