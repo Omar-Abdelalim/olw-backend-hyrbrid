@@ -103,13 +103,13 @@ class decryptMiddleware(BaseHTTPMiddleware):
         return {"message": plaintext2_str}
 
     async def dispatch(self, request: Request, call_next):
-        route_match = request.app.router.matches(request.scope)
-
-        if not route_match[0]:
+        response = await call_next(request)
+        
+        if response.status_code == 404:
             # Log the error
-            logger.error(f"Access denied: {request.url} - Route not found")
             
-            # Return a 403 Forbidden response
+            
+            # Modify the response to return 403 Forbidden instead
             return JSONResponse(
                 status_code=403,
                 content={"message": "Access Denied"},
