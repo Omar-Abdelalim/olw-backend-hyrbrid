@@ -1184,16 +1184,15 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
             return {"status_code": 400, "message": "account doesn't exist"}
         s = []
         r = []
-        print("a")
         acc = acct.accountNumber
+        print(acc)
         outg = db.query(Transaction).filter(Transaction.accountNo == acc).all()
+        print(outg)
         inc = db.query(Transaction).filter(Transaction.outAccountNo == acc).all()
-        print("b")
         for i in outg:
             s.append(i.id + 1)
         for i in inc:
             r.append(i.id - 1)
-        print("c")
         s.sort(reverse=True)
         r.sort(reverse=True)
         tr = []
