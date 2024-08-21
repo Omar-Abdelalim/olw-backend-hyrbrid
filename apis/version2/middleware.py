@@ -104,7 +104,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
-        
+        print(response.status_code)
         if response.status_code == 404:
             # Log the error
             
@@ -114,6 +114,15 @@ class decryptMiddleware(BaseHTTPMiddleware):
                 status_code=403,
                 content={"message": "Access Denied"},
             )
+        response = await call_next(request)
+        
+        # Check if the response status code is 404
+        if response.status_code == 404:
+            return JSONResponse(
+                status_code=403,
+                content={"message": "Access Denied"},
+            )
+
         requested_url = request.url.path
         if requested_url == "/postsms" or requested_url == "/getsms" or requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction" or requested_url == "/inTransaction":
             response = await call_next(request)
