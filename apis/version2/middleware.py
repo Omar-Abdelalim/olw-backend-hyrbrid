@@ -105,7 +105,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         print(response.status_code)
-        if response.status_code == 404:
+        if response.status_code == 403:
             # Log the error
             
             
