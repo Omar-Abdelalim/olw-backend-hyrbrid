@@ -116,86 +116,89 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
         
         
-        
-        body = await request.body()
-        json_body = json.loads(body)
-        # if requested_url ==  "/getQrTerStatus" and not 'message' in json_body:
-        #     response = await call_next(request)
-        #     return response
-        print("body from request",json_body)
-        if not 'message' in json_body:
-            return JSONResponse(content={"status_code": 410, "message": "invalid request"})
-        substrings = json_body['message'].split(":::")
-        alldicts = []
-        for i in substrings:
-            json_body = {'message':i}
-            decrypt_request = DecryptRequest(**json_body)
-            decrypted_message = self.decrypt_message_again(decrypt_request)
-            modified_body =  json.dumps(decrypted_message).encode('utf-8') # Modify if necessary
-            alldicts.append(modified_body)
-        
-        modified_body = ""
-        print('alldicts:',alldicts)
-        for j in alldicts:
-            on = j
-            on = on.decode('utf-8')
+        try:
+            body = await request.body()
+            json_body = json.loads(body)
+            # if requested_url ==  "/getQrTerStatus" and not 'message' in json_body:
+            #     response = await call_next(request)
+            #     return response
+            print("body from request",json_body)
+            if not 'message' in json_body:
+                return JSONResponse(content={"status_code": 410, "message": "invalid request"})
+            substrings = json_body['message'].split(":::")
+            alldicts = []
+            for i in substrings:
+                json_body = {'message':i}
+                decrypt_request = DecryptRequest(**json_body)
+                decrypted_message = self.decrypt_message_again(decrypt_request)
+                modified_body =  json.dumps(decrypted_message).encode('utf-8') # Modify if necessary
+                alldicts.append(modified_body)
             
-            if not requested_url == "/handshake":
-                on = json.loads(on)
-                on = on['message']
-                print('on inside:',on)
+            modified_body = ""
+            print('alldicts:',alldicts)
+            for j in alldicts:
+                on = j
+                on = on.decode('utf-8')
                 
-                # on = json.loads(on)
-            print("ON:",on)
-            modified_body=modified_body+on
-        print('modefied',modified_body)
-        
-        # modified_body=json.dumps(modified_body).encode('utf-8')
-        modified_body=modified_body.encode('utf-8')
-        # Define a new receive function that returns the modified body
-        async def receive() -> dict:
-            return {"type": "http.request", "body": modified_body}
-
-        request = Request(scope=request.scope, receive=receive)
-        
-        
-        b=await request.body()
-        print("body sent:",type(b),b)
-        if not requested_url == '/handshake':    
-            on = json.loads(b)    
-            print('not handshake, body now: ',on)
-            if "token" not in on:
-                return JSONResponse(content={"status_code": 410, "message": "missing token"})
+                if not requested_url == "/handshake":
+                    on = json.loads(on)
+                    on = on['message']
+                    print('on inside:',on)
+                    
+                    # on = json.loads(on)
+                print("ON:",on)
+                modified_body=modified_body+on
+            print('modefied',modified_body)
             
-            if not on['token'] in tokens:
-                return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
+            # modified_body=json.dumps(modified_body).encode('utf-8')
+            modified_body=modified_body.encode('utf-8')
+            # Define a new receive function that returns the modified body
+            async def receive() -> dict:
+                return {"type": "http.request", "body": modified_body}
 
-
-            if datetime.now() > tokens[on['token']]['exp']:
-                del tokens[on['token']]
-                return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
+            request = Request(scope=request.scope, receive=receive)
             
-            if not tokens[on['token']]['ip'] == request.client.host:
-                del tokens[on['token']]
-                return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
+            
+            b=await request.body()
+            print("body sent:",type(b),b)
+            if not requested_url == '/handshake':    
+                on = json.loads(b)    
+                print('not handshake, body now: ',on)
+                if "token" not in on:
+                    return JSONResponse(content={"status_code": 410, "message": "missing token"})
+                
+                if not on['token'] in tokens:
+                    return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
 
-        
-        response = await call_next(request)
-        if requested_url == "/test":
-            return response
-        # out_resp = encrypt(response,request.client.host)
-        response_body = [section async for section in response.__dict__['body_iterator']]
-        response_body_str = b"".join(response_body).decode('utf-8')
-        print("reponse body: ",json.loads(response_body_str))
-        respBody = json.loads(response_body_str)
-        
 
-        # out_resp = response_body_str#encrypt(response_body_str,request.client.host)
-        curr_code = on
-        if not requested_url == '/handshake':
-            tokens[on['token']]['exp'] = datetime.now() + timedelta(minutes=session_expiry_time)
-            curr_code = on['token']
-            out_resp = encrypt(response_body_str,curr_code)
-        else:
-            out_resp = encrypt(response_body_str,respBody['session key'])
-        return JSONResponse(content=out_resp)
+                if datetime.now() > tokens[on['token']]['exp']:
+                    del tokens[on['token']]
+                    return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
+                
+                if not tokens[on['token']]['ip'] == request.client.host:
+                    del tokens[on['token']]
+                    return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
+
+            
+            response = await call_next(request)
+            if requested_url == "/test":
+                return response
+            # out_resp = encrypt(response,request.client.host)
+            response_body = [section async for section in response.__dict__['body_iterator']]
+            response_body_str = b"".join(response_body).decode('utf-8')
+            print("reponse body: ",json.loads(response_body_str))
+            respBody = json.loads(response_body_str)
+            
+
+            # out_resp = response_body_str#encrypt(response_body_str,request.client.host)
+            curr_code = on
+            if not requested_url == '/handshake':
+                tokens[on['token']]['exp'] = datetime.now() + timedelta(minutes=session_expiry_time)
+                curr_code = on['token']
+                out_resp = encrypt(response_body_str,curr_code)
+            else:
+                out_resp = encrypt(response_body_str,respBody['session key'])
+            return JSONResponse(content=out_resp)
+        except:
+            message = "access denied"
+            return {"status_code":410,"message":message}
