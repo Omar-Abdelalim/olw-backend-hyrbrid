@@ -102,6 +102,17 @@ class decryptMiddleware(BaseHTTPMiddleware):
         return {"message": plaintext2_str}
 
     async def dispatch(self, request: Request, call_next):
+        route_match = request.app.router.matches(request.scope)
+
+        if not route_match[0]:
+            # Log the error
+            logger.error(f"Access denied: {request.url} - Route not found")
+            
+            # Return a 403 Forbidden response
+            return JSONResponse(
+                status_code=403,
+                content={"message": "Access Denied"},
+            )
         requested_url = request.url.path
         if requested_url == "/postsms" or requested_url == "/getsms" or requested_url == "/initAccts" or requested_url == "/initOpts" or requested_url == "/confirmEmail" or requested_url == "/confirmMobile" or requested_url ==  "/resendVer" or requested_url == "/addCard" or requested_url == "/chargeTransaction" or requested_url == "/inTransaction":
             response = await call_next(request)
