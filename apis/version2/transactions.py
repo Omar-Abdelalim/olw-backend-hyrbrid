@@ -1035,7 +1035,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
             print("payload temp update") 
         print('payload:',payload)
         if not "merchantID" in payload:
-            payload["merchantID"] = None
+            payload["merchantID"] = "M001"
         returning = calcFee(db,payload["amount"],payload["feeCode"],payload["merchantID"])
         cus = db.query(Customer).filter(Customer.id == payload["id"]).first()
         returning["level"] = cus.customerStatus
