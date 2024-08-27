@@ -924,19 +924,18 @@ def addTranType(db,tCode,tName,desc = "None"):
         return {"status_code":401,"message":message}
     
 def generateTranIdentifier(db,tcode):
-
-    print("a")
     t = db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").first()
-    return {"status_code":401,"a":t}
     
     if t is None:
         return {"status_code":401,"message":"code does not exist"}
     today = datetime.today()
-    print(t)
+    print(today)
     if not(t.dd == today.day and t.mm == today.month and t.yy == today.year%100):
+        print('b')
         db.commit(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"dd":today.day,"mm":today.month,"yy":today.year%100,"number":1})
         t.number=1
     else:
+        print('c')
         db.commit(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"number":t.number+1})
         t.number+=1
     db.commit()
