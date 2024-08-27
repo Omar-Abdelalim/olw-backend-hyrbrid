@@ -826,6 +826,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         
         t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender,transactionIdentifier=identifier)
     else:
+        print("e")
         t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount,transactionIdentifier=identifier)   
     if sendAmount < 0:
         return {"status_code":401,"message":"sending amount can't be less than 0"}
