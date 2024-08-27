@@ -180,6 +180,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             idn = generateTranIdentifier(db,"WAL")
             if not idn["status_code"]==201:
                     return idn
+            print("check")
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             
@@ -204,7 +205,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             sendAcc = db.query(Account).filter(Account.accountNumber==payload["fromAccount"]).first()
             if payload["amount"]+payload["fees"] > sendAcc.balance:
                 return {"status_code": 401,"message":"balance not enough"}
-            
+            print("check")
             if OLWBank is None or OLWBank is None:
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
             trans = transactionOperation(idn["message"],payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
