@@ -168,7 +168,7 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 
 @router.post("/transaction")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        try:
+        # try:
             payload = await request.body()
             # payload = json.loads(payload)
             # payload = payload['message']
@@ -216,17 +216,18 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 
                 if not trans2["status_code"]==201:
                     return trans2
-            
-        except:
-            message = "exception occurred with creating transaction"
-            log(0,message)
-            return {"status_code":401,"message":message}
-        log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
-        db.commit()
-        db.refresh(cus)
-        tra1 = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
-        return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra1}
+            log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
+            db.commit()
+            db.refresh(cus)
+            tra1 = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
+            return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra1}
 
+            
+        # except:
+        #     message = "exception occurred with creating transaction"
+        #     log(0,message)
+        #     return {"status_code":401,"message":message}
+        
 @router.post("/transactionQr")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
         try:
