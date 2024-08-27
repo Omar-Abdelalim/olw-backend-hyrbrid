@@ -929,16 +929,14 @@ def generateTranIdentifier(db,tcode):
     if t is None:
         return {"status_code":401,"message":"code does not exist"}
     today = datetime.today()
-    print(today)
     if not(t.dd == today.day and t.mm == today.month and t.yy == today.year%100):
-        print('b')
         db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"dd":today.day,"mm":today.month,"yy":today.year%100,"number":1})
         t.number=1
     else:
-        print('c')
         db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"number":t.number+1})
         t.number+=1
     db.commit()
+    print('d')
     returnString = tcode
     returnString += f"{int(today.yy):02}"
     returnString += f"{int(today.mm):02}"
