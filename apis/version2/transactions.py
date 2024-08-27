@@ -168,7 +168,7 @@ async def intiAccts(request: Request=None,response: Response=None,db: Session = 
 
 @router.post("/transaction")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        try:
+        # try:
             payload = await request.body()
             # payload = json.loads(payload)
             # payload = payload['message']
@@ -208,6 +208,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             if OLWBank is None or OLWBank is None:
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
+            
             trans = transactionOperation(idn["message"],payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
             if not trans["status_code"]==201:
                 return trans
@@ -224,10 +225,10 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             return {"status_code": 201, "customer": cus,"token":token,"message":"transaction registered","transactions":tra1}
 
             
-        except:
-            message = "exception occurred with creating transaction"
-            log(0,message)
-            return {"status_code":401,"message":message}
+        # except:
+        #     message = "exception occurred with creating transaction"
+        #     log(0,message)
+        #     return {"status_code":401,"message":message}
         
 @router.post("/transactionQr")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
@@ -799,6 +800,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             return {"status_code":401,"message":message}
 def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
     # try:
+    print("a")
     OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-00").first()
     
     now = datetime.now()
@@ -830,7 +832,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         return {"status_code":401,"message":"balance can't cover this transaction"}
 
     
-    
+    print("b")
     
     if accountRec is None:
         
@@ -858,7 +860,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     else:
         t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,transactionIdentifier=identifier)
 
-
+    print("c")
         
     db.add(t1)
     db.add(t2)
