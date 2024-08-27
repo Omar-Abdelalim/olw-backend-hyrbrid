@@ -398,7 +398,7 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
 
         
             print('payload:',payload)
-            idn = generateTranIdentifier(db,"BNK")
+            idn = generateTranIdentifier(db,"BAN")
             if not idn["status_code"]==201:
                     return idn
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
@@ -443,7 +443,7 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
 
 def tansaction3(intransID,db: Session = Depends(get_db)):
         try:
-            idn = generateTranIdentifier(db,"BNK")
+            idn = generateTranIdentifier(db,"BAN")
             if not idn["status_code"]==201:
                     return idn
             intrans = db.query(TransactionRequestIncoming).filter(TransactionRequestIncoming.id == intransID).first()
