@@ -926,10 +926,9 @@ def addTranType(db,tCode,tName,desc = "None"):
 def generateTranIdentifier(db,tcode):
 
     print("a")
-    tt = db.query(TransactionType).first()
-    return {"status_code":401,"a":tt}
     t = db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").first()
-    print(t)
+    return {"status_code":401,"a":t}
+    
     if t is None:
         return {"status_code":401,"message":"code does not exist"}
     today = datetime.today()
