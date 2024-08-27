@@ -924,7 +924,10 @@ def addTranType(db,tCode,tName,desc = "None"):
         return {"status_code":401,"message":message}
     
 def generateTranIdentifier(db,tcode):
+
     print("a")
+    tt = db.query(TransactionType).first()
+    print(tt)
     t = db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").first()
     print(t)
     if t is None:
