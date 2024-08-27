@@ -923,22 +923,22 @@ def addTranType(db,tCode,tName,desc = "None"):
         log(0,message)
         return {"status_code":401,"message":message}
     
-def generateTranIdentifier(db,code):
+def generateTranIdentifier(db,tcode):
     print("a")
-    t = db.query(TransactionType).filter(TransactionType.code == code,TransactionType.status == "active").first()
+    t = db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").first()
     print(t)
     if t is None:
         return {"status_code":401,"message":"code does not exist"}
     today = datetime.today()
     print(t)
     if not(t.dd == today.day and t.mm == today.month and t.yy == today.year%100):
-        db.commit(TransactionType).filter(TransactionType.code == code,TransactionType.status == "active").update({"dd":today.day,"mm":today.month,"yy":today.year%100,"number":1})
+        db.commit(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"dd":today.day,"mm":today.month,"yy":today.year%100,"number":1})
         t.number=1
     else:
-        db.commit(TransactionType).filter(TransactionType.code == code,TransactionType.status == "active").update({"number":t.number+1})
+        db.commit(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"number":t.number+1})
         t.number+=1
     db.commit()
-    returnString = code
+    returnString = tcode
     returnString += f"{int(today.yy):02}"
     returnString += f"{int(today.mm):02}"
     returnString += f"{int(today.dd):02}"
