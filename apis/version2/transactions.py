@@ -936,11 +936,10 @@ def generateTranIdentifier(db,tcode):
         db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"number":t.number+1})
         t.number+=1
     db.commit()
-    print('d')
     returnString = tcode
-    returnString += f"{int(today.yy):02}"
-    returnString += f"{int(today.mm):02}"
-    returnString += f"{int(today.dd):02}"
+    returnString += f"{int(today.day):02}"
+    returnString += f"{int(today.month):02}"
+    returnString += f"{int(today.year):02}"
     returnString += f"{int(t.number):08}"
     return {"status_code":201,"message":returnString}
 
