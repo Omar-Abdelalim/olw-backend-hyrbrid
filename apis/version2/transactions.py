@@ -928,6 +928,7 @@ def generateTranIdentifier(db,code):
     if t is None:
         return {"status_code":401,"message":"code does not exist"}
     today = datetime.today()
+    print(t)
     if not(t.dd == today.day and t.mm == today.month and t.yy == today.year%100):
         db.commit(TransactionType).filter(TransactionType.code == code,TransactionType.status == "active").update({"dd":today.day,"mm":today.month,"yy":today.year%100,"number":1})
         t.number=1
