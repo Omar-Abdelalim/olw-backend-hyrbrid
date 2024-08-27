@@ -865,8 +865,11 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     print("c")
         
     db.add(t1)
+    print("??")
     db.add(t2)
+    print("1")
     db.commit()
+    print("2")
     
     db.refresh(t1)
     db.refresh(t2)
