@@ -824,10 +824,10 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         accountSending=OLWBank
         currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
         
-        t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender,transactionIdentifier=identifier)
+        t1 = Transaction(dateTime=now,FromccountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender,transactionIdentifier=identifier)
     else:
         print("e")
-        t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount,transactionIdentifier=identifier)   
+        t1 = Transaction(dateTime=now,FromAccountNo=accountSending.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount,transactionIdentifier=identifier)   
     if sendAmount < 0:
         return {"status_code":401,"message":"sending amount can't be less than 0"}
     if sendAmount > accountSending.balance:
@@ -856,11 +856,11 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         if not displayName == "None":
             desc = displayName
         if not merchantAccount == None:
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
+            t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
         else:
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
+            t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
     else:
-        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,transactionIdentifier=identifier)
+        t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,transactionIdentifier=identifier)
 
     print("c")
         
