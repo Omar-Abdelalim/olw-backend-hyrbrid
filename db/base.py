@@ -26,6 +26,7 @@ from db.models.card import Card
 from db.models.vcards import VCard
 from db.models.vcard_status_log import  VCardLogs
 from db.models.lastAccount import LastAccount
+from db.models.transactionType import TransactionType
 
 
 

@@ -42,6 +42,7 @@ from db.models.qrTerminal import QRTer
 from db.models.charge import Charge
 from db.models.card import Card
 from db.models.lastAccount import LastAccount
+from db.models.transactionType import TransactionType
 
 
 import requests
@@ -68,7 +69,29 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
 ]
+@router.post("/testInit")
+async def intiAccts(request: Request=None,response: Response=None,db: Session = Depends(get_db)):
+    
+    t1 = addTranType(db,tCode="GEN",tName = "general")
+    t2 = addTranType(db,tCode="WAL",tName = "wallet")
+    t3 = addTranType(db,tCode="BAN",tName= "bank")
+    t4 = addTranType(db,tCode="MER",tName= "merchant")
+    t5 = addTranType(db,tCode="WAQ",tName = "wallet qr")
+    t6 = addTranType(db,tCode="CHR",tName = "charge")
 
+    if not t1["status_code"] == 201:
+        return t1
+    if not t2["status_code"] == 201:
+        return t2
+    if not t3["status_code"] == 201:
+        return t3
+    if not t4["status_code"] == 201:
+        return t4
+    if not t5["status_code"] == 201:
+        return t5
+    if not t6["status_code"] == 201:
+        return t6
+    return {"status_code": 201, "message": "transaction types added"}
 
 @router.post("/initAccts")
 async def intiAccts(request: Request=None,response: Response=None,db: Session = Depends(get_db)):
@@ -181,12 +204,12 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             if OLWBank is None or OLWBank is None:
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
-            trans = transactionOperation(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
+            trans = transactionOperation("wallet",payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
             if not trans["status_code"]==201:
                 return trans
                         
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation("fees",payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -232,7 +255,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             if OLWBank is None or OLWBank is None:
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
-            trans = transactionOperation(payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
+            trans = transactionOperation("wallet qr",payload["fromAccount"],acc.accountNumber,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
             if not trans["status_code"]==201:
                 return trans
             q = db.query(QR).filter(QR.id == payload["qrID"]).first()
@@ -248,7 +271,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
             db.query(QR).filter(QR.id == payload["qrID"]).update({"qrStatus":"completed"})
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation("fees",payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -301,7 +324,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").first()
             if qrt is None:
                 return{"status_code":403,"message":"terminal qr code is not pending here"}
-            trans = transactionOperation(payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
+            trans = transactionOperation("merchant",payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
             if not trans["status_code"]==201:
                 return trans
             r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
@@ -312,7 +335,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
             print(fee)
             if fee["status_code"] == 201:
-                trans2 = transactionOperation(qrt.merchantAccount,"10-00000005-001-00",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation("fees",qrt.merchantAccount,"10-00000005-001-00",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -384,12 +407,12 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
             if OLWBank is None or OLWBank is None:
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
             
-            trans = transactionOperation(payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
+            trans = transactionOperation("bank",payload["fromAccount"],iBan,payload["amount"],payload["fromCurrency"],payload["toCurrency"],db)
             if not trans["status_code"]==201:
                 return trans
             
             if payload["fees"]>0:
-                trans2 = transactionOperation(payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
+                trans2 = transactionOperation("fees",payload["fromAccount"],"10-00000005-001-00",payload["fees"],payload["fromCurrency"],payload["toCurrency"],db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -417,7 +440,7 @@ def tansaction3(intransID,db: Session = Depends(get_db)):
                 return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
             feesCode=intrans.feesCode
             amount=intrans.amount
-            trans = transactionOperation(intrans.inIBan,intrans.accountNo,intrans.amount,intrans.sendingCurrency,intrans.currency,db)
+            trans = transactionOperation("bank",intrans.inIBan,intrans.accountNo,intrans.amount,intrans.sendingCurrency,intrans.currency,db)
             
             if not trans["status_code"]==201:
                 return trans
@@ -427,7 +450,7 @@ def tansaction3(intransID,db: Session = Depends(get_db)):
             if not feeM["status_code"]==201:
                 return feeM
             if feeM["fee"]>0:
-                trans2 = transactionOperation(intrans.accountNo,"10-00000005-001-00",feeM["fee"],intrans.sendingCurrency,intrans.currency,db)
+                trans2 = transactionOperation("fees",intrans.accountNo,"10-00000005-001-00",feeM["fee"],intrans.sendingCurrency,intrans.currency,db)
                 
                 if not trans2["status_code"]==201:
                     return trans2
@@ -707,8 +730,8 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             transactions_data_1.append({
             'id': transaction.id,
             'dateTime': transaction.dateTime,
-            'accountNo': transaction.accountNo,
-            'outAccountNo': transaction.outAccountNo,
+            'accountNo': transaction.fromAccountNo,
+            'toAccountNo': transaction.toAccountNo,
             'transactionStatus': transaction.transactionStatus,
             'description': transaction.description,
             'amount': transaction.amount,
@@ -721,8 +744,8 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             transactions_data_2.append({
             'id': transaction.id,
             'dateTime': transaction.dateTime,
-            'accountNo': transaction.accountNo,
-            'outAccountNo': transaction.outAccountNo,
+            'accountNo': transaction.fromAccountNo,
+            'toAccountNo': transaction.toAccountNo,
             'transactionStatus': transaction.transactionStatus,
             'description': transaction.description,
             'amount': transaction.amount,
@@ -734,10 +757,10 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
         df1 = pd.DataFrame(transactions_data_1)
         df2 = pd.DataFrame(transactions_data_2)
 
-        df1['outAccountNo'] = df2['outAccountNo']
+        df1['toAccountNo'] = df2['toAccountNo']
         df1['recID'] = df2['sendID']
         df1['description']=df2['description']
-        df1.rename(columns={'accountNo': 'account paying','outAccountNo':'account receiving'}, inplace=True)
+        df1.rename(columns={'accountNo': 'account paying','toAccountNo':'account receiving'}, inplace=True)
         df1["account receiving"][df1["account receiving"]=="10-00000005-001-00"]="Fees"
         df1["account receiving"][df1["account receiving"]=="10-00000003-001-00"]="OLW Bank"
         
@@ -756,7 +779,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             message = "exception occurred with creating bank"
             log(0,message)
             return {"status_code":401,"message":message}
-def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
+def transactionOperation(type,sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
     # try:
     OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-00").first()
     
@@ -780,9 +803,9 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
         accountSending=OLWBank
         currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
         
-        t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender)
+        t1 = Transaction(dateTime=now,accountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender)
     else:
-        t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,outAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount)   
+        t1 = Transaction(dateTime=now,accountNo=accountSending.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount)   
     if sendAmount < 0:
         return {"status_code":401,"message":"sending amount can't be less than 0"}
     if sendAmount > accountSending.balance:
@@ -811,11 +834,11 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
         if not displayName == "None":
             desc = displayName
         if not merchantAccount == None:
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
+            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
         else:
-            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
+            t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc)
     else:
-        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,outAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount)
+        t2 = Transaction(dateTime=now,accountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount)
 
 
         
@@ -830,8 +853,8 @@ def transactionOperation(sender,receiver,sendAmount,sendCurr,recCurr,db,displayN
     db.query(Account).filter(Account.accountNumber == accountSending.accountNumber).update({"balance":accountSending.balance-sendAmount})
     db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance+sendAmount})
 
-    db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"audit"})
-    db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"audit"})
+    db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"audit","counterPart":t2.id})
+    db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"audit","counterPart":t1.id})
 
 
     db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance-recAmount})
@@ -867,7 +890,17 @@ def log(logFile,message):
     file_object.write(message+'\n')
     file_object.close()
     return True
-
+def addTranType(db,tCode,tName,desc = "None"):
+    try:
+        tday = datetime.today()
+        t= TransactionType(code = tCode,name = tName,status = "active",description = desc,number= 0,dd = tday.day,mm = tday.month,yy=tday.year%100)
+        db.add(t)
+        db.commit()
+        return {"status_code":201,"message":"transaction type added successfully"}
+    except:
+        message = "exception occurred with creating transaction type"
+        log(0,message)
+        return {"status_code":401,"message":message}
 def addFee(merchantID,categoryID,categoryName,categoryDescription,feeDescription,serviceCode,campaign,feeMax,feeMin,feeRate,feeFixed,db):
     try:
         mID = merchantID
@@ -1362,7 +1395,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
         
         if OLWBank is None or OLWBank is None:
             return{"status_code":404,"message":"please make sure fees and bank account are intialized"}
-        trans = transactionOperation(f"charge {str(charge.id)}",acc.accountNumber,charge.amount+charge.feesCurrency+charge.feesService,charge.currency,charge.currency,db)
+        trans = transactionOperation("charge",f"charge {str(charge.id)}",acc.accountNumber,charge.amount+charge.feesCurrency+charge.feesService,charge.currency,charge.currency,db)
         print(trans)
         if not trans["status_code"]==201:
             db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failed"})
@@ -1370,7 +1403,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
             return trans
                     
         if charge.feesCurrency>0:
-            trans2 = transactionOperation(acc.accountNumber,"10-00000005-001-00",charge.feesCurrency,charge.currency,charge.currency,db)
+            trans2 = transactionOperation("fees",acc.accountNumber,"10-00000005-001-00",charge.feesCurrency,charge.currency,charge.currency,db)
             
             if not trans2["status_code"]==201:
                 db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failedF1"})
@@ -1378,7 +1411,7 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
                 return trans2
         
         if charge.feesService>0:
-            trans3 = transactionOperation(acc.accountNumber,"10-00000005-001-00",charge.feesService,charge.currency,charge.currency,db)
+            trans3 = transactionOperation("fees",acc.accountNumber,"10-00000005-001-00",charge.feesService,charge.currency,charge.currency,db)
             
             if not trans3["status_code"]==201:
                 db.query(Charge).filter(Charge.id==chID).update({"chargeStatus":"failedF2"})

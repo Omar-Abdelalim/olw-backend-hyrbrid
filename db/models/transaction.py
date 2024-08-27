@@ -7,8 +7,8 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     dateTime=Column(String,nullable=False)
 
-    accountNo=Column(String,nullable=False)
-    outAccountNo=Column(String,nullable=False)
+    fromAccountNo=Column(String,nullable=False)
+    toAccountNo=Column(String,nullable=False)
     
     
     transactionStatus=Column(String,nullable=False)
@@ -18,7 +18,8 @@ class Transaction(Base):
     sendID=Column(Integer,nullable=False)
     recID = Column(Integer,nullable=False)
 
-    flag = Column(String,nullable = True)
+    transactionIdentifier = Column(String,nullable = True)
+    counterPart = Column(Integer,nullable = True)
     
     
 

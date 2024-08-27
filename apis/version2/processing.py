@@ -1186,9 +1186,9 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         r = []
         acc = acct.accountNumber
         print(acc)
-        outg = db.query(Transaction).filter(Transaction.accountNo == acc).all()
+        outg = db.query(Transaction).filter(Transaction.fromAccountNo == acc).all()
         print(outg)
-        inc = db.query(Transaction).filter(Transaction.outAccountNo == acc).all()
+        inc = db.query(Transaction).filter(Transaction.toAccountNo == acc).all()
         for i in outg:
             s.append(i.id + 1)
         for i in inc:
@@ -1201,12 +1201,12 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         print(r)
         for i in s:
             tran = db.query(Transaction).filter(Transaction.id == i).first()
-            tran.accountNo = "from"
-            if tran.outAccountNo == "10-00000005-001-00":
-                tran.outAccountNo = "fees"
+            tran.fromAccountNo = "from"
+            if tran.toAccountNo == "10-00000005-001-00":
+                tran.toAccountNo = "fees"
                 tran.description = "fees"
-            elif tran.outAccountNo == "10-00000003-001-00":
-                tran.outAccountNo = "external"
+            elif tran.toAccountNo == "10-00000003-001-00":
+                tran.toAccountNo = "external"
             else:
                 tran.description = "Wallet Transfer"
             tr.append(tran)
@@ -1216,9 +1216,9 @@ async def gettrans(request: Request, payload: dict = Body(...), db: Session = De
         for i in r:
             
             tran = db.query(Transaction).filter(Transaction.id == i).first()
-            tran.outAccountNo = "to"
-            if tran.accountNo == "10-00000003-001-00":
-                tran.accountNo = "external"
+            tran.toAccountNo = "to"
+            if tran.fromAccountNo == "10-00000003-001-00":
+                tran.fromAccountNo = "external"
             else:
                 tran.description = "Wallet Transfer"
             tr.append(tran)
