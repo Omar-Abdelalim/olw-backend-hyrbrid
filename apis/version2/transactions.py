@@ -930,7 +930,6 @@ def generateTranIdentifier(db,tcode):
         t.number=1
     else:
         db.query(TransactionType).filter(TransactionType.code == tcode,TransactionType.status == "active").update({"number":t.number+1})
-        t.number+=1
     db.commit()
     returnString = tcode
     returnString += f"{int(today.day):02}"
