@@ -811,6 +811,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     
     accountSending = db.query(Account).filter(Account.accountNumber == sender).first()
     accountRec = db.query(Account).filter(Account.accountNumber == receiver).first()
+    print("d")
 
     if accountSending is None and accountRec is None:
         return {"status_code":401,"message":"neither accounts is on OLW"}
