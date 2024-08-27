@@ -870,7 +870,8 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     
     db.refresh(t1)
     db.refresh(t2)
-        
+    
+    print("f")
 
     db.query(Account).filter(Account.accountNumber == accountSending.accountNumber).update({"balance":accountSending.balance-sendAmount})
     db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance+sendAmount})
@@ -878,13 +879,13 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"audit","counterPart":t2.id})
     db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"audit","counterPart":t1.id})
 
-
+    print('g')
     db.query(Account).filter(Account.accountNumber == "2").update({"balance":OLWAudit.balance-recAmount})
     db.query(Account).filter(Account.accountNumber == accountRec.accountNumber).update({"balance":accountRec.balance+recAmount})
 
     db.query(Transaction).filter(Transaction.id == t1.id).update({"transactionStatus":"complete"})
     db.query(Transaction).filter(Transaction.id == t2.id).update({"transactionStatus":"complete"})
-
+    print("h")
     db.commit()
     db.refresh(t1)
     db.refresh(t2)
