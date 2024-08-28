@@ -389,7 +389,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        # try:
+        try:
             payload = await request.body()
             # payload = json.loads(payload)
             # payload = payload['message']
@@ -437,10 +437,10 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
          
             return {"status_code": 201, "token":token,"message":"transaction registered"}        
 
-        # except:
-        #     message = "exception occurred with creating transaction"
-        #     log(0,message)
-        #     return {"status_code":401,"message":message}
+        except:
+            message = "exception occurred with creating transaction"
+            log(0,message)
+            return {"status_code":401,"message":message}
         
 def tansaction3(intransID,db: Session = Depends(get_db)):
         try:
@@ -800,7 +800,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             log(0,message)
             return {"status_code":401,"message":message}
 def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
-    # try:
+    try:
         OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-00").first()
         
         now = datetime.now()
@@ -882,10 +882,10 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         db.refresh(t1)
         db.refresh(t2)
         return {"status_code":201,"message":"transaction operation complete","t1":t1.id,"t2":t2.id}
-    # except:
-    #     message = "exception occurred with creating transaction operation"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with creating transaction operation"
+        log(0,message)
+        return {"status_code":401,"message":message}
             
     
 
