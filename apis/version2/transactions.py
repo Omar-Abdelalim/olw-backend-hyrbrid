@@ -937,7 +937,7 @@ def generateTranIdentifier(db,tcode):
     returnString = tcode
     returnString += f"{int(today.day):02}"
     returnString += f"{int(today.month):02}"
-    returnString += f"{int(today.year):02}"
+    returnString += f"{int(today.year%100):02}"
     returnString += f"{int(t.number):08}"
     return {"status_code":201,"message":returnString}
 
