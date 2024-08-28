@@ -115,9 +115,9 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url):
             response = await call_next(request)
             return response
-        # if ('/' in requested_url):
-        #     response = await call_next(request)
-        #     return response
+        if ('/' in requested_url):
+            response = await call_next(request)
+            return response
         
 
         
