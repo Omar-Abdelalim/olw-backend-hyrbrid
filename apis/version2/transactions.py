@@ -389,7 +389,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        try:
+        # try:
             payload = await request.body()
             # payload = json.loads(payload)
             # payload = payload['message']
@@ -432,15 +432,16 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
                 
                 if not trans2["status_code"]==201:
                     return trans2
-        except:
-            message = "exception occurred with creating transaction"
-            log(0,message)
-            return {"status_code":401,"message":message}
-        log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],("iBan"+iBan),payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
-        db.commit()
+            log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],("iBan"+iBan),payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
+            db.commit()
          
-        return {"status_code": 201, "token":token,"message":"transaction registered"}        
+            return {"status_code": 201, "token":token,"message":"transaction registered"}        
 
+        # except:
+        #     message = "exception occurred with creating transaction"
+        #     log(0,message)
+        #     return {"status_code":401,"message":message}
+        
 def tansaction3(intransID,db: Session = Depends(get_db)):
         try:
             idn = generateTranIdentifier(db,"BAN")
