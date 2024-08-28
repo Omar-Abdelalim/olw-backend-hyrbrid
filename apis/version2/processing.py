@@ -1768,6 +1768,7 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
         user.smsCode = otp
         user.smsValid = datetime.now() + timedelta(days=365)
         smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
+        print("login success")
         return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
     except:
         message = "exception occurred with checking credentials"
