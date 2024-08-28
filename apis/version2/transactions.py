@@ -854,7 +854,8 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
             if not merchantAccount == None:
                 t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
             else:
-                t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
+                # t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
+                t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description="outgoing bank transaction",transactionIdentifier=identifier)
         else:
             t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,transactionIdentifier=identifier)
 
