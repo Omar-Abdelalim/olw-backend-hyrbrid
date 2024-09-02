@@ -298,7 +298,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
 
 @router.post("/transactionMerchant")
 async def tansaction1(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-        try:
+        # try:
             payload = await request.body()
             # payload = json.loads(payload)
             # payload = payload['message']
@@ -374,24 +374,24 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
 
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
+            log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
+            db.commit()
+            db.refresh(sendAcc)
+            db.refresh(sendCus)
+            
+            tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
+            
+            r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
+            
+            
+            return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"token":token,"response":r.json}
 
 
-        except Exception as e:
-            message = "exception occurred with creating transaction"
-            log(0,message)
-            return {"status_code":401,"message":e}
-        log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
-        db.commit()
-        db.refresh(sendAcc)
-        db.refresh(sendCus)
+        # except Exception as e:
+        #     message = "exception occurred with creating transaction"
+        #     log(0,message)
+        #     return {"status_code":401,"message":e}
         
-        tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
-        
-        r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
-        
-        
-        return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"token":token,"response":r.json}
-
 
 @router.post("/transactionOut")
 async def tansaction2(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
