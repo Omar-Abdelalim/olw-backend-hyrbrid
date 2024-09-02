@@ -27,7 +27,7 @@ from db.models.vcards import VCard
 from db.models.vcard_status_log import  VCardLogs
 from db.models.lastAccount import LastAccount
 from db.models.transactionType import TransactionType
-
+from db.models.paylink import PayLink
 
 
 from db.base_class import Base

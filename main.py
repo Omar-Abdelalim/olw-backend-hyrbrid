@@ -6,6 +6,7 @@ from db.base import Base
 from apis.version2.processing import router as processing_router
 from apis.version2.transactions import router as transaction_router
 from apis.version2.vcard import router as vcard_router
+from apis.version2.merchant_traansactions import router as merchant_transaction_router
 from fastapi.responses import JSONResponse
 
 from apis.version2.middleware import decryptMiddleware
@@ -28,6 +29,8 @@ def startapplication():
     app.include_router(processing_router)
     app.include_router(vcard_router)
     app.include_router(transaction_router)
+    app.include_router(merchant_transaction_router)
+    
     app.add_exception_handler(404, custom_404_handler)
 
     db = next(get_db()) 
