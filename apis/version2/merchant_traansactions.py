@@ -153,7 +153,7 @@ async def connection_pay(paylink_id,db: Session = Depends(get_db)):
         return HTMLResponse(content=error_message, status_code=404)
 
     # Generate the QR code string and image with amount included
-    qr_string = f"ecom-{paylink.paylinkID}"
+    qr_string = f"ecom/{paylink.paylinkID}"
     qr = qrcode.make(qr_string)
 
     img_io = io.BytesIO()
