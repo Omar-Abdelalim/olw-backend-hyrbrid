@@ -138,7 +138,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     
     
 @router.get("/ecom/{paylinkID}")
-async def connection_pay(paylink_id: str,db: Session = Depends(get_db)):
+async def connection_pay(paylink_id,db: Session = Depends(get_db)):
     # Find the related paylink
     print(paylink_id)
     paylink = db.query(PayLink).filter(PayLink.paylinkID ==paylink_id).first()
