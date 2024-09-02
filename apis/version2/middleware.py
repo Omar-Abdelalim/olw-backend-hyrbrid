@@ -132,6 +132,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
             #     return response
             print("body from request",json_body)
             if 'debug' in json_body:
+                print('debug mode')
                 response = await call_next(request)
                 return response
             if not 'message' in json_body:
