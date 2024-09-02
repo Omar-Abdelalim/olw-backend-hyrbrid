@@ -204,4 +204,6 @@ async def connection_status(paylinkID: str, transactionRef: str,db: Session = De
 @router.get("/paylink")
 async def getter(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     p = db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload['terminalID'])).first()
-    return p
+    if p is None:
+        return {"status_code": 401, "message": "no terminal with this id"}
+    return {"status_code": 200, "message":p.MerchantId}
