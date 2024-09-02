@@ -102,7 +102,7 @@ async def get_client_ip(request: Request) -> str:
 @router.post("/paylink-create",)
 async def create_paylink(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     # Validate IP address
-    r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["merchantID"]})
+    r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["MerchantID"]})
     print(r)
     r = json.loads(r.content)
     print("response:",r)
