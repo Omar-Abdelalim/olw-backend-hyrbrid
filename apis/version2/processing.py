@@ -1810,7 +1810,7 @@ def get_sms():
     
 @router.post("/login")
 async def signIn(request: Request, payload2: dict = Body(...), db: Session = Depends(get_db)):
-    try:
+    # try:
         payload = await request.body()
         payload = json.loads(payload)
         # payload = payload['message']
@@ -1829,22 +1829,22 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 
 
         
-        tokens[token]['id'] = cus.id
+        # tokens[token]['id'] = cus.id
         
 
 
         account = db.query(Account).filter(Account.customerID == str(cus.id), Account.primaryAccount == "1").first()
         bank = db.query(Bank).filter(Bank.accountNumber == account.accountNumber).first()
         bankb = db.query(BankBusiness).filter(BankBusiness.accountNumber == account.accountNumber).first()
+        return {"status_code":200,"user":cus,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
 
         
 
-    except:
-         message = "exception occurred with retrieving token"
-         log(0,message)
-         return {"status_code":401,"message":message}
-    return {"status_code":200,"user":cus,"token":token,"account":account,"bank":bank,"bankBusiness":bankb}
-
+    # except:
+    #      message = "exception occurred with logining in"
+    #      log(0,message)
+    #      return {"status_code":401,"message":message}
+    
 @router.post("/getAddress")
 async def getAdd(request: Request, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
