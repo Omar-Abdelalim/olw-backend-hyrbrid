@@ -16,6 +16,6 @@ class PayLink(Base):
     
 
     def __str__(self):
-        return self.id
+        return self.link
     
     
