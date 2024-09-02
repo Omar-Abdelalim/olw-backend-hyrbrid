@@ -171,7 +171,7 @@ async def connection_pay(paylink_id,db: Session = Depends(get_db)):
               <h1>Payment Details</h1>
               <p>Merchant Name: {paylink.MerchantId}</p>
               <p>Amount: {paylink.amount} {paylink.currency}</p>
-              <p>Transaction Reference: {paylink.transactionRef}</p>
+              <p>Transaction Reference: {paylink.transactionRefferance}</p>
               <img src="data:image/png;base64,{img_base64}" alt="QR Code" />
               <p>QR Code String: <span id="qrString">{qr_string}</span></p>
               <button onclick="copyToClipboard()">Copy QR Code String</button>
