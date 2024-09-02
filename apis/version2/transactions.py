@@ -342,13 +342,14 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             if not trans["status_code"]==201:
                 return trans
             r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
+            r = json.loads(r.content)
             if not r['status_code'] == 200:
                 pl = db.query(PayLink).filter(PayLink.paylinkID == ("http://192.223.11.185:4000/"+payload["terminal"])).first()
                 rmid = pl.MerchantId
             else:
                 rmid=r["merchantID"]
             print(rmid)
-            r = json.loads(r.content)
+            
             
 
             fee = calcFee(db,payload["amount"],"MR002",rmid)
