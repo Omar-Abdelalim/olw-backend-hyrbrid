@@ -347,9 +347,9 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 rmid = pl.MerchantId
             else:
                 rmid=r["merchantID"]
-            print(r)
+            print(rmid)
             r = json.loads(r.content)
-            print("response:",r)
+            
 
             fee = calcFee(db,payload["amount"],"MR002",rmid)
             print(fee)
