@@ -43,6 +43,7 @@ from db.models.charge import Charge
 from db.models.card import Card
 from db.models.lastAccount import LastAccount
 from db.models.transactionType import TransactionType
+from db.models.paylink import PayLink
 
 
 import requests
@@ -341,11 +342,16 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             if not trans["status_code"]==201:
                 return trans
             r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
+            if not r['status_code'] == 200:
+                pl = db.query(PayLink).filter(PayLink.paylinkID == ("http://192.223.11.185:4000/"+payload["terminal"])).first()
+                rmid = pl.MerchantId
+            else:
+                rmid=r["merchantID"]
             print(r)
             r = json.loads(r.content)
             print("response:",r)
 
-            fee = calcFee(db,payload["amount"],"MR002",r["merchantID"])
+            fee = calcFee(db,payload["amount"],"MR002",rmid)
             print(fee)
             if fee["status_code"] == 201:
                 trans2 = transactionOperation(idn["message"],qrt.merchantAccount,"10-00000005-001-00",fee["fee"],payload["fromCurrency"],payload["toCurrency"],db)

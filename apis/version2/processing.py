@@ -1753,21 +1753,25 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
 
         print('payload:',payload)
         em = payload["email"]
-
+        
         pa = payload["password"]
         user = db.query(Customer).filter(Customer.email == em).first()
 
         if not user:
             return {"status_code": 403, "message": "wrong email or password!"}
+        print('a')
         password = db.query(Password).filter(Password.customerID == str(user.id) , Password.passwordStatus == "active").first()
         hashed_password = pa.encode('utf-8')
+        print("b")
         if not Hasher.verify_password(hashed_password, password.passwordHash):
             return {"status_code": 404, "message": "wrong email or password!!", "orig": hashed_password,
                     "other": password}
         otp = "1111"
+        print('c')
         user.smsCode = otp
         user.smsValid = datetime.now() + timedelta(days=365)
         user = db.query(Customer).filter(Customer.email == em).update({"smsCode":otp,"smsValid":user.smsValid})
+        print('d')
         db.commit()
         smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
         print("login success")
