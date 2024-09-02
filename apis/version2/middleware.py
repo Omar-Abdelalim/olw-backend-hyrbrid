@@ -125,7 +125,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
 
         
         
-        try:
+        # try:
             body = await request.body()
             json_body = json.loads(body)
             # if requested_url ==  "/getQrTerStatus" and not 'message' in json_body:
@@ -211,6 +211,6 @@ class decryptMiddleware(BaseHTTPMiddleware):
             else:
                 out_resp = encrypt(response_body_str,respBody['session key'])
             return JSONResponse(content=out_resp)
-        except:
-            message = "Access Denied"
-            return PlainTextResponse(message)
+        # except:
+        #     message = "Access Denied"
+        #     return PlainTextResponse(message)
