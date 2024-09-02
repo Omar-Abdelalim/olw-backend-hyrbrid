@@ -1770,10 +1770,12 @@ async def signIn(request: Request, payload2: dict = Body(...), db: Session = Dep
         print('c')
         user.smsCode = otp
         user.smsValid = datetime.now() + timedelta(days=365)
-        user = db.query(Customer).filter(Customer.email == em).update({"smsCode":otp,"smsValid":user.smsValid})
+        db.query(Customer).filter(Customer.email == em).update({"smsCode":otp,"smsValid":user.smsValid})
         print('d')
         db.commit()
+        print('e')
         smsList.append({"phone_number": user.countryCode+user.phoneNumber, "message": "your otp is:"+otp})
+        print('f')
         print("login success")
         return {"status_code":200,"message":"email and password correct","otp":otp,"customerID":user.id}
     # except:
