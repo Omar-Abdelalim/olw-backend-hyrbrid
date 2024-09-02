@@ -174,13 +174,13 @@ class decryptMiddleware(BaseHTTPMiddleware):
         b=await request.body()
         print("body sent:",type(b),b)
         if not requested_url == '/handshake':
-            print(b) 
             on = json.loads(b)    
             print('not handshake, body now: ',on)
             if "token" not in on:
                 return JSONResponse(content={"status_code": 410, "message": "missing token"})
             
             if not on['token'] in tokens:
+                print("NO TOKEN")
                 return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
 
 
