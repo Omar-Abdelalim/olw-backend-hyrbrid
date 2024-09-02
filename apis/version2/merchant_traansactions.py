@@ -201,3 +201,7 @@ async def connection_status(paylinkID: str, transactionRef: str,db: Session = De
 
     return PaylinkStatusResponse(paylinkID=paylinkID, status=paylink["status"])
 
+@router.get("/paylink")
+async def getter(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
+    p = db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload['terminalID'])).first()
+    return p
