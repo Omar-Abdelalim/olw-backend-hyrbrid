@@ -102,21 +102,27 @@ async def get_client_ip(request: Request) -> str:
 @router.post("/paylink-create",)
 async def create_paylink(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     # Validate IP address
-    if not validate_ip(get_client_ip()):
-        raise HTTPException(status_code=403, detail="Invalid IP address")
-
-    # Validate MerchantId and API_key
-    if not validate_merchant(payload['merchant_id'], payload['API_key']):
-        raise HTTPException(status_code=401, detail="Invalid MerchantId or API_key")
-
-    # Generate unique paylinkID
-    paylinkID = str(uuid.uuid4())
-    paylinkID = str(uuid.uuid4()).replace("-", "")[:12]
     r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["merchantID"]})
     print(r)
     r = json.loads(r.content)
     print("response:",r)
-    QRTer(terminalID = "ecom/"+paylinkID,displayName = r.merchantName,merchantName=r.merchantName,merchantAccount=r.merchantAccount,currency=payload['currency'],qrStatus="active",amount=payload["amount"])
+    # if not validate_ip(get_client_ip()):
+    #     raise HTTPException(status_code=403, detail="Invalid IP address")
+    if not payload['API_key'] == r["apiKey"]: 
+        raise HTTPException(status_code=403, detail="Invalid key")
+    if not r["ip"] == request.client.host:
+        raise HTTPException(status_code=403, detail="InvalidIP address")
+    # # Validate MerchantId and API_key
+    # if not validate_merchant(payload['merchant_id'], payload['API_key']):
+    #     raise HTTPException(status_code=401, detail="Invalid MerchantId or API_key")
+
+    # Generate unique paylinkID
+    paylinkID = str(uuid.uuid4())
+    paylinkID = str(uuid.uuid4()).replace("-", "")[:12]
+    
+    q = QRTer(terminalID = "ecom/"+paylinkID,displayName = r.merchantName,merchantName=r.merchantName,merchantAccount=r.merchantAccount,currency=payload['currency'],qrStatus="active",amount=payload["amount"])
+    db.add(q)
+    db.commit()
     # Insert paylink record
     # paylinks_db[paylinkID] = {
     #     "MerchantId": request.MerchantId,
