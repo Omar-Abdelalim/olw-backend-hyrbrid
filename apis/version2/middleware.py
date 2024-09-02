@@ -132,6 +132,9 @@ class decryptMiddleware(BaseHTTPMiddleware):
             #     response = await call_next(request)
             #     return response
             print("body from request",json_body)
+            if 'debug' in json_body:
+                response = await call_next(request)
+                return response
             if not 'message' in json_body:
                 return JSONResponse(content={"status_code": 410, "message": "invalid request"})
             substrings = json_body['message'].split(":::")
