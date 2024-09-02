@@ -111,6 +111,8 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     if not payload['API_key'] == r["apiKey"]: 
         raise HTTPException(status_code=403, detail="Invalid key")
     if not r["ip"] == request.client.host:
+        print(r["ip"])
+        print(request.client.host)
         raise HTTPException(status_code=403, detail="InvalidIP address")
     # # Validate MerchantId and API_key
     # if not validate_merchant(payload['merchant_id'], payload['API_key']):
