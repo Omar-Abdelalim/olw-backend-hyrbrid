@@ -112,7 +112,11 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     # Generate unique paylinkID
     paylinkID = str(uuid.uuid4())
     paylinkID = str(uuid.uuid4()).replace("-", "")[:12]
-
+    r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["merchantID"]})
+    print(r)
+    r = json.loads(r.content)
+    print("response:",r)
+    QRTer(terminalID = "ecom/"+paylinkID,displayName = r.merchantName,merchantName=r.merchantName,merchantAccount=r.merchantAccount,currency=payload['currency'],qrStatus="active",amount=payload["amount"])
     # Insert paylink record
     # paylinks_db[paylinkID] = {
     #     "MerchantId": request.MerchantId,
@@ -136,7 +140,7 @@ async def connection_pay(paylink_id: str,db: Session = Depends(get_db)):
 
     if not paylink:
         # paylinkID not found
-        error_message = f"<h1>Error: Invalid paylinkID '{paylinkID}'</h1>"
+        error_message = f"<h1>Error: Invalid paylinkID '{paylink_id}'</h1>"
         return HTMLResponse(content=error_message, status_code=404)
 
     # Generate the QR code string and image with amount included

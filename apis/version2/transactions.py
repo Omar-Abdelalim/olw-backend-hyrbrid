@@ -837,7 +837,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
             res  = checkExAccount(receiver)
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
             accountRec=OLWBank
-            if not res["status_code"]==200:
+            if (not res["status_code"]==200) and (not 'ecom/'in receiver):
                 
                 
                 currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
