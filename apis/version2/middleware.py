@@ -112,7 +112,10 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if requested_url =="/merchantAccount" or requested_url == "/createQRTer" or requested_url == "/cancelQrTerStatus" or requested_url == "/timeOutQrTerStatus" or requested_url == "/NOTrejectQrTerStatus" or requested_url ==  "/getQrTerStatus" or requested_url == "/getQrTerIdStatus":
             response = await call_next(request)
             return response
-        if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url):
+        if  ('/updateEmail/'in requested_url) or ('/email/' in requested_url) or ('/cardForm/'in requested_url)or ('/ecom/'in requested_url):
+            response = await call_next(request)
+            return response
+        if requested_url =="/paylink-create":
             response = await call_next(request)
             return response
         # if ('/' in requested_url):
