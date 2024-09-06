@@ -365,7 +365,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 return fee
             
             if not payload['agent'] is None:
-                r =requests.get("http://192.223.11.185:8080/agent", json={'id': payload["agent"]})
+                r =requests.get("http://192.223.11.185:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
                 r = json.loads(r.content)
                 agentFee = r['fee']
                 agentAccount = r['account']
