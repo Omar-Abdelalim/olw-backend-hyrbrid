@@ -363,7 +363,19 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                     return trans2
             else:
                 return fee
-        
+            
+            if not payload['agent'] is None:
+                r =requests.get("http://192.223.11.185:8080/agent", json={'id': payload["agent"]})
+                r = json.loads(r.content)
+                agentFee = r['fee']
+                agentAccount = r['account']
+            else:
+                agentFee = 0
+
+            if agentFee >0:
+                trans3 = transactionOperation(idn["message"],"10-00000005-001-00",agentAccount,agentFee,payload["fromCurrency"],payload["toCurrency"],db,agentID=rmid)
+                if not trans3["status_code"]==201:
+                    return trans3
 
             # q = db.query(QR).filter(QR.id == payload["qrID"]).first()
             
@@ -372,7 +384,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # elif q.qrStatus == "completed":
             #     return{"status_code":404,"message":"transaction already complete"}
 
-
+            db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload["terminal"])).update({'status':'complete'})
             
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
 
@@ -808,7 +820,7 @@ async def testT(request: Request,response: Response,payload: dict = Body(...),db
             message = "exception occurred with creating bank"
             log(0,message)
             return {"status_code":401,"message":message}
-def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None):
+def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,db,displayName="None",merchantAccount = None,agentID=None):
     try:
         OLWAudit = db.query(Account).filter(Account.accountNumber == "10-00000001-001-00").first()
         
@@ -862,6 +874,9 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
                 desc = displayName
             if not merchantAccount == None:
                 t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=merchantAccount,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
+
+            elif not agentID is None:
+                t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,description=agentID,transactionIdentifier=identifier)
             else:
                 # t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description=desc,transactionIdentifier=identifier)
                 t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=OLWBank.accountNumber,sendID=OLWAudit.customerID,recID=OLWBank.customerID,transactionStatus="pending",amount=recAmount,description="outgoing bank transaction",transactionIdentifier=identifier)
