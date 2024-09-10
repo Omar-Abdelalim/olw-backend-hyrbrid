@@ -118,9 +118,9 @@ class decryptMiddleware(BaseHTTPMiddleware):
         if requested_url =="/paylink-create":
             response = await call_next(request)
             return response
-        # if ('/' in requested_url):
-        #     response = await call_next(request)
-        #     return response
+        if ('/' in requested_url):
+            response = await call_next(request)
+            return response
         
         
         
