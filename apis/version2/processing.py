@@ -47,7 +47,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from apis.version2.middleware import DecryptRequest, decrypt_data
 from pydantic import BaseModel
-from db.globals.globals import tokens,smsList
+from db.globals.globals import tokens,smsList,currentServer
 
 from core.hashing import Hasher
 
@@ -1639,6 +1639,7 @@ async def test(request: Request, payload: dict = Body(...), db: Session = Depend
         "Content Length": content_length,
         "Query Parameters": query_params,
         "Cookies": cookies,
+        "hostIP":currentServer
     }
 
 

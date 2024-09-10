@@ -134,13 +134,13 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     #     "status": "pending"
     # }
     transactionlink = {"link":f"http://192.223.11.185:4000/ecom/{paylinkID}"}
-    return transactionlink
+    return {"status":"success","link":transactionlink,"expires_at":datetime.now()+timedelta(minutes=10)}
     
     
     
     
 @router.get("/ecom/{paylink_id}")
-@router.get("/api/v1/qr/status/{paylink_id}")
+@router.get("/api/v1/qr/{paylink_id}")
 async def connection_pay(paylink_id,db: Session = Depends(get_db)):
     # Find the related paylink
     # return paylink_id
@@ -202,6 +202,15 @@ async def connection_status(paylinkID: str, transactionRef: str,db: Session = De
         raise HTTPException(status_code=404, detail="Paylink not found")
 
     return PaylinkStatusResponse(paylinkID=paylinkID, status=paylink["status"])
+
+@router.get("/api/v1/qr/status/{qr_id}", response_model=PaylinkStatusResponse)
+async def connection_status(qr_id: int, transactionRef: str,db: Session = Depends(get_db)):
+    q = db.query(QRTer).filter(QRTer.id == qr_id).first()
+    if q is None:
+        raise HTTPException(status_code=404, detail="QR record not found")
+    return {"status": "success","payment_status": q.qrStatus,"amount":q.amount,"currency": q.currency,"transaction_id": q.transactionID}
+
+
 
 @router.get("/paylink")
 async def getter(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):

@@ -17,4 +17,5 @@ class Settings:
     SECRET_KEY:str=os.getenv('SECRET_KEY')
     ALGORITHM:str=os.getenv('ALGORITHM')
     ACCESS_TOKEN_EXPIRE_MINUTES=30
+    work_environment = "debug"
 settings=Settings()
