@@ -100,6 +100,7 @@ async def get_client_ip(request: Request) -> str:
 
 # Endpoints
 @router.post("/paylink-create",)
+@router.post("/api/v1/qr/create",)
 async def create_paylink(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     # Validate IP address
     r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["merchantID"]})
@@ -139,6 +140,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     
     
 @router.get("/ecom/{paylink_id}")
+@router.get("/api/v1/qr/status/{paylink_id}")
 async def connection_pay(paylink_id,db: Session = Depends(get_db)):
     # Find the related paylink
     # return paylink_id
