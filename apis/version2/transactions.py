@@ -50,6 +50,7 @@ import requests
 from fastapi.responses import HTMLResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
+from db.globals.globals import currentServer,currentPort
 
 router = APIRouter()
 
@@ -341,10 +342,10 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             trans = transactionOperation(idn["message"],payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
             if not trans["status_code"]==201:
                 return trans
-            r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
+            r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': payload["terminal"]})
             r = json.loads(r.content)
             if not r['status_code'] == 200:
-                pl = db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload["terminal"])).first()
+                pl = db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).first()
                 if pl is None:
                     return{"status_code":403,"message":"incorrect link"}
                 rmid = pl.MerchantId
@@ -365,7 +366,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 return fee
             
             if not payload['agent'] is None:
-                r =requests.get("http://192.223.11.185:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
+                r =requests.get(f"http://{currentServer}:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
                 r = json.loads(r.content)
                 agentFee = r['fee']
                 agentAccount = r['account']
@@ -384,7 +385,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # elif q.qrStatus == "completed":
             #     return{"status_code":404,"message":"transaction already complete"}
 
-            db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload["terminal"])).update({'status':'complete'})
+            db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
             
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
 
@@ -396,7 +397,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
             
-            r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
+            r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
             
             
             return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"token":token,"response":r.json}
@@ -915,7 +916,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     
 
 def checkExAccount(terminalNumber):
-    r =requests.get("http://192.223.11.185:8080/terminal", json={'id': terminalNumber})
+    r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': terminalNumber})
     return json.loads(r.content)
 
 def log(logFile,message):
@@ -1210,9 +1211,9 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
         if not ch["status_code"] == 201:
             return ch
         charge_instance = ch["message"]
-        url = "http://192.223.11.185:9000/v1/card_process"
+        url = f"http://{currentServer}:9000/v1/card_process"
         # if charge.method == "crypto":
-        #     url = "http://192.223.11.185:9000/v1/crypto_process"
+        #     url = f"http://{currentServer}:9000/v1/crypto_process"
         charge_dict = {
         'id': charge_instance.id,
         'dateTime': charge_instance.dateTime,
@@ -1421,7 +1422,7 @@ async def getcard(request: Request,response: Response,payload: dict = Body(...),
         return {"status_code":401,"message":message}
 
 
-#x = await requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
+#x = await requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
 
 @router.post("/chargeTransaction")
 async def testT(request: Request,response: Response,db: Session = Depends(get_db)):

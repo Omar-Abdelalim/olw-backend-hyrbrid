@@ -234,7 +234,7 @@ async def reg1(request: Request, response: Response, payload: dict = Body(...), 
 
                        expiration=datetime.now() + timedelta(minutes=codeValidMinutes), result="pending")
 
-        notif = createNotif(db,c.id,"Please Confim Email Address","email registeration"," http://192.223.11.185:4000/resendVer")
+        notif = createNotif(db,c.id,"Please Confim Email Address","email registeration",f"http://{currentServer}:4000/resendVer")
 
         db.add(ec)
         cNum = str(cus.id).zfill(9)
@@ -527,7 +527,7 @@ async def changeEmail(request: Request, payload: dict = Body(...), db: Session =
                        expiration=datetime.now() + timedelta(minutes=codeValidMinutes), result="pending")
         db.query(Customer).filter(Customer.id == payload["id"]).update({"emailCode": ec.code})
         db.query(Notification).filter(Notification.customerID==cus.id, Notification.notificationType=="email update").update({"notificationStatus":"expired"})
-        notif = createNotif(db,cus.id,"Please Confirm Your Email Update","email update"," http://192.223.11.185:4000/resendUpdateVer")
+        notif = createNotif(db,cus.id,"Please Confirm Your Email Update","email update",f"http://{currentServer}:4000/resendUpdateVer")
 
         db.add(ec)
         db.commit()
@@ -722,7 +722,7 @@ async def createQrTer(request: Request, payload: dict = Body(...), db: Session =
         # payload = payload['message']
         payload = json.loads(payload)
         # token = payload['token']
-        r =requests.get("http://192.223.11.185:8080/terminal", json={'id': payload["terminalID"]})
+        r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': payload["terminalID"]})
         r = json.loads(r.content)
         if not r["status_code"] == 200:
             return r
@@ -771,7 +771,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
         db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").update(
             {"qrStatus": "cancelled"})
-        r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"cancelled","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
+        r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"cancelled","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
         db.commit()
 
     except:
@@ -798,7 +798,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
         db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").update(
             {"qrStatus": "timed out"})
-        r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"timed out","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
+        r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"timed out","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
         db.commit()
 
     except:
@@ -826,7 +826,7 @@ async def getqrter(request: Request, payload: dict = Body(...), db: Session = De
 
         db.query(QRTer).filter(QRTer.terminalID == payload["terminalID"], QRTer.qrStatus == "pending").update(
             {"qrStatus": "rejected"})
-        r =requests.post("http://192.223.11.185:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"rejected","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
+        r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": "None","displayName":qr.displayName,"accountNo":"None","message":"transaction registered","transactionStatus":"rejected","transactionID":"None","terminal":qr.terminalID,"amount":qr.amount,"currency":qr.currency})
         db.commit()
 
     except:
@@ -1268,7 +1268,7 @@ async def addAcct(request: Request, payload: dict = Body(...), db: Session = Dep
             return acco
         a = acco["message"]
         n = Notification(customerID=a.customerID, dateTime=datetime.now(), notificationStatus="active",
-                         notificationText="Account Has Been Added to Your Profile",notificationType="active",action=" http://192.223.11.185:4000/removeNotification")
+                         notificationText="Account Has Been Added to Your Profile",notificationType="active",action=f"http://{currentServer}:4000/removeNotification")
         db.add(n)
         db.commit()
         db.refresh(n)
@@ -1991,11 +1991,11 @@ def send_template_email(receiver_email, template_number, customer):
         email_content = email_template.replace("[Recipient's Name]", customer.firstName)
         if template_number == 1:
             email_content = email_content.replace("[Confirmation Link]",
-                                                  " http://192.223.11.185:4000/email/" + encode(
+                                                  f"http://{currentServer}:4000/email/" + encode(
                                                       str(confrimation_code)))
         if template_number == 3:
             email_content = email_content.replace("[Confirmation Link]",
-                                                  " http://192.223.11.185:4000/updateEmail/" + encode(
+                                                  f"http://{currentServer}:4000/updateEmail/" + encode(
                                                       str(confrimation_code)))
 
         subject_templates = ["Welcome to Our Platform", "Registration Confirmation", "Account Updated",

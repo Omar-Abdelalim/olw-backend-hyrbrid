@@ -49,7 +49,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from apis.version2.middleware import DecryptRequest, decrypt_data
 from pydantic import BaseModel
-from db.globals.globals import tokens,smsList
+from db.globals.globals import tokens,smsList,currentServer,currentPort
 import uuid
 
 from core.hashing import Hasher
@@ -103,7 +103,7 @@ async def get_client_ip(request: Request) -> str:
 @router.post("/api/v1/qr/create",)
 async def create_paylink(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     # Validate IP address
-    r =requests.get("http://192.223.11.185:8080/merchant", json={'id': payload["merchantID"]})
+    r =requests.get(f"http://{currentServer}:8080/merchant", json={'id': payload["merchantID"]})
     print(r)
     r = json.loads(r.content)
     print("response:",r)
@@ -119,7 +119,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     # Generate unique paylinkID
     paylinkID = str(uuid.uuid4())
     paylinkID = str(uuid.uuid4()).replace("-", "")[:12]
-    p = PayLink(paylinkID = paylinkID,MerchantId = payload["merchantID"],amount = payload["amount"],currency=payload["amount"],transactionRefferance=payload["transactionRef"],link=f"http://192.223.11.185:4000/ecom/{paylinkID}",dateTime=datetime.now(),status="active")
+    p = PayLink(paylinkID = paylinkID,MerchantId = payload["merchantID"],amount = payload["amount"],currency=payload["amount"],transactionRefferance=payload["transactionRef"],link=f"http://{currentServer}:4000/ecom/{paylinkID}",dateTime=datetime.now(),status="active")
     q = QRTer(terminalID = "ecom/"+paylinkID,displayName = r["merchantName"],merchantName=r["merchantName"],merchantAccount=r["merchantAccount"],currency=payload['currency'],qrStatus="pending",amount=payload["amount"],dateTime = datetime.now())
     db.add(q)
     db.add(p)
@@ -133,7 +133,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     #     "date_time": datetime.now(),
     #     "status": "pending"
     # }
-    transactionlink = {"link":f"http://192.223.11.185:4000/ecom/{paylinkID}"}
+    transactionlink = {"link":f"http://{currentServer}:4000/ecom/{paylinkID}"}
     return {"status":"success","link":transactionlink,"expires_at":datetime.now()+timedelta(minutes=10)}
     
     
@@ -214,7 +214,7 @@ async def connection_status(qr_id: int, transactionRef: str,db: Session = Depend
 
 @router.get("/paylink")
 async def getter(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
-    p = db.query(PayLink).filter(PayLink.link == ("http://192.223.11.185:4000/"+payload['terminalID'])).first()
+    p = db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload['terminalID'])).first()
     if p is None:
         return {"status_code": 401, "message": "no terminal with this id"}
     return {"status_code": 200, "message":p.MerchantId}
