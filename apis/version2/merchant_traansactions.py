@@ -119,7 +119,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     # Generate unique paylinkID
     paylinkID = str(uuid.uuid4())
     paylinkID = str(uuid.uuid4()).replace("-", "")[:12]
-    p = PayLink(paylinkID = paylinkID,MerchantId = payload["merchantID"],amount = payload["amount"],currency=payload["amount"],transactionRefferance=payload["transactionRef"],link=f"http://{currentServer}:4000/ecom/{paylinkID}",dateTime=datetime.now(),status="active")
+    p = PayLink(paylinkID = paylinkID,MerchantId = payload["merchantID"],amount = payload["amount"],currency=payload["amount"],transactionRefferance=payload["transactionRef"],link=f"http://{currentServer}:4000/ecom/{paylinkID}",dateTime=datetime.now(),status="active",webhook_url=r['webhook_url'])
     q = QRTer(terminalID = "ecom/"+paylinkID,displayName = r["merchantName"],merchantName=r["merchantName"],merchantAccount=r["merchantAccount"],currency=payload['currency'],qrStatus="pending",amount=payload["amount"],dateTime = datetime.now())
     db.add(q)
     db.add(p)

@@ -12,7 +12,7 @@ class PayLink(Base):
     dateTime=Column(String,nullable=True)
     status=Column(String,nullable=False)
     link=Column(String,nullable=False)
-   
+    webhook_url=Column(String,nullable=False)
     
 
     def __str__(self):

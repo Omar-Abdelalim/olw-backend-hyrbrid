@@ -385,8 +385,11 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # elif q.qrStatus == "completed":
             #     return{"status_code":404,"message":"transaction already complete"}
 
-            db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
-            
+            paylink_data=db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
+            try:
+                response=request.post(paylink_data['webhook_url'],payload(paylink_data))
+            except:
+                print("wrbhook not exsite")
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
 
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
