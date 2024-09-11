@@ -385,7 +385,9 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # elif q.qrStatus == "completed":
             #     return{"status_code":404,"message":"transaction already complete"}
 
-            paylink_data=db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
+            db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
+            paylink_data=db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).first()
+
             try:
                 response=request.post(paylink_data['webhook_url'],payload(paylink_data))
             except:
