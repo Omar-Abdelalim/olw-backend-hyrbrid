@@ -107,7 +107,7 @@ async def create_paylink(request: Request, response: Response, payload: dict = B
     
     print(r)
     r = json.loads(r.content)
-    if r['webhook_url'] is None:
+    if not 'webhook_url' in r:
         r['webhook_url'] = 'None'
     print("response:",r)
     # if not validate_ip(get_client_ip()):
