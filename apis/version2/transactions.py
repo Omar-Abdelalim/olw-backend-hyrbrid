@@ -365,6 +365,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                     return trans2
             else:
                 return fee
+            return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered"}
             
             if not payload['agent'] is None:
                 print('b')
