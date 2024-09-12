@@ -366,14 +366,18 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 return fee
             
             if not payload['agent'] is None:
+                print('b')
                 r =requests.get(f"http://{currentServer}:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
                 r = json.loads(r.content)
                 agentFee = r['fee']
                 agentAccount = r['account']
             else:
+                print('a')
                 agentFee = 0
 
             if agentFee >0:
+
+                print('c')
                 trans3 = transactionOperation(idn["message"],"10-00000005-001-00",agentAccount,agentFee,payload["fromCurrency"],payload["toCurrency"],db,agentID=rmid)
                 if not trans3["status_code"]==201:
                     return trans3
@@ -384,21 +388,25 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             #     return{"status_code":404,"message":"no qr code exists with this ID"}
             # elif q.qrStatus == "completed":
             #     return{"status_code":404,"message":"transaction already complete"}
-
+            print('d')
             db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).update({'status':'complete'})
+            print('e')
             # paylink_data=db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).first()
 
             # try:
             #     response=request.post(paylink_data['webhook_url'],payload(paylink_data))
             # except:
             #     print("webhook not exsit")
+            print('f')
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
-
+            print('g')
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
-            log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
+            # log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
+            print('h')
             db.commit()
             db.refresh(sendAcc)
             db.refresh(sendCus)
+            print('i')
             
             tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
             print('s')
