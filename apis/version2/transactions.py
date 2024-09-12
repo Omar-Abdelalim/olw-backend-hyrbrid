@@ -342,8 +342,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             trans = transactionOperation(idn["message"],payload["fromAccount"],qrt.terminalID,qrt.amount,payload["fromCurrency"],payload["toCurrency"],db,displayName="merchant:"+qrt.merchantName,merchantAccount = qrt.merchantAccount)
             if not trans["status_code"]==201:
                 return trans
-            # r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': payload["terminal"]})
-            r =requests.get(f"http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
+            r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': payload["terminal"]})
+            # r =requests.get(f"http://192.223.11.185:8080/terminal", json={'id': payload["terminal"]})
             r = json.loads(r.content)
             if not r['status_code'] == 200:
                 pl = db.query(PayLink).filter(PayLink.link == (f"http://{currentServer}:4000/"+payload["terminal"])).first()
@@ -369,8 +369,8 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             
             if 'agent' in payload:
                 
-                # r =requests.get(f"http://{currentServer}:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
-                r =requests.get(f"http://192.223.11.185:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
+                r =requests.get(f"http://{currentServer}:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
+                # r =requests.get(f"http://192.223.11.185:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
                 r = json.loads(r.content)
                 agentFee = r['fee']
                 agentAccount = r['account']
@@ -400,22 +400,22 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                 response=request.post(paylink_data['webhook_url'],payload(paylink_data))
             except:
                 print("webhook not exsit")
-            print('f')
+           
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"transactionID":trans["t1"]})
-            print('g')
+          
             db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "processing").update({"qrStatus":"completed"})
             # log(1,"from:{}, to:{}, amount:{},sending currency:{}, receiving currency:{}".format(payload["fromAccount"],payload["terminal"],payload["amount"],payload["fromCurrency"],payload["toCurrency"]))
-            print('h')
+          
             db.commit()
             db.refresh(sendAcc)
             db.refresh(sendCus)
-            print('i')
+           
             
             tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
-            print('s')
             
-            # r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
-            r =requests.post(f"http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
+            
+            r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
+            # r =requests.post(f"http://192.223.11.185:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
             
             
             return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered","transactions":tra,"token":token,"response":r.json}
@@ -934,8 +934,8 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
     
 
 def checkExAccount(terminalNumber):
-    # r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': terminalNumber})
-    r =requests.get(f"http://192.223.11.185:8080/terminal", json={'id': terminalNumber})
+    r =requests.get(f"http://{currentServer}:8080/terminal", json={'id': terminalNumber})
+    # r =requests.get(f"http://192.223.11.185:8080/terminal", json={'id': terminalNumber})
     return json.loads(r.content)
 
 def log(logFile,message):
