@@ -401,6 +401,7 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             db.refresh(sendCus)
             
             tra = db.query(Transaction).filter(Transaction.id == trans["t1"]).first()
+            print('s')
             
             r =requests.post(f"http://{currentServer}:8080/transaction", json={ "customerID": sendCus.id,"accountNo":sendAcc.accountNumber,"message":"transaction registered","transactionStatus":tra.transactionStatus,"transactionID":tra.id,"terminal":payload["terminal"],"amount":payload["amount"],"currency":payload["toCurrency"]})
             
