@@ -898,7 +898,8 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
         else:
             t2 = Transaction(dateTime=now,fromAccountNo=OLWAudit.accountNumber,toAccountNo=accountRec.accountNumber,sendID=OLWAudit.customerID,recID=accountRec.customerID,transactionStatus="pending",amount=recAmount,transactionIdentifier=identifier)
 
-            
+        print(t1)
+        print(t2)
         db.add(t1)
         db.add(t2)
         db.commit()
