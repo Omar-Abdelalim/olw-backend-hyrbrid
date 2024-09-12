@@ -104,10 +104,11 @@ async def get_client_ip(request: Request) -> str:
 async def create_paylink(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     # Validate IP address
     r =requests.get(f"http://{currentServer}:8080/merchant", json={'id': payload["merchantID"]})
-    if r['webhook_url'] is None:
-        r['webhook_url'] = 'None'
+    
     print(r)
     r = json.loads(r.content)
+    if r['webhook_url'] is None:
+        r['webhook_url'] = 'None'
     print("response:",r)
     # if not validate_ip(get_client_ip()):
     #     raise HTTPException(status_code=403, detail="Invalid IP address")
