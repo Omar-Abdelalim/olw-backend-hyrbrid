@@ -365,9 +365,9 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
                     return trans2
             else:
                 return fee
-            return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered"}
+            # return {"status_code": 201, "customer": sendCus,"account":sendAcc,"message":"transaction registered"}
             
-            if not payload['agent'] is None:
+            if not 'agent' in payload:
                 print('b')
                 # r =requests.get(f"http://{currentServer}:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
                 r =requests.get(f"http://192.223.11.185:8080/agent", json={'id': payload["agent"],'amount':payload['amount']})
