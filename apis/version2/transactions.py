@@ -862,7 +862,7 @@ def transactionOperation(identifier,sender,receiver,sendAmount,sendCurr,recCurr,
             accountSending=OLWBank
             currency= db.query(Currency).filter(Currency.currencyName==recCurr).first()
             
-            t1 = Transaction(dateTime=now,fromccountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender,transactionIdentifier=identifier)
+            t1 = Transaction(dateTime=now,fromAccountNo=OLWBank.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=OLWBank.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=recAmount,description=sender,transactionIdentifier=identifier)
         else:
             t1 = Transaction(dateTime=now,fromAccountNo=accountSending.accountNumber,toAccountNo=OLWAudit.accountNumber,sendID=accountSending.customerID,recID=OLWAudit.customerID,transactionStatus="pending",amount=sendAmount,transactionIdentifier=identifier)   
         if sendAmount < 0:
