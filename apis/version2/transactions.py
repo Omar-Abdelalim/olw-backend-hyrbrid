@@ -183,6 +183,9 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             if not idn["status_code"]==201:
                     return idn
             
+            if payload["amount"] <1 or payload['fees']<0:
+                return{"status_code":403,"message":"transaction amount can't be less than 1"}
+            
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             
@@ -240,6 +243,10 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             # payload = payload['message']
             payload = json.loads(payload)
             token = payload['token']
+
+            if payload["amount"] <1 or payload['fees']<0:
+                return{"status_code":403,"message":"transaction amount can't be less than 1"}
+            
 
         
             print('payload:',payload)
@@ -311,6 +318,9 @@ async def tansaction1(request: Request,response: Response,payload: dict = Body(.
             idn = generateTranIdentifier(db,"MER")
             if not idn["status_code"]==201:
                     return idn
+            if payload["amount"] <0:
+                return{"status_code":403,"message":"transaction amount can't be less than 1"}
+            
             
             qrt = db.query(QRTer).filter(QRTer.terminalID == payload["terminal"],QRTer.qrStatus == "pending").first()
             if qrt is None:
@@ -441,6 +451,9 @@ async def tansaction2(request: Request,response: Response,payload: dict = Body(.
             idn = generateTranIdentifier(db,"BAN")
             if not idn["status_code"]==201:
                     return idn
+            if payload["amount"] <1 or payload['fees']<0:
+                return{"status_code":403,"message":"transaction amount can't be less than 1"}
+            
             OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
             OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
             iBan = payload["iBan"]
@@ -1457,6 +1470,9 @@ async def testT(request: Request,response: Response,db: Session = Depends(get_db
         idn = generateTranIdentifier(db,"CHR")
         if not idn["status_code"]==201:
                 return idn
+        if payload["amount"] <1:
+                return{"status_code":403,"message":"transaction amount can't be less than 1"}
+            
         OLWBank = db.query(Account).filter(Account.accountNumber == "10-00000003-001-00").first()
         OLWFees = db.query(Account).filter(Account.accountNumber == "10-00000005-001-00").first()
         

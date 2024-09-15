@@ -191,6 +191,7 @@ class decryptMiddleware(BaseHTTPMiddleware):
                     return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
                 
                 # if not tokens[on['token']]['ip'] == request.client.host:
+                x_forwarded_for = request.headers.get('X-Forwarded-For')
                 #     del tokens[on['token']]
                 #     return JSONResponse(content={"status_code": 410, "message": "do handshake again"})
 

@@ -134,7 +134,10 @@ async def handshake(request: Request, response: Response, data: DecryptRequest, 
     payload = json.loads(b)
 
     print("payload",payload)
-    ip = request.client.host
+    x_forwarded_for = request.headers.get('X-Forwarded-For')
+    ip = x_forwarded_for
+    if not x_forwarded_for :
+        ip = request.client.host
     key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
     keys = tokens.keys()
     while key in keys:
