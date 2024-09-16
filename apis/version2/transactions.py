@@ -1316,6 +1316,8 @@ async def getCharge(request: Request,response: Response,payload: dict = Body(...
         if cus is None:
             return {"status_code":401,"message":"No customer exists with this ID"}
         
+        if "chargeID" not in payload:
+            return {"status_code":401,"message":"No charge id provided"}
         ch = db.query(Charge).filter(Charge.id == payload["chargeID"]).first()
         if ch is None:
             return {"status_code":401,"message":"No charge exists with this ID"}
