@@ -1186,7 +1186,7 @@ async def getFees(request: Request,response: Response,payload: dict = Body(...),
 
 @router.post("/getEligibility")
 async def getEle(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    # try:
+    try:
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
@@ -1218,10 +1218,10 @@ async def getEle(request: Request,response: Response,payload: dict = Body(...),d
         return {"status_code":201,"message":"User eligibile to send this amount","level":returning["level"],"limit":returning["limit"],"token":token}
 
         
-    # except:
-    #     message = "exception occurred with retrieving eligibility"
-    #     log(0,message)
-    #     return {"status_code":401,"message":message}
+    except:
+        message = "exception occurred with retrieving eligibility"
+        log(0,message)
+        return {"status_code":401,"message":message}
 
 @router.post("/charge")
 async def charge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
@@ -1302,7 +1302,7 @@ async def charge(request: Request,response: Response,payload: dict = Body(...),d
 
 @router.get("/getCharge")
 async def getCharge(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
-    try:
+    # try:
         payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
@@ -1331,10 +1331,10 @@ async def getCharge(request: Request,response: Response,payload: dict = Body(...
         return {"status_code":201,"charge":ch,"token":token,"time":20}
 
         
-    except:
-        message = "exception occurred with retrieving charge"
-        log(0,message)
-        return {"status_code":401,"message":message}
+    # except:
+    #     message = "exception occurred with retrieving charge"
+    #     log(0,message)
+    #     return {"status_code":401,"message":message}
 
 @router.post("/addCard")
 async def addcard(request: Request,response: Response,payload: dict = Body(...),db: Session = Depends(get_db)):
