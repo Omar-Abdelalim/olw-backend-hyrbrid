@@ -121,6 +121,9 @@ async def addCard(request: Request, response: Response, payload: dict = Body(...
 
         cardNum = generate_unique_cardnumber()#here code to generate 16 digit card number
         cardBr = 1
+        v=db.query(VCard).filter(VCard.AccountId == a.id).first()
+        if not v is None:
+             return {"status_code": 401, "message": "account already has an intiated card"}
 
 
         
@@ -257,10 +260,10 @@ async def updateuseage(request: Request, response: Response, payload: dict = Bod
 @router.post("/getCustomerCards")
 async def getcustomercards(request: Request, response: Response, payload: dict = Body(...), db: Session = Depends(get_db)):
     try:
-        payload = await request.body()
+        # payload = await request.body()
         # payload = json.loads(payload)
         # payload = payload['message']
-        payload = json.loads(payload)
+        # payload = json.loads(payload)
         token = payload['token']
 
 
@@ -279,11 +282,11 @@ async def getcustomercards(request: Request, response: Response, payload: dict =
 
             for c in db.query(VCard).filter(VCard.AccountId == account.id).all():
                         cards.append((c))
-            if len(cards)> 0:
-                return {"status_code": 201, "message": cards}
+        if len(cards)> 0:
+            return {"status_code": 201, "message": cards}
 
-            else:
-                return {"status_code": 201, "message": []}
+        else:
+            return {"status_code": 201, "message": []}
     except:
         message = "exception occurred with getting card"
         log(0,message)
